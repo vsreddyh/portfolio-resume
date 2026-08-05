@@ -14,6 +14,8 @@
 3. Create a tailored `.tex` file in `Custom_Resumes/`, named after the role.
 4. Match the JD's required and preferred qualifications with facts that are TRUE. Never fabricate experience, metrics, or skills. When in doubt, ask the user.
 5. Align the bullet points, skills, and summary to the JD's keywords and responsibilities, but keep the same section structure and LaTeX style as `Main_Resume.tex`.
+6. You may edit, reword, or remove bullet points in the custom resume to fit the JD and keep it to one page. Do not change the master `Main_Resume.tex` unless asked.
+6. Derived resumes (custom resumes, CVs, or any resume built from `Main_Resume.tex`) must always fit on a single page.
 
 ## User feedback rules
 
@@ -22,4 +24,4 @@
 
 ## Compile
 
-- Use `pdflatex` to compile `.tex` files. Confirm the PDF renders before finishing.
+- Use `tectonic` to compile `.tex` files. Confirm the PDF renders before finishing.
