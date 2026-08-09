@@ -1,0 +1,116 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \textbar{} +91 9502747257 \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer experienced in full-stack web development, cloud platforms, and AI/LLM-powered automation, building scalable, cost-efficient systems for advertising and trading domains. Strong focus on event-driven architectures, data pipelines, and low-latency systems, with hands-on ML, NLP, and search work. Passionate about applying AI to solve modern engineering challenges and delivering reliable products with measurable impact through close cross-functional collaboration.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 -- 2026}
+{B.Tech in Computer Science and Engineering}{} \\
+\textbf{Relevant Coursework:} Computer Networks, Operating Systems, Database Management, Software Engineering
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jun 2026 -- Present}
+{Software Engineer}{Hyderabad}
+\resumeSubHeadingListStart
+\resumeItem{Built a role-based web platform for social media advertising agencies using React, Node.js, and Convex, managing influencer partnerships end-to-end from campaign creation to collaboration offer distribution.}
+\resumeItem{Developed an AI-powered application using React, Node.js, and SQLite that combines real-time news aggregation with LLM-based content generation to surface trending video ideas for content teams.}
+\resumeItem{Engineered a cost-optimized AI pipeline using React and Node.js that transforms text prompts into short-form videos, applying prompt and model-inference optimization to reduce generation costs while maintaining output quality.}
+\resumeItem{Designed and implemented an event-driven, low-latency trading infrastructure using Node.js, ClickHouse, and PostgreSQL, enabling real-time market alerts and fast order execution across multiple markets.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 -- Jun 2026}
+{Software Engineer Intern}{Hyderabad}
+\resumeSubHeadingListStart
+\resumeItem{Designed and evaluated predictive models using Python, scikit-learn, and Pandas, combining machine learning and rule-based approaches with simulation and backtesting techniques.}
+\resumeItem{Built an NLP pipeline using Python, PyTorch, and Transformers to extract insights from unstructured text data.}
+\resumeItem{Implemented a system using Python, an LLM, and a search layer to verify signals for real-time identification of emerging trends from continuous data streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} Python, Java, C++, C\#, TypeScript, JavaScript, Bash, Lua
+\item \textbf{Frontend:} React, TypeScript, HTML, CSS, React Native, Expo, TailwindCSS
+\item \textbf{Backend:} Node.js, Express, FastAPI, Django, ASP.NET
+\item \textbf{Databases:} Microsoft SQL Server, PostgreSQL, MySQL, SQLite, MongoDB, Redis, ClickHouse, Convex
+\item \textbf{AI/ML:} PyTorch, Transformers, Gemini API, Scikit-learn, XGBoost, LightGBM, Pandas, NumPy, Jupyter
+\item \textbf{Cloud, DevOps \& CI/CD:} Docker, Docker Compose, GitHub Actions, Amazon Web Services, Vercel, MinIO
+\item \textbf{Tools:} Git, GitHub
+\end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+
+\resumeSubheading
+{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
+\resumeSubHeadingListStart
+\resumeItem{Designed an event-driven, cost-optimized media ingestion pipeline: uploads hit MinIO for fast, bursty ingest, a nightly mirror syncs to S3 and purges MinIO, and access is short-lived via signed S3 URLs, cutting request overhead and retaining only curated files in S3 (about 10--25\% fewer request charges).}
+\resumeItem{Developed a FastAPI backend issuing presigned URLs and storing image metadata in MongoDB, with Redis caching of signed URLs to cut latency on repeat access.}
+\resumeSubHeadingListEnd
+
+\vspace{-0.6em}
+
+
+
+
+\end{document}
