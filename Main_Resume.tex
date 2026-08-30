@@ -89,9 +89,9 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \item \textbf{Backend:} ASP.NET, Node.js, Express, Django, FastAPI
 \item \textbf{Frontend:} React, React Native, Expo, ElectronJS, TailwindCSS, Nativewind
 \item \textbf{Databases:} Microsoft SQL Server, PostgreSQL, MongoDB, MySQL, SQLite, Redis, Convex
-\item \textbf{Cloud, DevOps \& CI/CD:} Docker, GitHub Actions, Amazon Web Services, Vercel, MinIO
+\item \textbf{Cloud, DevOps \& CI/CD:} Docker, GitHub Actions, Amazon Web Services, Vercel, MinIO, Tailscale, Linux
 \item \textbf{AI/ML:} PyTorch, Transformers, Scikit-learn, XGBoost, LightGBM, NumPy, Pandas, Matplotlib, Jupyter
-\item \textbf{Tools:} Git, GitHub, Mercurial
+\item \textbf{Tools:} Git, GitHub, Mercurial, SearXNG
 \end{itemize}
 
 
@@ -100,6 +100,15 @@ Software Engineer with experience in full-stack web development, mobile applicat
 %----------------------------------------------------------------------------------------
 \section*{Projects}
 
+\resumeSubheading
+{Multi-Agent AI Bot Orchestration Platform}{}{Python, FastAPI, Docker Compose, MongoDB, Discord API}{github.com/vsreddyh/Discord-bots}
+\resumeSubHeadingListStart
+\resumeItem{Orchestrated six AI agents (one master coordinator plus five domain bots) on Discord through a single multiplexed gateway process, giving each agent an isolated profile home, workspace, and per-profile credential scope.}
+\resumeItem{Built a credit-aware LLM proxy that routes chat completions to OpenCode Zen and automatically falls back to DeepInfra on credit/payment errors, alongside private SearXNG search.}
+\resumeItem{Runs fully on Docker Compose (search, proxy, health-api, gateway, dashboard, retention job), with a dev mode that targets a test\_ database on the remote cluster so development never touches production data.}
+\resumeItem{Implemented a Health Connect pipeline where an Android app syncs daily activity, sleep, and workout data to a FastAPI service that persists it in MongoDB and posts summaries to Discord.}
+\resumeItem{Automated data lifecycle management with scheduled retention jobs (90-day transaction wipes, 30-day health-data pruning) and secured the dashboard and APIs behind Tailscale, firewall rules, and password auth.}
+\resumeSubHeadingListEnd
 
 \resumeSubheading
 {Schedio: Project Sharing Platform}{}{React, Node, Express, Gemini API, MongoDB, Scrapy, Vercel, Docker}{github.com/vsreddyh/schedio}
