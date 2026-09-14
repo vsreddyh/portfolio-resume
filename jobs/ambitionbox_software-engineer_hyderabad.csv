@@ -1,0 +1,53 @@
+Company,Rating,Reviews_Count,Industry,Location_Info,Experience,Salary_Range,Salary_Min_LPA,Salary_Max_LPA,Highly_Rated_For,Critically_Rated_For
+Palo Alto Networks,3.7,145,IT Services & Consulting,Hyderabad +12 other locations,0 - 4 yrs exp.,₹ 31.2 L/yr - ₹ 43.5 L/yr,31.2,43.5,Salary,"Job Security, Promotions, Work Satisfaction"
+Google,4.4,2k,Software Product,Hyderabad +93 other locations,0 - 7 yrs exp.,₹ 35.1 L/yr - ₹ 38.7 L/yr,35.1,38.7,"Company Culture, Work Life Balance, Work Satisfaction",
+SPRINKLR,2.9,404,Software Product,Hyderabad +8 other locations,0 - 3 yrs exp.,₹ 31.3 L/yr - ₹ 37.1 L/yr,31.3,37.1,,"Work Satisfaction, Job Security, Promotions"
+WinZO,4.2,54,IT Services & Consulting,Hyderabad +2 other locations,0 - 5 yrs exp.,₹ 30.2 L/yr - ₹ 37.3 L/yr,30.2,37.3,"Salary, Work Satisfaction, Promotions",
+Eightfold AI,3.3,37,Internet,Hyderabad +2 other locations,0 - 4 yrs exp.,₹ 30.1 L/yr - ₹ 37.1 L/yr,30.1,37.1,,"Work Life Balance, Company Culture, Work Satisfaction"
+Microsoft Corporation,3.8,2.2k,Software Product,Hyderabad +53 other locations,0 - 7 yrs exp.,₹ 28.9 L/yr - ₹ 32.1 L/yr,28.9,32.1,"Work Life Balance, Company Culture","Job Security, Promotions"
+Navi Limited,3.1,402,FinTech,Hyderabad +18 other locations,0 - 4 yrs exp.,₹ 24.5 L/yr - ₹ 36.4 L/yr,24.5,36.4,,"Job Security, Promotions, Work Life Balance"
+Google Operations Center,3.5,794,BPO,Hyderabad +14 other locations,0 - 3 yrs exp.,₹ 24.3 L/yr - ₹ 36 L/yr,24.3,36,,"Promotions, Work Satisfaction, Skill Development"
+Airbnb,3.6,317,Travel & Tourism,Hyderabad +14 other locations,0 - 5 yrs exp.,₹ 25 L/yr - ₹ 35.1 L/yr,25,35.1,Salary,"Promotions, Job Security, Skill Development"
+CommVault,3.8,150,Software Product,Hyderabad +7 other locations,0 - 4 yrs exp.,₹ 23 L/yr - ₹ 33.2 L/yr,23,33.2,"Company Culture, Work Life Balance, Salary","Promotions, Job Security, Work Satisfaction"
+Dream11,4.2,148,Internet,Hyderabad +7 other locations,0 - 4 yrs exp.,₹ 22.8 L/yr - ₹ 31.7 L/yr,22.8,31.7,"Salary, Company Culture, Work Life Balance",
+Nvidia,3.4,763,Hardware & Networking,Hyderabad +20 other locations,0 - 7 yrs exp.,₹ 22.4 L/yr - ₹ 31.8 L/yr,22.4,31.8,,"Promotions, Work Satisfaction, Job Security"
+Swiggy,3.7,6k,Internet,Hyderabad +248 other locations,0 - 4 yrs exp.,₹ 21 L/yr - ₹ 30 L/yr,21,30,,"Job Security, Promotions, Work Life Balance"
+Goldman Sachs,3.3,1.7k,Financial Services,Hyderabad +23 other locations,0 - 5 yrs exp.,₹ 22 L/yr - ₹ 28.4 L/yr,22,28.4,,"Work Life Balance, Job Security, Promotions"
+Ola Electric Mobility,3.3,3.3k,Automobile,Hyderabad +455 other locations,0 - 4 yrs exp.,₹ 19.4 L/yr - ₹ 29.1 L/yr,19.4,29.1,Salary,"Job Security, Promotions, Company Culture"
+Microsoft Research,4.4,104,,Hyderabad +9 other locations,0 - 5 yrs exp.,₹ 19.4 L/yr - ₹ 28.4 L/yr,19.4,28.4,"Company Culture, Work Life Balance, Work Satisfaction",
+Cult.fit,3.4,1k,Fitness & Wellness,Hyderabad +44 other locations,0 - 4 yrs exp.,₹ 20.6 L/yr - ₹ 27.2 L/yr,20.6,27.2,,"Promotions, Job Security, Work Life Balance"
+BNY,3.6,5.5k,Financial Services,Hyderabad +29 other locations,0 - 4 yrs exp.,₹ 21.6 L/yr - ₹ 25.2 L/yr,21.6,25.2,,"Promotions, Job Security, Work Satisfaction"
+Qualcomm,3.7,1.3k,Semiconductors,Hyderabad +21 other locations,0 - 5 yrs exp.,₹ 21.4 L/yr - ₹ 24.2 L/yr,21.4,24.2,Salary,"Promotions, Work Life Balance, Work Satisfaction"
+Flipkart,3.9,13.7k,Internet,Hyderabad +577 other locations,0 - 5 yrs exp.,₹ 19.2 L/yr - ₹ 25.7 L/yr,19.2,25.7,"Company Culture, Skill Development, Salary",Promotions
+Visa,3.3,523,FinTech,Hyderabad +18 other locations,0 - 4 yrs exp.,₹ 20.7 L/yr - ₹ 23.6 L/yr,20.7,23.6,,"Promotions, Job Security, Work Satisfaction"
+Blinkit,3.8,4.1k,Internet,Hyderabad +187 other locations,0 - 3 yrs exp.,₹ 17.5 L/yr - ₹ 26 L/yr,17.5,26,"Skill Development, Salary",Promotions
+Jaguar Land Rover,3.9,330,Automobile,Hyderabad +34 other locations,0 - 4 yrs exp.,₹ 18.7 L/yr - ₹ 24.5 L/yr,18.7,24.5,"Work Life Balance, Company Culture, Work Satisfaction",Promotions
+Grab Greco,4.0,100,Internet,Hyderabad +34 other locations,0 - 4 yrs exp.,₹ 19.3 L/yr - ₹ 23.3 L/yr,19.3,23.3,"Company Culture, Work Life Balance, Skill Development","Promotions, Job Security"
+Dunzo,3.5,759,Internet,Hyderabad +21 other locations,0 - 3 yrs exp.,₹ 16.8 L/yr - ₹ 24.9 L/yr,16.8,24.9,,"Job Security, Promotions, Company Culture"
+C DOT,3.8,221,Telecom,Hyderabad +14 other locations,0 - 3 yrs exp.,₹ 17.9 L/yr - ₹ 23.6 L/yr,17.9,23.6,"Work Life Balance, Job Security","Promotions, Skill Development, Work Satisfaction"
+Centre For Railway Information Systems,4.0,107,Railways,Hyderabad +9 other locations,0 - 6 yrs exp.,₹ 17.6 L/yr - ₹ 22.7 L/yr,17.6,22.7,"Work Life Balance, Company Culture, Work Satisfaction",Promotions
+TriNet,2.8,65,IT Services & Consulting,Hyderabad +2 other locations,0 - 4 yrs exp.,₹ 17 L/yr - ₹ 23.3 L/yr,17,23.3,,"Promotions, Job Security, Skill Development"
+Money View,4.1,324,FinTech,Hyderabad +26 other locations,0 - 6 yrs exp.,₹ 16.6 L/yr - ₹ 23.3 L/yr,16.6,23.3,"Company Culture, Work Life Balance, Work Satisfaction",Promotions
+Cadence Design Systems,3.8,345,Semiconductors,Hyderabad +19 other locations,0 - 4 yrs exp.,₹ 18.4 L/yr - ₹ 21.2 L/yr,18.4,21.2,"Company Culture, Work Life Balance, Salary","Promotions, Work Satisfaction"
+Walmart,3.5,3.2k,Retail,Hyderabad +96 other locations,0 - 8 yrs exp.,₹ 18.2 L/yr - ₹ 21.3 L/yr,18.2,21.3,,"Promotions, Work Satisfaction, Job Security"
+ACKO,3.2,665,Insurance,Hyderabad +15 other locations,0 - 3 yrs exp.,₹ 16.2 L/yr - ₹ 22.1 L/yr,16.2,22.1,,"Promotions, Job Security, Work Satisfaction"
+OPPO,3.9,4.6k,Consumer Electronics & Appliances,Hyderabad +419 other locations,0 - 4 yrs exp.,₹ 15.6 L/yr - ₹ 22.4 L/yr,15.6,22.4,Skill Development,"Promotions, Job Security"
+DeHaat,3.6,698,Internet,Hyderabad +121 other locations,0 - 5 yrs exp.,₹ 17.4 L/yr - ₹ 19.2 L/yr,17.4,19.2,,"Job Security, Promotions, Company Culture"
+Celigo,3.4,41,Software Product,Hyderabad +1 other locations,0 - 2 yrs exp.,₹ 16.7 L/yr - ₹ 20.9 L/yr,16.7,20.9,"Work Life Balance, Salary","Job Security, Promotions, Work Satisfaction"
+Teradata,3.5,485,Software Product,Hyderabad +10 other locations,0 - 6 yrs exp.,₹ 16 L/yr - ₹ 21.6 L/yr,16,21.6,Work Life Balance,"Job Security, Promotions, Skill Development"
+CommerceIQ,3.0,107,Software Product,Hyderabad +5 other locations,0 - 4 yrs exp.,₹ 14.8 L/yr - ₹ 21.6 L/yr,14.8,21.6,,"Promotions, Work Satisfaction, Job Security"
+Siemens EDA,4.0,69,Software Product,Hyderabad +7 other locations,0 - 3 yrs exp.,₹ 14.9 L/yr - ₹ 21.7 L/yr,14.9,21.7,"Work Life Balance, Company Culture, Salary",
+NXP Semiconductors,3.6,359,Semiconductors,Hyderabad +14 other locations,0 - 6 yrs exp.,₹ 15.7 L/yr - ₹ 20.7 L/yr,15.7,20.7,,"Promotions, Job Security, Work Satisfaction"
+Blackrock,3.4,672,Financial Services,Hyderabad +19 other locations,0 - 4 yrs exp.,₹ 16 L/yr - ₹ 20.1 L/yr,16,20.1,,"Promotions, Work Satisfaction, Company Culture"
+VMware Software,4.4,1.1k,Software Product,Hyderabad +18 other locations,0 - 7 yrs exp.,₹ 14.5 L/yr - ₹ 21.6 L/yr,14.5,21.6,"Salary, Company Culture, Work Life Balance",
+F5 Networks,3.2,160,IT Services & Consulting,Hyderabad +5 other locations,0 - 7 yrs exp.,₹ 15.4 L/yr - ₹ 20.7 L/yr,15.4,20.7,,"Job Security, Promotions, Work Satisfaction"
+Unacademy,3.0,2.3k,EdTech,Hyderabad +75 other locations,0 - 3 yrs exp.,₹ 15 L/yr - ₹ 20.6 L/yr,15,20.6,,"Job Security, Promotions, Work Life Balance"
+Deutsche Bank,3.8,4.7k,Banking,Hyderabad +43 other locations,0 - 6 yrs exp.,₹ 16.3 L/yr - ₹ 19.2 L/yr,16.3,19.2,"Work Life Balance, Job Security, Company Culture","Promotions, Skill Development"
+Zscaler Softech,3.2,470,Software Product,Hyderabad +15 other locations,0 - 6 yrs exp.,₹ 14.2 L/yr - ₹ 21.1 L/yr,14.2,21.1,,"Job Security, Promotions, Work Satisfaction"
+ClearTax,3.0,410,IT Services & Consulting,Hyderabad +10 other locations,0 - 3 yrs exp.,₹ 14.2 L/yr - ₹ 21.1 L/yr,14.2,21.1,,"Job Security, Promotions, Work Satisfaction"
+New Relic,2.6,63,Internet,Hyderabad +1 other locations,0 - 6 yrs exp.,₹ 14.5 L/yr - ₹ 20.8 L/yr,14.5,20.8,,"Job Security, Promotions, Company Culture"
+Nutanix,3.4,205,Software Product,Hyderabad +6 other locations,0 - 4 yrs exp.,₹ 14.2 L/yr - ₹ 21.1 L/yr,14.2,21.1,,"Promotions, Job Security, Work Satisfaction"
+Meesho,3.7,2.3k,Internet,Hyderabad +142 other locations,0 - 4 yrs exp.,₹ 14.5 L/yr - ₹ 20.8 L/yr,14.5,20.8,Salary,"Job Security, Promotions"
+Unique Identification Authority of India,3.7,356,IT Services & Consulting,Hyderabad +98 other locations,0 - 2 yrs exp.,₹ 14.9 L/yr - ₹ 19.8 L/yr,14.9,19.8,,"Promotions, Job Security, Company Culture"
+Amazon,3.9,33.2k,Internet,Hyderabad +553 other locations,0 - 6 yrs exp.,₹ 15.8 L/yr - ₹ 18.9 L/yr,15.8,18.9,"Company Culture, Work Life Balance, Salary",Promotions
+INDMoney,2.8,113,FinTech,Hyderabad +7 other locations,0 - 3 yrs exp.,₹ 15.8 L/yr - ₹ 17.5 L/yr,15.8,17.5,,"Job Security, Promotions, Company Culture"
