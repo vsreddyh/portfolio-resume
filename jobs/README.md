@@ -13,8 +13,6 @@ Hyderabad software salary / employer dataset scraped from AmbitionBox, kept alon
   - `ambitionbox_software_development_engineer_hyderabad.csv` (14 rows)
   - remaining 8 files have 1–3 rows each (`ai-ml-engineer`, `backend-developer`, `data-engineer`, `developer`, `full-stack-developer`, `full-stack-engineer`, `java-full-stack-developer`, `web-developer`)
 - `designations_full.txt` — 199 AmbitionBox designation filters with live job counts, e.g. `software-engineer || Software Engineer (7720)`
-- `software-related-designation-list.txt` — 39 software-only designations subset of the above
-- `index.html`, `index.html.bak` — raw AmbitionBox jobs-filter HTML the designation lists were parsed from
 - `package.json` — placeholder only (`jobs@1.0.0`, no scripts/dependencies)
 
 All salaries are in ₹ LPA ranges for 0–x yrs experience, with company rating, review count, industry, location mix (`Hyderabad +N other locations`), and highly/critically-rated attributes.
