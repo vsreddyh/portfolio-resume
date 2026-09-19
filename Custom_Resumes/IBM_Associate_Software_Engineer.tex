@@ -1,0 +1,125 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \textbar{} +91 9502747257 \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Entry-level Software Engineer experienced in component design and development, unit testing, debugging, and technical documentation within team SDLC and Agile practices. Hands-on with API-based integration, data analytics (Python, Pandas, scikit-learn), and AI-assisted development tools.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 -- 2026}
+{B.Tech in Computer Science and Engineering}{} \\
+\textbf{Relevant Coursework:} Computer Networks, Operating Systems, Database Management, Software Engineering
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jun 2026 -- Present}
+{Software Engineer}{Hyderabad}
+\resumeSubHeadingListStart
+\resumeItem{Worked on application customization and extension development for ProCAD (Revalize), developing User and Domain Extensions to deliver additional functionality based on client requirements.}
+\resumeItem{Also shipped a role-based influencer-partnership platform, AI content tools (news-driven reel-idea generator, cost-optimized text-to-video pipeline), and an event-driven trading infrastructure with real-time alerts.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 -- Jun 2026}
+{Software Engineer Intern}{Hyderabad}
+\resumeSubHeadingListStart
+\resumeItem{Designed and evaluated predictive models using Python, scikit-learn, and Pandas, combining machine learning and rule-based approaches with simulation and backtesting techniques.}
+\resumeItem{Also built an NLP pipeline (PyTorch, Transformers) for unstructured text and LLM-plus-search systems for identifying emerging trends from continuous data streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} Python, Java, C\#, TypeScript, JavaScript, Go, C++, Bash
+\item \textbf{Backend:} Node.js, Express, FastAPI, Django, ASP.NET
+\item \textbf{Frontend:} React, Next.js, React Native, Expo, TailwindCSS
+\item \textbf{Databases:} PostgreSQL, MongoDB, MySQL, SQLite, Redis, Microsoft SQL Server, Convex
+\item \textbf{AI/ML:} PyTorch, Transformers, Scikit-learn, Pandas, NumPy, Jupyter
+\item \textbf{Cloud, DevOps \& CI/CD:} Docker, GitHub Actions, Amazon Web Services, Vercel, Linux
+\item \textbf{Tools:} Git, GitHub
+\end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Rouge Automaton: Go Discord RAG Bot}{}{Go, discordgo, MongoDB, Podman Compose}{github.com/vsreddyh/rouge\_automaton}
+\resumeSubHeadingListStart
+\resumeItem{Built a Go Discord bot on a direct gateway plus an OpenCode relay client, backed by a MongoDB intel store and a wiki ingestion pipeline with RecentChanges polling and live lookup fallback.}
+\resumeItem{Verified reliability with Go tests across packages; shipped multi-service Podman Compose deployment with a standalone MCP server over the shared tool executor.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{LeetCode Scoreboard: Competitive Practice Tracker}{}{Next.js, TypeScript, MongoDB, Mongoose, Web Push}{github.com/vsreddyh/leetcode-scoreboard}
+\resumeSubHeadingListStart
+\resumeItem{Built a Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 $-$ acceptance rate) via the LeetCode GraphQL API, with a five-minute cron sync upserting submissions while the dashboard reads pre-aggregated scores.}
+\resumeItem{Added a password-protected admin panel for user management and manual sync, plus Web Push notifications, PWA install support, and dark/light theming.}
+\resumeSubHeadingListEnd
+
+
+\vspace{-0.6em}
+
+
+
+
+\section*{Certifications}
+\begin{itemize}
+\resumeItem{Google Project Management Certificate}
+\end{itemize}
+
+\end{document}
