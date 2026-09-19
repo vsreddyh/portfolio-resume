@@ -85,9 +85,9 @@ Software Engineer with experience in full-stack web development, mobile applicat
 %----------------------------------------------------------------------------------------
 \section*{Technical Skills}
 \begin{itemize}
-\item \textbf{Languages:} C\#, Java, Python, TypeScript, JavaScript, C++, Bash, Lua
+\item \textbf{Languages:} C\#, Java, Python, TypeScript, JavaScript, Go, C++, Bash, Lua
 \item \textbf{Backend:} ASP.NET, Node.js, Express, Django, FastAPI
-\item \textbf{Frontend:} React, React Native, Expo, ElectronJS, TailwindCSS, Nativewind
+\item \textbf{Frontend:} React, Next.js, React Native, Expo, ElectronJS, TailwindCSS, Nativewind
 \item \textbf{Databases:} Microsoft SQL Server, PostgreSQL, MongoDB, MySQL, SQLite, Redis, Convex
 \item \textbf{Cloud, DevOps \& CI/CD:} Docker, GitHub Actions, Amazon Web Services, Vercel, MinIO, Tailscale, Linux
 \item \textbf{AI/ML:} PyTorch, Transformers, Scikit-learn, XGBoost, LightGBM, NumPy, Pandas, Matplotlib, Jupyter
@@ -154,12 +154,54 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Journal, Diary and ToDo App: Unified Productivity Platform}{}{React, Django, Redis, PostgreSQL}{github.com/vsreddyh/MyDiary}
+{Rouge Automaton: Go Discord RAG Bot}{}{Go, discordgo, MongoDB, Podman Compose}{github.com/vsreddyh/rouge\_automaton}
 \resumeSubHeadingListStart
-\resumeItem{Building a web-based productivity application combining To-Do lists, Journals, and Diaries for streamlined personal task tracking.}
-\resumeItem{Implemented automated journaling where completed tasks are logged into the user’s daily journal for better activity insights.}
-\resumeItem{Engineered performance optimization using Redis caching (server-side) and IndexedDB (client-side), reducing database queries significantly.}
-\resumeItem{Ongoing personal project.}
+\resumeItem{Built a Go Discord bot serving game intel through a direct gateway plus an OpenCode relay client, backed by a MongoDB store with keyword retrieval and cited context.}
+\resumeItem{Implemented a wiki ingestion pipeline with RecentChanges polling, wikitext parsers, and a live war-status feed, falling back to live wiki lookup with source links on local misses.}
+\resumeItem{Shipped multi-service Podman Compose deployment (bot, watcher, Mongo) from a distroless image, with a standalone MCP server over the shared tool executor and Go tests across packages.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{LeetCode Scoreboard: Competitive Practice Tracker}{}{Next.js, TypeScript, MongoDB, Mongoose, Web Push}{github.com/vsreddyh/leetcode-scoreboard}
+\resumeSubHeadingListStart
+\resumeItem{Built a Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 $-$ acceptance rate) via the LeetCode GraphQL API, so harder problems score more.}
+\resumeItem{Implemented a five-minute external cron sync that upserts submissions into MongoDB while the dashboard reads pre-aggregated daily and total scores without touching LeetCode.}
+\resumeItem{Added a password-protected admin panel for tracked-user management and manual sync, plus Web Push notifications, PWA install support, and dark/light theming.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Daily Gita: Offline Multilingual Verse App}{}{React Native, Expo, expo-sqlite, Nativewind, Scrapy}{github.com/vsreddyh/Daily\_Gita}
+\resumeSubHeadingListStart
+\resumeItem{Building an Expo React Native app serving daily verses with file-based routing, drawer and tab navigation, offline persistence via expo-sqlite, and reading history.}
+\resumeItem{Wrote Scrapy spiders collecting Telugu and Hindi verses into a local dataset backing the app content.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Past Placements XLSX Generator}{}{Python, pandas, lxml, gspread, GitHub Actions}{github.com/vsreddyh/Past-Placements-XLSX-generator}
+\resumeSubHeadingListStart
+\resumeItem{Scraped multi-year college placement tables with requests and lxml, normalizing company-wise selections, internships, and CTC figures into pandas DataFrames.}
+\resumeItem{Published formatted workbooks to Google Sheets via service-account auth with conditional formatting, automated through GitHub Actions.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Birthday Calendar: Excel to Google Calendar Sync}{}{Python, pandas, Google Calendar API}{github.com/vsreddyh/birthdayCalendar}
+\resumeSubHeadingListStart
+\resumeItem{Built a Python tool importing birthdays from Excel via pandas and creating recurring yearly all-day events in Google Calendar.}
+\resumeItem{Implemented OAuth 2.0 login with local token caching, plus configurable email and popup reminders for each event.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Wigikin: Themed Storefront with Leaderboard}{}{Node.js, Express, JavaScript, HTML/CSS}{github.com/vsreddyh/Wigikin}
+\resumeSubHeadingListStart
+\resumeItem{Built an Express + vanilla JS storefront with product catalog, client-side cart, and themed content pages served as static files.}
+\resumeItem{Added a leaderboard page backed by a JSON REST endpoint, with file-based data served through Express routes.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{CLI Games: Bingo and Snakes and Ladders}{}{Java, Python, Bash}{github.com/vsreddyh/games}
+\resumeSubHeadingListStart
+\resumeItem{Implemented console Bingo in Java across iterations, including a virtual board with sorted-map ranking logic and a shell launcher script.}
+\resumeItem{Built a playable Snakes and Ladders game in Python as an early programming exercise.}
 \resumeSubHeadingListEnd
 
 
@@ -172,7 +214,5 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \begin{itemize}
 \resumeItem{Google Project Management Certificate}
 \end{itemize}
-
-\end{document}
 
 \end{document}
