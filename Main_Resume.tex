@@ -105,7 +105,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \section*{Projects}
 
 \resumeSubheading
-{Multi-Agent AI Bot Orchestration Platform}{}{Python, FastAPI, Docker Compose, MongoDB, Discord API}{github.com/vsreddyh/Discord-bots}
+{Multi-Agent AI Bot Orchestration Platform}{}{Python, FastAPI, Docker Compose, MongoDB, Discord API}{github.com/vsreddyh/Workflow-app}
 \resumeSubHeadingListStart
 \resumeItem{Orchestrated six AI agents (one master coordinator plus five domain bots) on Discord through a single multiplexed gateway process, giving each agent an isolated profile home, workspace, and per-profile credential scope.}
 \resumeItem{Built a credit-aware LLM proxy that routes chat completions to OpenCode Zen and automatically falls back to DeepInfra on credit/payment errors, alongside private SearXNG search.}
@@ -146,14 +146,17 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Authored a lightweight Bash script to monitor CPU, RAM, Disk, and Temperature usage on Linux systems.}
 \resumeItem{Implemented real time notifications that trigger when user defined thresholds are crossed, preventing potential hardware damage due to overheating or overuse.}
+\resumeItem{Covers battery state alongside CPU, RAM, disk, and temperature against user-defined thresholds.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Saanjh Sahayak: Clinical Decision Support Mobile App}{github.com/vsreddyh/mysaanj}{React Native, Expo, Nativewind, Node, Express, Gemini API, MongoDB, Vercel}{}
+{Saanjh Sahayak: Clinical Decision Support Mobile App}{github.com/vsreddyh/mysaanj}{React Native, Expo, Nativewind, Node, Express, Mongoose, Gemini API, MongoDB, Vercel}{}
 \resumeSubHeadingListStart
 \resumeItem{Building a cross-platform mobile application to assist doctors in clinical decision-making and patient data management.}
 \resumeItem{Integrating AI (Gemini API) to predict disease risks from patient inputs, reducing review time and improving diagnostic accuracy.}
 \resumeItem{Designed a secure Node.js + MongoDB backend to handle patient records and model predictions with scalable API endpoints.}
+\resumeItem{Modeled patients, old-age homes, and reports as Mongoose schemas with verified/unverified report arrays, severity scores, and AI-generated summaries.}
+\resumeItem{Built Express routes for caretaker/doctor session login, patient management, PDF report upload, and LLM-assisted report review, with an Expo frontend supporting PDF viewing and document picking.}
 \resumeItem{Ongoing personal project.}
 \resumeSubHeadingListEnd
 
@@ -163,6 +166,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeItem{Built a Go Discord bot serving game intel through a direct gateway plus an OpenCode relay client, backed by a MongoDB store with keyword retrieval and cited context.}
 \resumeItem{Implemented a wiki ingestion pipeline with RecentChanges polling, wikitext parsers, and a live war-status feed, falling back to live wiki lookup with source links on local misses.}
 \resumeItem{Shipped multi-service Podman Compose deployment (bot, watcher, Mongo) from a distroless image, with a standalone MCP server over the shared tool executor and Go tests across packages.}
+\resumeItem{Seeds MongoDB from checked-in JSON intel organized by faction through a one-shot ingest command.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
@@ -170,6 +174,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Built a Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 $-$ acceptance rate) via the LeetCode GraphQL API, so harder problems score more.}
 \resumeItem{Implemented a five-minute external cron sync that upserts submissions into MongoDB while the dashboard reads pre-aggregated daily and total scores without touching LeetCode.}
+\resumeItem{Scores aggregate per user per day (IST), keeping daily and all-time totals consistent across syncs.}
 \resumeItem{Added a password-protected admin panel for tracked-user management and manual sync, plus Web Push notifications, PWA install support, and dark/light theming.}
 \resumeSubHeadingListEnd
 
@@ -178,6 +183,8 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Building an Expo React Native app serving daily verses with file-based routing, drawer and tab navigation, offline persistence via expo-sqlite, and reading history.}
 \resumeItem{Wrote Scrapy spiders collecting Telugu and Hindi verses into a local dataset backing the app content.}
+\resumeItem{Structured screens with expo-router (home, history, settings, terms, privacy) plus splash screens and a language chooser, styled with Nativewind.}
+\resumeItem{Queries the on-device verse store through an expo-sqlite context hook so the app works fully offline.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
@@ -185,6 +192,8 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Scraped multi-year college placement tables with requests and lxml, normalizing company-wise selections, internships, and CTC figures into pandas DataFrames.}
 \resumeItem{Published formatted workbooks to Google Sheets via service-account auth with conditional formatting, automated through GitHub Actions.}
+\resumeItem{Deduplicated companies recurring across years and pivoted year-wise selections, internships, and CTC figures into per-company rows.}
+\resumeItem{Merged year-group headers, center-aligned the grid, and highlighted blank cells with a conditional-format rule via gspread-formatting.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
@@ -192,6 +201,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Built a Python tool importing birthdays from Excel via pandas and creating recurring yearly all-day events in Google Calendar.}
 \resumeItem{Implemented OAuth 2.0 login with local token caching, plus configurable email and popup reminders for each event.}
+\resumeItem{Caches OAuth credentials locally with automatic refresh so repeat runs need no browser login.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
@@ -199,6 +209,8 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Built an Express + vanilla JS storefront with product catalog, client-side cart, and themed content pages served as static files.}
 \resumeItem{Added a leaderboard page backed by a JSON REST endpoint, with file-based data served through Express routes.}
+\resumeItem{Implemented a client-side cart with a live count badge spanning the shop, leaderboard, and OnlyBalds pages.}
+\resumeItem{Added SEO meta tags and links to the community's Discord, Instagram, TikTok, and YouTube channels.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
@@ -206,6 +218,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Implemented console Bingo in Java across iterations, including a virtual board with sorted-map ranking logic and a shell launcher script.}
 \resumeItem{Built a playable Snakes and Ladders game in Python as an early programming exercise.}
+\resumeItem{Iterated Bingo across three versions, culminating in a virtual board backed by sorted-map ranking.}
 \resumeSubHeadingListEnd
 
 
