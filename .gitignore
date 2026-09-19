@@ -1,2 +1,4 @@
 .vscode/settings.json
 *.pdf
+.playwright-mcp/
+**/.playwright-mcp/
