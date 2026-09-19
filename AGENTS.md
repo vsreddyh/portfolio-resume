@@ -14,11 +14,12 @@
 2. Read `Main_Resume.tex` to source the user's facts, skills, and experience.
 3. Create a tailored `.tex` file in `Custom_Resumes/`, named after the role.
 4. Match the JD's required and preferred qualifications with facts that are TRUE. Never fabricate experience, metrics, or skills. When in doubt, ask the user.
-5. Align the bullet points, skills, and summary to the JD's keywords and responsibilities, but keep the same section structure and LaTeX style as `Main_Resume.tex`.
+5. Align the bullet points, skills, and summary to the JD's keywords and responsibilities. Section structure may be changed to serve the JD (reorder, rename, or merge sections) but keep the same LaTeX style as `Main_Resume.tex`.
 6. Tailor content in the custom resume to fit the JD while keeping it to one page: keep the Technical Skills category structure (Languages, Backend, Frontend, Databases, Cloud/DevOps, AI/ML, Tools), list the JD's required technologies first, and only include skills that are TRUE for the user — drop skills irrelevant to the JD. You may edit, reword, or remove bullet points. Do not change the master `Main_Resume.tex` unless asked.
 7. Derived resumes (custom resumes, CVs, or any resume built from `Main_Resume.tex`) must always fit on a single page.
 8. Never leave a section (experience role, project, etc.) with only one bullet point — keep at least two per section, or drop the section entirely.
 9. Never remove an experience (role) section from a custom resume. If one page is tight, trim bullets, projects, skills, or other sections instead. An experience section may be trimmed down to two bullet points if needed: keep the most JD-relevant point first, and make the second point a one-line summary of the rest of the work.
+10. Keep every bullet point to at most two lines; prefer a single line. Trim wording to fit, never facts.
 
 ## Changelog responses
 
