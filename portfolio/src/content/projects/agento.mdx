@@ -1,52 +1,65 @@
 ---
 title: "Agento"
-description: "Six AI agents on Discord behind one gateway, with an LLM proxy that survives dead API credits."
-stack: ["Python", "FastAPI", "Docker Compose", "MongoDB", "Discord API"]
+description: "Personal AI stack: one multiplexed gateway serving three profiles, driven from a custom Android app."
+stack: ["Kotlin", "Jetpack Compose", "Go", "Podman Compose", "MongoDB", "Hermes"]
 github: "https://github.com/vsreddyh/Agento"
 featured: true
 order: 1
-kicker: "Multi-agent AI ops"
-outcome: "Runs unattended: agents, health sync, retention jobs"
+kicker: "Personal AI stack"
+outcome: "One Compose stack: app, gateway, health sync, retention"
 diagram: |
   flowchart LR
-    D[Discord] --> G["Gateway\nmultiplexed · 1 process"]
-    G --> M["Master coordinator\nroutes + supervises"]
-    G --> B["5 × domain bots\nisolated home + creds"]
-    G -.-> P["LLM proxy\nZen → DeepInfra fallback"]
-    P --- S["SearXNG\nprivate search"]
-    A["Android Health Connect"] --> F[FastAPI] --> DB[(MongoDB)] --> D
-    DB --- R["Retention\n90d tx · 30d health"]
+    App["Agento Android\nGod · Story · Resumes chats"] --> PX["proxy :8080\n/p/* → chat · /api/* → sync"]
+    PX --> GW["ONE gateway container\ngod + story + resumes · :8642"]
+    PX --> HA["health-api :8001"]
+    GW --> OC["OpenCode Go direct\nmimo-v2.6-flash"]
+    GW --> DB[(MongoDB Atlas\nmoney · health · cookbook)]
+    HA --> DB
+    RT["retention one-shot\ncron 03:00"] -.-> DB
+    GW --- MCPs["Go MCPs\nmoney · cookbook · health-check"]
 ---
 
 ## The problem
 
-I wanted a personal AI setup that actually runs day-to-day, not a demo I babysit.
-That meant several specialized bots (not one giant prompt), working API access even
-when a provider has a billing hiccup, and data hygiene so storage doesn't grow forever.
+I wanted a personal AI setup that runs day-to-day without babysitting: distinct
+spaces for different parts of my life, memory that persists across sessions,
+health data captured automatically, and old data cleaned up on its own.
 
-## What I built
+## What it is now
 
-Agento orchestrates six AI agents — one master coordinator plus five domain bots —
-on Discord through a single multiplexed gateway process. Each agent gets an isolated
-profile home, workspace, and per-profile credential scope, so a misbehaving bot can't
-wander into another's context.
+Agento is a Hermes-based stack, not a Discord bot fleet. ONE multiplexed gateway
+container serves three profiles: **god** (main — money tracking, cookbook, health),
+**story** (a lore vault backed by a Git repo), and **resumes** (LaTeX resume
+tailoring backed by this very repo). Each profile has its own workspace, skills,
+and credential scope.
 
-The piece I'm proudest of is the credit-aware LLM proxy: it routes chat completions
-to OpenCode Zen and automatically falls back to DeepInfra on credit or payment errors,
-with private SearXNG search alongside. The system degrades instead of dying.
+The frontend is **Agento**, a custom Android app (Jetpack Compose): God/Story/Resumes
+chat tabs with threaded, on-device-persisted conversations, plus Tasks, Storage,
+Reminders, and Settings. One Server URL + Password — the app talks to an nginx
+proxy (`:8080`) that routes `/p/*` to the gateway's OpenAI-compatible chat API
+(`:8642`) and `/api/*` to the health-sync service.
+
+All three profiles reason through **OpenCode Go directly** (`mimo-v2.6-flash`),
+with per-tab provider/model selection from the live gateway catalog. Domain
+capabilities come from Go MCP servers I wrote — money, cookbook, health-check —
+plus Playwright browser automation on every profile.
 
 ## How it runs
 
-Everything is Docker Compose: search, proxy, health API, gateway, dashboard, and a
-retention job. Dev mode targets a `test_` database on the remote cluster, so
-development never touches production data. A Health Connect pipeline syncs daily
-activity, sleep, and workouts from an Android app into FastAPI + MongoDB, with
-summaries posted back to Discord. Scheduled jobs enforce the lifecycle — 90-day
-transaction wipes, 30-day health-data pruning — and the dashboard and APIs sit behind
-Tailscale, firewall rules, and password auth.
+One Podman Compose file: gateway, health-api, proxy, and a one-shot retention
+job. Health Connect syncs (steps, sleep, workouts) flow from the app through
+health-api into per-day MongoDB docs. Every night at 03:00 the retention binary
+prunes money transactions older than 90 days and health logs older than 30 days —
+while weight and cookbook data are permanent, and the Git-backed profiles need no
+DB retention at all. Dev checkouts point at a throwaway Atlas database, so
+production data is never at risk. A `hermes.sh` CLI (`init|start|stop|status|clean`)
+orchestrates the whole lifecycle, and every app change ships a versioned release
+APK with in-app updates.
 
 ## What it taught me
 
-Reliability is a feature you design for: fallback chains, isolated credentials, and
-automated cleanup matter more than model choice. Most of this system exists so that
-nothing pages me.
+Multiplexing beats multiplicity: one gateway process with three scoped profiles
+is simpler to operate than a fleet of bots. And reliability is designed, not
+hoped for — isolated credentials, automated pruning, and a single secret store
+(the git-ignored `.env`) matter more than model choice. Most of this system
+exists so that nothing pages me.
