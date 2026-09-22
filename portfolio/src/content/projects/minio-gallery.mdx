@@ -7,6 +7,15 @@ featured: true
 order: 3
 kicker: "Cost-driven systems"
 outcome: "~10–25% fewer S3 request charges"
+diagram: |
+  flowchart TB
+    subgraph write[Write path]
+      U["Uploads\nbursty"] --> MI["MinIO\nhot ingest"] --> NM["Nightly mirror + purge\ncurated only"] --> S3[(Amazon S3)]
+    end
+    subgraph read[Read path]
+      CL[Client] --> FA["FastAPI\npresigned URLs"] --> RD[(Redis cache)] --> S3
+      MDB[(MongoDB index)] -.-> FA
+    end
 ---
 
 ## The problem

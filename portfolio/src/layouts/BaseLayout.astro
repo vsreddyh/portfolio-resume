@@ -29,6 +29,62 @@ const nav = [
     <meta name="description" content={description} />
     <title>{title}</title>
     <ClientRouter />
+    <script is:inline defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script is:inline defer>
+      (function () {
+        var counter = 0;
+        function renderPending() {
+          if (!window.mermaid) {
+            setTimeout(renderPending, 500);
+            return;
+          }
+          window.mermaid.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            fontFamily: 'system-ui, sans-serif',
+            themeVariables: {
+              primaryColor: '#131a16',
+              primaryBorderColor: '#34d399',
+              primaryTextColor: '#e4e4e7',
+              secondaryColor: '#18181b',
+              tertiaryColor: '#18181b',
+              lineColor: '#34d399',
+              textColor: '#e4e4e7',
+              mainBkg: '#131a16',
+              nodeBorder: '#34d399',
+              clusterBkg: 'transparent',
+              clusterBorder: '#3f3f46',
+              edgeLabelBackground: '#09090b',
+            },
+          });
+          var nodes = document.querySelectorAll('pre.mermaid-diagram:not([data-done])');
+          if (!('IntersectionObserver' in window)) {
+            nodes.forEach(renderOne);
+            return;
+          }
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                io.unobserve(entry.target);
+                renderOne(entry.target);
+              }
+            });
+          });
+          nodes.forEach(function (n) { io.observe(n); });
+        }
+        function renderOne(pre) {
+          try {
+            var code = pre.getAttribute('data-chart') || pre.textContent;
+            window.mermaid.render('mmd-' + (counter++), code).then(function (res) {
+              pre.innerHTML = res.svg;
+              pre.setAttribute('data-done', 'true');
+            });
+          } catch (e) { /* leave source text visible */ }
+        }
+        renderPending();
+        document.addEventListener('astro:page-load', renderPending);
+      })();
+    </script>
   </head>
   <body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
     <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-zinc-950/80 backdrop-blur">

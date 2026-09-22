@@ -8,6 +8,15 @@ featured: true
 order: 2
 kicker: "Full-stack platform"
 outcome: "Live on Vercel with real institutional data"
+diagram: |
+  flowchart LR
+    S[Students] --> R["React · Vercel\nrole-based access"]
+    C[Colleges] --> R
+    Re[Recruiters] --> R
+    R --> E["Express API\nREST + auth"]
+    E --> M[(MongoDB)]
+    E <--> G["Gemini API\ncode explanations"]
+    DS["10,000+ colleges\nscraped dataset"] --> SC[Scrapy spiders] --> M
 ---
 
 ## The problem

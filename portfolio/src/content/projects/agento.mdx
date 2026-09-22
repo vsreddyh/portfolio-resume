@@ -7,6 +7,15 @@ featured: true
 order: 1
 kicker: "Multi-agent AI ops"
 outcome: "Runs unattended: agents, health sync, retention jobs"
+diagram: |
+  flowchart LR
+    D[Discord] --> G["Gateway\nmultiplexed · 1 process"]
+    G --> M["Master coordinator\nroutes + supervises"]
+    G --> B["5 × domain bots\nisolated home + creds"]
+    G -.-> P["LLM proxy\nZen → DeepInfra fallback"]
+    P --- S["SearXNG\nprivate search"]
+    A["Android Health Connect"] --> F[FastAPI] --> DB[(MongoDB)] --> D
+    DB --- R["Retention\n90d tx · 30d health"]
 ---
 
 ## The problem

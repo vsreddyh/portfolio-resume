@@ -13,6 +13,7 @@ const projects = defineCollection({
     order: z.number().default(100),
     kicker: z.string().optional(),
     outcome: z.string().optional(),
+    diagram: z.string().optional(),
   }),
 });
 

@@ -34,6 +34,14 @@ html {
   transform: none;
 }
 
+/* Mermaid diagrams: source text until lazy-rendered to SVG */
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
 /* Active nav link (scrollspy) */
 .nav-link {
   position: relative;
