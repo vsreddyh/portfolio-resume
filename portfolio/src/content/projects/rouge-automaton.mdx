@@ -1,0 +1,18 @@
+---
+title: "Rouge Automaton — Go Discord RAG Bot"
+description: "Go Discord bot serving game intel via gateway + relay, with wiki ingestion and cited context."
+stack: ["Go", "discordgo", "MongoDB", "Podman Compose"]
+github: "https://github.com/vsreddyh/rouge_automaton"
+featured: true
+order: 6
+---
+
+## What it does
+
+Serves game intel through a direct gateway plus an OpenCode relay client, backed by a MongoDB store with keyword retrieval and cited context.
+
+## Key engineering
+
+- Wiki ingestion pipeline: RecentChanges polling, wikitext parsers, live war-status feed; falls back to live wiki lookup with source links on local misses.
+- Multi-service Podman Compose deployment (bot, watcher, Mongo) from a distroless image.
+- Standalone MCP server over the shared tool executor; Go tests across packages; one-shot ingest seeding MongoDB from checked-in JSON intel.

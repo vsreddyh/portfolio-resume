@@ -1,0 +1,18 @@
+---
+title: "LeetCode Scoreboard"
+description: "Competitive practice tracker ranking accepted problems by difficulty, with PWA + push."
+stack: ["Next.js", "TypeScript", "MongoDB", "Mongoose", "Web Push"]
+github: "https://github.com/vsreddyh/leetcode-scoreboard"
+featured: true
+order: 5
+---
+
+## What it does
+
+Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 − acceptance rate) via the LeetCode GraphQL API, so harder problems score more.
+
+## Key engineering
+
+- Five-minute external cron sync upserts submissions; dashboard reads pre-aggregated daily/total scores without touching LeetCode.
+- Per-user-per-day (IST) aggregation keeps daily and all-time totals consistent.
+- Password-protected admin panel, Web Push notifications, PWA install support, dark/light theming.

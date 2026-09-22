@@ -1,4 +1,10 @@
-.vscode/settings.json
-*.pdf
 .playwright-mcp/
 **/.playwright-mcp/
+.vscode/settings.json
+*.pdf
+
+# portfolio (Astro/Node)
+portfolio/node_modules/
+portfolio/dist/
+portfolio/.astro/
+portfolio/.vercel/

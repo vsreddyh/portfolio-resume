@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+const projects = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout>
+  <!-- HOME -->
+  <section id="home" class="mx-auto flex min-h-[92vh] max-w-6xl flex-col justify-center px-4 pt-24 sm:px-6">
+    <p class="reveal text-sm font-semibold uppercase tracking-widest text-emerald-400">Software Engineer · Hyderabad</p>
+    <h1 class="reveal mt-4 max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl" style="--reveal-delay:80ms">
+      Vishnu Shouryan Reddy
+    </h1>
+    <p class="reveal mt-5 max-w-2xl text-lg text-zinc-300" style="--reveal-delay:160ms">
+      Full-stack web, mobile, cloud, and AI-powered automation. I build scalable,
+      cost-efficient systems — event-driven workflows, distributed storage, caching,
+      and low-latency architectures.
+    </p>
+    <div class="reveal mt-8 flex flex-wrap gap-3" style="--reveal-delay:240ms">
+      <a href="#projects" class="rounded-full bg-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300">
+        View projects
+      </a>
+      <a href={`${base}resume.pdf`} class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
+        Download resume
+      </a>
+      <a href="https://github.com/vsreddyh" class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
+        GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <h2 class="reveal text-2xl font-bold tracking-tight sm:text-3xl">About</h2>
+    <div class="reveal mt-4 grid gap-8 text-zinc-300 md:grid-cols-3" style="--reveal-delay:100ms">
+      <p class="md:col-span-2">
+        B.Tech CSE at Keshav Memorial Institute of Technology (2022–2026). Currently a
+        Software Engineer at 5th Bridge Data Technologies, working across React/Node
+        platforms, AI content tooling, and event-driven trading infrastructure. I'm
+        building a personal agentic AI ecosystem focused on intelligent automation and
+        clean engineering practices.
+      </p>
+      <ul class="space-y-2 text-sm">
+        <li><span class="text-zinc-500">Email</span><br />shouryanreddyh@gmail.com</li>
+        <li><span class="text-zinc-500">Phone</span><br />+91 9502747257</li>
+        <li><span class="text-zinc-500">Links</span><br />linkedin.com/in/vsreddyh · github.com/vsreddyh</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="border-y border-white/10 bg-zinc-900/40">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <h2 class="reveal text-2xl font-bold tracking-tight sm:text-3xl">Experience</h2>
+      <div class="mt-8 space-y-6">
+        <article class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-6">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="text-lg font-semibold">Software Engineer — 5th Bridge Data Technologies</h3>
+            <span class="text-sm text-zinc-400">Jun 2026 – Present · Hyderabad</span>
+          </div>
+          <ul class="mt-3 list-disc space-y-1.5 pl-5 text-sm text-zinc-300">
+            <li>Role-based web platform for social media ad agencies (React, Node.js, Convex): influencer partnerships from campaign creation to offer distribution.</li>
+            <li>AI content tools (React, Node.js, SQLite): trending reel-idea generator (news aggregation + LLM) and cost-optimized text-to-video pipeline.</li>
+            <li>ProCAD (Revalize) extensions: User and Domain Extensions per client requirements.</li>
+            <li>Led 3-person team on event-driven low-latency trading infra (Node.js, ClickHouse, PostgreSQL) for market alerts and fast execution.</li>
+          </ul>
+        </article>
+        <article class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-6" style="--reveal-delay:100ms">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="text-lg font-semibold">Software Engineer Intern — 5th Bridge Data Technologies</h3>
+            <span class="text-sm text-zinc-400">Jan 2026 – Jun 2026 · Hyderabad</span>
+          </div>
+          <ul class="mt-3 list-disc space-y-1.5 pl-5 text-sm text-zinc-300">
+            <li>Predictive models with Python, scikit-learn, Pandas — ML + rules with simulation/backtesting.</li>
+            <li>NLP pipeline (Python, PyTorch, Transformers) for insight extraction from unstructured text.</li>
+            <li>Signal-verification systems (Python, LLM, search layer) for emerging-trend detection on streams.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <div class="reveal flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Projects</h2>
+        <p class="mt-2 text-zinc-400">Selected work — click any card for the full case study.</p>
+      </div>
+    </div>
+    <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((p, i) => (
+        <a
+          href={`${base}projects/${p.id}/`}
+          class="reveal group flex flex-col rounded-2xl border border-white/10 bg-zinc-900/60 p-5 transition hover:-translate-y-1 hover:border-emerald-400/50"
+          style={`--reveal-delay:${Math.min(i, 5) * 70}ms`}
+        >
+          <h3 class="font-semibold group-hover:text-emerald-300">{p.data.title}</h3>
+          <p class="mt-2 flex-1 text-sm text-zinc-400">{p.data.description}</p>
+          <div class="mt-4 flex flex-wrap gap-1.5">
+            {p.data.stack.slice(0, 4).map((s) => (
+              <span class="rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-zinc-300">{s}</span>
+            ))}
+          </div>
+          <span class="mt-4 text-sm font-semibold text-emerald-400">Read case study →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="border-y border-white/10 bg-zinc-900/40">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <h2 class="reveal text-2xl font-bold tracking-tight sm:text-3xl">Skills</h2>
+      <dl class="mt-8 grid gap-5 text-sm sm:grid-cols-2 lg:grid-cols-3">
+        <div class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-5"><dt class="font-semibold text-emerald-300">Languages</dt><dd class="mt-2 text-zinc-300">C#, Java, Python, TypeScript, JavaScript, Go, C++, Bash, Lua, SQL, HTML, CSS</dd></div>
+        <div class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-5" style="--reveal-delay:60ms"><dt class="font-semibold text-emerald-300">Backend</dt><dd class="mt-2 text-zinc-300">ASP.NET, Node.js, Express, Django, FastAPI, Flask, Mongoose</dd></div>
+        <div class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-5" style="--reveal-delay:120ms"><dt class="font-semibold text-emerald-300">Frontend</dt><dd class="mt-2 text-zinc-300">React, Next.js, React Native, Expo, ElectronJS, TailwindCSS, shadcn/ui, Vite</dd></div>
+        <div class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-5"><dt class="font-semibold text-emerald-300">Databases</dt><dd class="mt-2 text-zinc-300">PostgreSQL, MongoDB, MySQL, SQLite, Redis, Convex, ClickHouse, SQL Server</dd></div>
+        <div class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-5" style="--reveal-delay:60ms"><dt class="font-semibold text-emerald-300">Cloud / DevOps</dt><dd class="mt-2 text-zinc-300">Docker, Podman, GitHub Actions, AWS, S3, Vercel, MinIO, Tailscale, Linux</dd></div>
+        <div class="reveal rounded-2xl border border-white/10 bg-zinc-950 p-5" style="--reveal-delay:120ms"><dt class="font-semibold text-emerald-300">AI / ML</dt><dd class="mt-2 text-zinc-300">PyTorch, Transformers, scikit-learn, XGBoost, LightGBM, Pandas, Gemini API</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section id="resume" class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <div class="reveal rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-400/10 to-transparent p-8 text-center sm:p-12">
+      <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Resume</h2>
+      <p class="mx-auto mt-3 max-w-xl text-zinc-300">
+        Single source of truth: <code class="text-emerald-300">resume/Main_Resume.pdf</code>.
+        The button below serves the same file copied to <code class="text-emerald-300">/resume.pdf</code> at build time.
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <a href={`${base}resume.pdf`} class="rounded-full bg-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300">
+          Download Main Resume (PDF)
+        </a>
+        <a href="https://github.com/vsreddyh" class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
+          GitHub profile
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+    <h2 class="reveal text-2xl font-bold tracking-tight sm:text-3xl">Contact</h2>
+    <p class="reveal mt-3 max-w-xl text-zinc-300" style="--reveal-delay:80ms">
+      Open to software engineering roles. Fastest way to reach me is email.
+    </p>
+    <div class="reveal mt-6 flex flex-wrap gap-3" style="--reveal-delay:140ms">
+      <a href="mailto:shouryanreddyh@gmail.com" class="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200">
+        shouryanreddyh@gmail.com
+      </a>
+      <a href="https://linkedin.com/in/vsreddyh" class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
+        LinkedIn
+      </a>
+    </div>
+  </section>
+</BaseLayout>
