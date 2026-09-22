@@ -1,19 +1,43 @@
 ---
-title: "Agento — Multi-Agent AI Bot Orchestration"
-description: "Six AI agents on Discord through one multiplexed gateway, with a credit-aware LLM proxy and fully containerized ops."
+title: "Agento"
+description: "Six AI agents on Discord behind one gateway, with an LLM proxy that survives dead API credits."
 stack: ["Python", "FastAPI", "Docker Compose", "MongoDB", "Discord API"]
 github: "https://github.com/vsreddyh/Agento"
 featured: true
 order: 1
+kicker: "Multi-agent AI ops"
+outcome: "Runs unattended: agents, health sync, retention jobs"
 ---
 
-## What it does
+## The problem
 
-Orchestrates six AI agents (one master coordinator + five domain bots) on Discord through a single multiplexed gateway process. Each agent gets an isolated profile home, workspace, and per-profile credential scope.
+I wanted a personal AI setup that actually runs day-to-day, not a demo I babysit.
+That meant several specialized bots (not one giant prompt), working API access even
+when a provider has a billing hiccup, and data hygiene so storage doesn't grow forever.
 
-## Key engineering
+## What I built
 
-- **Credit-aware LLM proxy:** routes chat completions to OpenCode Zen, automatically falling back to DeepInfra on credit/payment errors, alongside private SearXNG search.
-- **Compose-native ops:** search, proxy, health-api, gateway, dashboard, and retention job all run on Docker Compose. Dev mode targets a `test_` database on the remote cluster so development never touches production.
-- **Health Connect pipeline:** an Android app syncs daily activity, sleep, and workout data to a FastAPI service that persists it in MongoDB and posts summaries to Discord.
-- **Lifecycle + security:** scheduled retention jobs (90-day transaction wipes, 30-day health-data pruning); dashboard and APIs secured behind Tailscale, firewall rules, and password auth.
+Agento orchestrates six AI agents — one master coordinator plus five domain bots —
+on Discord through a single multiplexed gateway process. Each agent gets an isolated
+profile home, workspace, and per-profile credential scope, so a misbehaving bot can't
+wander into another's context.
+
+The piece I'm proudest of is the credit-aware LLM proxy: it routes chat completions
+to OpenCode Zen and automatically falls back to DeepInfra on credit or payment errors,
+with private SearXNG search alongside. The system degrades instead of dying.
+
+## How it runs
+
+Everything is Docker Compose: search, proxy, health API, gateway, dashboard, and a
+retention job. Dev mode targets a `test_` database on the remote cluster, so
+development never touches production data. A Health Connect pipeline syncs daily
+activity, sleep, and workouts from an Android app into FastAPI + MongoDB, with
+summaries posted back to Discord. Scheduled jobs enforce the lifecycle — 90-day
+transaction wipes, 30-day health-data pruning — and the dashboard and APIs sit behind
+Tailscale, firewall rules, and password auth.
+
+## What it taught me
+
+Reliability is a feature you design for: fallback chains, isolated credentials, and
+automated cleanup matter more than model choice. Most of this system exists so that
+nothing pages me.

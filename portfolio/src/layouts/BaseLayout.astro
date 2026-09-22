@@ -14,11 +14,10 @@ const {
 } = Astro.props;
 
 const nav = [
+  { href: `${base}#work`, label: 'Work', id: 'work' },
   { href: `${base}#about`, label: 'About', id: 'about' },
   { href: `${base}#experience`, label: 'Experience', id: 'experience' },
-  { href: `${base}#projects`, label: 'Projects', id: 'projects' },
-  { href: `${base}#skills`, label: 'Skills', id: 'skills' },
-  { href: `${base}#resume`, label: 'Resume', id: 'resume' },
+  { href: `${base}#now`, label: 'Now', id: 'now' },
   { href: `${base}#contact`, label: 'Contact', id: 'contact' },
 ];
 ---
@@ -46,10 +45,10 @@ const nav = [
         </div>
         <div class="flex items-center gap-3">
           <a
-            href={`${base}#contact`}
+            href={`${base}resume.pdf`}
             class="hidden rounded-full bg-emerald-400 px-4 py-1.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300 md:inline-block"
           >
-            Hire me
+            Resume
           </a>
           <details class="relative md:hidden">
             <summary class="cursor-pointer rounded-lg border border-white/15 px-3 py-1.5 text-sm list-none">

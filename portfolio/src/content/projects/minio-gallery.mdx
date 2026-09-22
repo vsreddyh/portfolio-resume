@@ -1,18 +1,35 @@
 ---
-title: "Anonymous Image Gallery — Cost-Optimized Ingestion"
-description: "Event-driven media pipeline: fast MinIO ingest, nightly S3 mirror, signed-URL delivery with Redis caching."
+title: "Anonymous Image Gallery"
+description: "A media ingestion pipeline designed around one question: what should we NOT pay S3 for?"
 stack: ["React", "FastAPI", "Redis", "MongoDB", "MinIO", "Amazon S3"]
 github: "https://github.com/vsreddyh/Minio-S3"
 featured: true
-order: 4
+order: 3
+kicker: "Cost-driven systems"
+outcome: "~10–25% fewer S3 request charges"
 ---
 
-## What it does
+## The problem
 
-Uploads hit MinIO for fast, bursty ingest. A nightly mirror syncs to S3 and purges MinIO; access is short-lived via signed S3 URLs.
+Object storage bills aren't dominated by bytes — they're dominated by requests.
+A naive gallery pays S3 for every bursty upload, every re-read, every piece of
+noise. I wanted an ingestion path that was fast under burst and cheap at rest.
 
-## Key engineering
+## What I built
 
-- Curated-only retention in S3 (about 10–25% fewer request charges by cutting noisy request overhead).
-- FastAPI backend issuing presigned URLs; image list in MongoDB; Redis-cached signed URLs to cut repeat-access latency.
-- Docker Compose across Bun/Vite frontend, FastAPI backend, MongoDB, Redis, and MinIO.
+An event-driven pipeline with tiered storage: uploads hit self-hosted MinIO for
+fast, bursty ingest. A nightly mirror syncs only curated files to S3 and purges
+MinIO. Reads go through short-lived signed S3 URLs, with Redis caching the signed
+URLs to cut latency on repeat access. The FastAPI backend issues presigned URLs,
+MongoDB holds the image index, and the whole stack — Bun/Vite frontend, FastAPI,
+MongoDB, Redis, MinIO — ships as one Docker Compose file.
+
+The result: roughly 10–25% fewer S3 request charges, by cutting noisy request
+overhead and retaining only curated files in S3.
+
+## What it taught me
+
+Cost is an architecture constraint, not an invoice surprise. Batching the expensive
+operation (S3 writes) into a nightly job and caching the expensive read (signed
+URLs) is the entire design — everything else is plumbing. This is the project that
+most shaped how I think about building cheap-to-run systems.
