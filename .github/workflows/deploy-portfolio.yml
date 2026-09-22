@@ -29,7 +29,7 @@ jobs:
           cache: npm
           cache-dependency-path: portfolio/package-lock.json
       - name: Use Main_Resume as site resume
-        run: cp resume/Main_Resume.pdf portfolio/public/resume.pdf
+        run: mkdir -p portfolio/public && cp resume/Main_Resume.pdf portfolio/public/resume.pdf
       - name: Install
         run: npm ci
         working-directory: portfolio
