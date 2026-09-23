@@ -1,19 +1,19 @@
 ---
 title: "Anonymous Image Gallery"
-description: "A media ingestion pipeline designed around one question: what should we NOT pay S3 for?"
+description: "Tiered media pipeline: MinIO for burst, S3 for rest, Redis in front of every read."
 stack: ["React", "FastAPI", "Redis", "MongoDB", "MinIO", "Amazon S3"]
 github: "https://github.com/vsreddyh/Minio-S3"
 featured: true
 order: 3
 kicker: "Cost-driven systems"
-outcome: "~10–25% fewer S3 request charges"
+outcome: "Fewer S3 requests by design, not by hope"
 diagram: |
   flowchart TB
     subgraph write[Write path]
-      U["Uploads\nbursty"] --> MI["MinIO\nhot ingest"] --> NM["Nightly mirror + purge\ncurated only"] --> S3[(Amazon S3)]
+      U["Uploads\nuuid names"] --> MI["MinIO\nhot ingest"] --> NM["Midnight mc mirror\ncurated only + purge"] --> S3[(Amazon S3)]
     end
     subgraph read[Read path]
-      CL[Client] --> FA["FastAPI\npresigned URLs"] --> RD[(Redis cache)] --> S3
+      CL[Client] --> FA["FastAPI\npresigned URLs"] --> RD[(Redis\n55-min TTL)] --> S3
       MDB[(MongoDB index)] -.-> FA
     end
 ---
@@ -26,19 +26,21 @@ noise. I wanted an ingestion path that was fast under burst and cheap at rest.
 
 ## What I built
 
-An event-driven pipeline with tiered storage: uploads hit self-hosted MinIO for
-fast, bursty ingest. A nightly mirror syncs only curated files to S3 and purges
-MinIO. Reads go through short-lived signed S3 URLs, with Redis caching the signed
-URLs to cut latency on repeat access. The FastAPI backend issues presigned URLs,
-MongoDB holds the image index, and the whole stack — Bun/Vite frontend, FastAPI,
-MongoDB, Redis, MinIO — ships as one Docker Compose file.
+A tiered pipeline with one Docker Compose file. Uploads land in self-hosted
+MinIO under uuid-hex names (the endpoint 503s unless both MinIO and Mongo are
+up — no half-written state), with metadata in MongoDB. Reads resolve through a
+chain: Redis first (55-minute TTL on signed URLs), MinIO presigned URL next,
+S3 fallback last. At midnight a cron job mirrors curated files to S3 with
+`mc mirror`, deletes the mirrored objects from MinIO, and invalidates their
+Redis keys. A `/health` endpoint pings all four backing services and reports
+degraded unless Mongo is healthy.
 
-The result: roughly 10–25% fewer S3 request charges, by cutting noisy request
-overhead and retaining only curated files in S3.
+The result is fewer S3 request charges: noisy traffic never reaches S3, only
+the nightly batch does, and repeat reads never leave Redis.
 
 ## What it taught me
 
-Cost is an architecture constraint, not an invoice surprise. Batching the expensive
-operation (S3 writes) into a nightly job and caching the expensive read (signed
-URLs) is the entire design — everything else is plumbing. This is the project that
-most shaped how I think about building cheap-to-run systems.
+Cost is an architecture constraint, not an invoice surprise. Batching the
+expensive operation (S3 writes) into a nightly job and caching the expensive
+read (signed URLs) is the entire design — everything else is plumbing. This is
+the project that most shaped how I think about building cheap-to-run systems.

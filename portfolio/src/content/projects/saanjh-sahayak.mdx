@@ -1,0 +1,38 @@
+---
+title: "Saanjh Sahayak"
+description: "Prototype clinical-decision app: caretakers upload lab PDFs, Gemini extracts params, doctors verify."
+stack: ["React Native", "Expo", "NativeWind", "Node.js", "Express", "Gemini API", "MongoDB"]
+github: "https://github.com/vsreddyh/mysaanj"
+featured: false
+order: 7
+diagram: |
+  flowchart LR
+    App["Expo app\npatients · PDF upload"] --> E["Express /en/*\n18 endpoints"]
+    E --> M[(MongoDB\npatients · reports)]
+    E --> G[(GridFS\nreport PDFs)]
+    E <--> GE["Gemini 1.5-flash\nextract + analyze"]
+    D["Doctor review\nunverified → verified"] --> E
+---
+
+## The problem
+
+In old-age homes, caretakers collect lab reports but doctors review them in
+batches — slow, and easy to miss deterioration. The idea: digitize the handoff
+so an AI first pass (parameters, summary, severity, specialist suggestion)
+reaches the doctor before the visit, not after.
+
+## What exists (prototype)
+
+An 11-screen Expo app (caretaker flows, doctor flows, PDF viewing) over an
+Express API with 18 endpoints. Uploaded PDFs land in GridFS; a two-stage
+Gemini pipeline first extracts structured health parameters (few-shot, with a
+negative example to reject non-medical uploads) and then generates analysis,
+precautions, severity 0–10, and specialist routing, filed under the patient's
+unverified reports. A doctor's note promotes a report to verified.
+
+## Honest status
+
+Late prototype, stalled since 2024: the pipeline and review loop are real, but
+authentication is still stubbed demo sessions — it needs real auth before it
+touches real patients. I'm keeping it here because the two-stage extraction
+design is the interesting part, not because it's shippable.

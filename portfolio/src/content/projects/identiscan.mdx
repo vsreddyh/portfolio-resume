@@ -1,17 +1,46 @@
 ---
-title: "Identiscan — Face Recognition Attendance"
-description: "Self-hostable facial-recognition attendance system with web portal and Linux touchscreen app."
+title: "Identiscan"
+description: "Check-in/out engine on top of dlib face matching, with GridFS photos and cascade-safe admin."
 stack: ["React", "TailwindCSS", "Node.js", "Flask", "MongoDB", "ElectronJS"]
 github: "https://github.com/vsreddyh/identiscan"
 featured: false
-order: 3
+order: 4
+diagram: |
+  flowchart LR
+    A["Attendance app\nroll + live photo"] --> E["Express :5003"]
+    E --> G[(GridFS\n enrolled photos)]
+    E --> F["Flask :5004\ndlib embedding · 0.6"]
+    F --> E
+    E --> M[(MongoDB\nrecords · batches)]
+    AD["Admin app\nbatches · % view"] --> E
 ---
 
-## What it does
+## The problem
 
-Self-hostable, scalable attendance system using Python and the `face_recognition` library, reported at 99.38% identification accuracy in the resume's evaluation.
+Paper registers and proxy attendance don't scale for large batches. The goal:
+walk up, enter a roll number, show your face, and get a trustworthy check-in —
+with admins able to see who was actually present, per class, per day.
 
-## Key engineering
+## What I built
 
-- Web portal for attendance records with batch-wise and class-wise organization, plus a student dashboard for checking status.
-- Linux ElectronJS app with a custom-built virtual keyboard for touchscreen devices.
+Three services behind two frontends. The Attendance app takes a roll number
+plus a live photo (with a custom on-screen virtual keyboard for touchscreens)
+and POSTs to Express, which pulls the enrolled photo from a GridFS bucket and
+forwards both images to a Flask microservice. Flask runs the `face_recognition`
+pipeline — dlib 128-d embedding, Euclidean distance, 0.6 threshold, first face
+only — and returns the match distance. On match, Express writes the record.
+
+The rules engine is where the domain lives: check-in before 12:00, checkout
+only after a 6-hour gap, one in/out pair per day, and attendance percentage
+computed against active class dates. The Admin app manages the hierarchy
+(batch → class → student) with cascade deletes wired as Mongoose hooks, so
+removing a batch can't orphan records. Auth is session-cookie + bcrypt, and
+the whole Attendance frontend ships wrapped as a Linux Electron app for kiosk
+hardware.
+
+## On the accuracy number
+
+Matching runs on dlib's ResNet embedding (99.38% on LFW, per the model
+publisher). That's the library's benchmark, not an in-repo evaluation — the
+right way to read it is "proven model, threshold tuned for the deployment,"
+not a claim about our hallways.

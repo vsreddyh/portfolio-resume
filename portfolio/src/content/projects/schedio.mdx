@@ -1,50 +1,55 @@
 ---
 title: "Schedio"
-description: "A collaboration platform for students, colleges, and recruiters — seeded with 10,000+ scraped institutions."
+description: "Three-sided collaboration platform with GridFS uploads, per-file AI explanations, and plagiarism checks."
 stack: ["React", "Node.js", "Express", "Gemini API", "MongoDB", "Docker"]
 github: "https://github.com/vsreddyh/schedio"
 demo: "https://schedio-coral.vercel.app"
 featured: true
 order: 2
 kicker: "Full-stack platform"
-outcome: "Live on Vercel with real institutional data"
+outcome: "Live on Vercel; three roles, one codebase"
 diagram: |
   flowchart LR
-    S[Students] --> R["React · Vercel\nrole-based access"]
-    C[Colleges] --> R
-    Re[Recruiters] --> R
-    R --> E["Express API\nREST + auth"]
-    E --> M[(MongoDB)]
-    E <--> G["Gemini API\ncode explanations"]
-    DS["10,000+ colleges\nscraped dataset"] --> SC[Scrapy spiders] --> M
+    S[T1 Students] --> R["React 18 + MUI"]
+    C[T2 Colleges] --> R
+    Re[T3 Recruiters] --> R
+    R --> E["Express API\nJWT + session auth"]
+    E --> M[(MongoDB\nusers · projects)]
+    E --> G[(GridFS\nZIPs · video · photos)]
+    E <--> GE["Gemini 2.5-flash\nper-file explanations"]
+    E <--> PL["Smodin API\nplagiarism check"]
 ---
 
 ## The problem
 
-Student projects are scattered across GitHub profiles nobody finds, and recruiters
-have no good way to discover them through colleges. I wanted one place where
-students, colleges, and recruiters meet around real work.
+Student projects are scattered across GitHub profiles nobody finds, and
+recruiters have no good way to discover them through colleges. I wanted one
+place where students, colleges, and recruiters meet around real work — with
+the evaluation tooling recruiters actually need.
 
 ## What I built
 
-Schedio is a full-stack collaboration platform with role-based access control and
-profile management for all three sides. To solve the cold-start problem, I scraped
-data from over 10,000 colleges into an institutional dataset, so the platform has
-real content from day one.
+Schedio serves three roles from one codebase: students upload and showcase
+projects, colleges manage their students' work with monthly analytics, and
+recruiters search across everything with institute and domain filters.
+Auth is email + bcrypt with JWT and Mongo-backed sessions, and every route
+is gated by user type.
 
-Discovery goes beyond keyword search: tokenized search and filtering, plagiarism
-detection, and AI-powered code explanations via the Gemini API. Contributors get
-file uploads (code, images, videos), analytics, PDF exports, and contributor
-management — the unglamorous tooling that makes sharing and evaluation actually work.
-
-## How it runs
-
-Docker for dev/production parity, live deployment on Vercel. Try it:
-**[schedio-coral.vercel.app](https://schedio-coral.vercel.app)**.
+The core loop is upload → explore → evaluate. Projects bundle code ZIPs,
+videos, and images into GridFS; the backend unzips code server-side and serves
+a file-tree viewer where each file gets its own Gemini explanation. Project
+descriptions run through a plagiarism API, and engagement (likes, comments,
+recruiter bookmarks) is first-class. Colleges get Chart.js monthly and
+domain analytics; profiles are print-friendly for handouts. Password reset
+flows through Gmail templates, and the whole thing ships in Docker
+(dev + prod Dockerfiles) with the live deployment on Vercel.
 
 ## What it taught me
 
-Marketplaces die of emptiness, not bad UI. Seeding supply (the college dataset)
-mattered more than any feature, and the evaluation tooling — plagiarism checks,
-code explanations — is what makes the platform useful to recruiters rather than
-just a prettier project list.
+Marketplaces die of emptiness, not bad UI — so the evaluation tooling
+(plagiarism checks, per-file code explanations, analytics) is what makes the
+platform useful to recruiters rather than just a prettier project list.
+And boring auth choices (sessions in Mongo, short-lived reset tokens) pay off
+when three user types share one API.
+
+Try it: **[schedio-coral.vercel.app](https://schedio-coral.vercel.app)**.

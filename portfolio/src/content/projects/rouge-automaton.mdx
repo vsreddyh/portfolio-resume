@@ -1,18 +1,47 @@
 ---
-title: "Rouge Automaton — Go Discord RAG Bot"
-description: "Go Discord bot serving game intel via gateway + relay, with wiki ingestion and cited context."
+title: "Rouge Automaton"
+description: "Go Discord RAG bot with a 5-tool model loop, wiki watcher, and a roleplayed defector persona."
 stack: ["Go", "discordgo", "MongoDB", "Podman Compose"]
 github: "https://github.com/vsreddyh/rouge_automaton"
 featured: false
 order: 6
+diagram: |
+  flowchart LR
+    U["Discord\nallowlist + mentions"] --> B["rouge bot\ndiscordgo gateway"]
+    B --> RL["OpenCode relay\nResponses API + tool loop"]
+    B --> DB[(MongoDB\nwiki intel cache)]
+    W["watcher\nRecentChanges · 5 min"] --> DB
+    B --> WF["helldivers.wiki.gg\nfallback + war status"]
 ---
 
-## What it does
+## The problem
 
-Serves game intel through a direct gateway plus an OpenCode relay client, backed by a MongoDB store with keyword retrieval and cited context.
+Game wikis are huge, slow to search mid-session, and go stale. The idea: a
+Discord bot that answers Helldivers 2 intel questions (units, counters,
+loadouts, biomes, live war status) from a local cache that refreshes itself —
+with a personality players actually enjoy talking to.
 
-## Key engineering
+## What I built
 
-- Wiki ingestion pipeline: RecentChanges polling, wikitext parsers, live war-status feed; falls back to live wiki lookup with source links on local misses.
-- Multi-service Podman Compose deployment (bot, watcher, Mongo) from a distroless image.
-- Standalone MCP server over the shared tool executor; Go tests across packages; one-shot ingest seeding MongoDB from checked-in JSON intel.
+A Go-only bot (no Python runtime) roleplaying a defected informant. Questions
+flow through a think-act loop capped at 3 tool rounds over five model tools —
+unit/gear/world search, planet status, wiki search — defined once and shared
+between the relay client and an MCP stdio server. Retrieval is Mongo keyword
+search with cited context; on a local miss it falls back to live wiki lookup
+with source links, plus a live war-status API. A separate watcher polls the
+wiki RecentChanges feed every 5 minutes and re-parses only changed pages.
+
+The craft is in the guardrails: allowlist + mention gating with auto-threads,
+answers truncated to Discord's 2000-rune limit, the persona compiled into the
+binary with serial numbers redacted and every transmission ending in `Over.`,
+and failure voiced in character — a 429 gets a "busy spreading democracy"
+reply with a liberation ETA, never silence. Four static binaries ship in a
+distroless image under Podman Compose (bot, watcher, Mongo), seeded by a
+one-shot ingest from checked-in intel data.
+
+## What it taught me
+
+Constraints make bots: capped tool rounds, clamped result counts, and canned
+failure modes turn an LLM integration from a demo into something that behaves
+in production. And embedding the persona at compile time means the character
+survives every redeploy bit-for-bit.

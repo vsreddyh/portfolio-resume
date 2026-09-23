@@ -1,0 +1,35 @@
+---
+title: "Daily Gita"
+description: "Offline-first verse reader: 701 verses bundled as SQLite, scraped trilingually, no backend."
+stack: ["React Native", "Expo", "expo-sqlite", "Nativewind", "Scrapy"]
+github: "https://github.com/vsreddyh/Daily_Gita"
+featured: false
+order: 8
+diagram: |
+  flowchart LR
+    W["holy-bhagavad-gita.org"] --> SC["Scrapy spiders\nen · hi · te"]
+    SC --> CSV["data.csv\ntrilingual"]
+    CSV --> DB[("gita.db · 701 verses\nbundled asset")]
+    DB --> App["Expo app\nSQLiteProvider · offline"]
+---
+
+## The problem
+
+Devotional apps shouldn't need accounts, backends, or connectivity. A daily
+verse reader is the perfect offline-first app: the entire corpus fits in a few
+megabytes, so ship the database with the app and never phone home.
+
+## What exists (in development)
+
+Scrapy spiders crawl English, Hindi, and Telugu verse pages into a trilingual
+CSV, compiled into a 701-row SQLite database bundled as an app asset and read
+through `SQLiteProvider` — zero network calls. Around it: drawer + tab
+navigation via expo-router, a language picker, reading history, and full
+in-app Terms/Privacy text framing the offline design.
+
+## Honest status
+
+Late prototype: dataset, bundling, and navigation shell are done; the
+verse-reading loop itself is still being wired (the home screen renders
+placeholders). The data pipeline was the hard part and it's finished — the UI
+is what's left.

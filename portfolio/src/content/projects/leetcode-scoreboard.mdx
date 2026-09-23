@@ -1,18 +1,44 @@
 ---
 title: "LeetCode Scoreboard"
-description: "Competitive practice tracker ranking accepted problems by difficulty, with PWA + push."
+description: "Difficulty-weighted rankings with a write/read split: cron syncs, dashboard never touches LeetCode."
 stack: ["Next.js", "TypeScript", "MongoDB", "Mongoose", "Web Push"]
 github: "https://github.com/vsreddyh/leetcode-scoreboard"
 featured: false
 order: 5
+diagram: |
+  flowchart LR
+    CR["cron-job.org\n5 min"] --> SY["/api/sync\ncookie or CRON_SECRET"]
+    SY --> GQL["LeetCode GraphQL\nsubmissions + acRate"]
+    SY --> DB[(MongoDB\none doc per user+question)]
+    D["/ dashboard\naggregation only"] --> DB
+    AD["/admin\ntracked users"] --> DB
 ---
 
-## What it does
+## The problem
 
-Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 − acceptance rate) via the LeetCode GraphQL API, so harder problems score more.
+Counting solved problems rewards grinding easies. For a practice group, the
+fair score pays more for harder problems — and the board has to stay fast and
+fresh without hammering LeetCode on every page view.
 
-## Key engineering
+## What I built
 
-- Five-minute external cron sync upserts submissions; dashboard reads pre-aggregated daily/total scores without touching LeetCode.
-- Per-user-per-day (IST) aggregation keeps daily and all-time totals consistent.
-- Password-protected admin panel, Web Push notifications, PWA install support, dark/light theming.
+Score per accepted problem is `100 − acceptance rate`, bucketed per user per
+day in IST. The key decision is the write/read split: an external cron hits
+`/api/sync` every 5 minutes (admin cookie or a constant-time-compared
+`CRON_SECRET`), which walks tracked users through `recentSubmissionList`,
+upserts one doc per user+question with the score pinned at first accept, and
+backfills canonical per-question rates so solving minutes apart pays the same.
+An end-of-day refresh folds into the first tick after 23:30 IST. The dashboard
+reads pre-aggregated Mongo data only — it never calls LeetCode — and each sync
+with new solves pushes a summary (solver counts, today's points, leader) via
+Web Push, pruning dead subscriptions automatically.
+
+Around it: a password-cookie admin panel with HMAC-signed sessions for tracked
+users and manual syncs, PWA install support, and dark/light theming.
+
+## What it taught me
+
+Separate the hot path from the slow source. Polling external APIs on a timer
+into your own store, then serving reads from the store, is a pattern that
+scales from scoreboards to trading infra — and idempotent upserts plus
+canonical scores are what keep concurrent writers honest.

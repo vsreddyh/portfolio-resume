@@ -105,29 +105,28 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \section*{Projects}
 
 \resumeSubheading
-{Multi-Agent AI Bot Orchestration Platform}{}{Python, FastAPI, Docker Compose, MongoDB, Discord API}{github.com/vsreddyh/Agento}
+{Agento: Personal AI Stack (Hermes + Android App)}{}{Kotlin, Jetpack Compose, Go, Podman Compose, MongoDB, Hermes}{github.com/vsreddyh/Agento}
 \resumeSubHeadingListStart
-\resumeItem{Orchestrated six AI agents (one master coordinator plus five domain bots) on Discord through a single multiplexed gateway process, giving each agent an isolated profile home, workspace, and per-profile credential scope.}
-\resumeItem{Built a credit-aware LLM proxy that routes chat completions to OpenCode Zen and automatically falls back to DeepInfra on credit/payment errors, alongside private SearXNG search.}
-\resumeItem{Runs fully on Docker Compose (search, proxy, health-api, gateway, dashboard, retention job), with a dev mode that targets a test\_ database on the remote cluster so development never touches production data.}
-\resumeItem{Implemented a Health Connect pipeline where an Android app syncs daily activity, sleep, and workout data to a FastAPI service that persists it in MongoDB and posts summaries to Discord.}
-\resumeItem{Automated data lifecycle management with scheduled retention jobs (90-day transaction wipes, 30-day health-data pruning) and secured the dashboard and APIs behind Tailscale, firewall rules, and password auth.}
+\resumeItem{Built a personal AI stack on Hermes: one multiplexed gateway serving god + story/resumes profiles with isolated workspaces and per-profile credentials, driven from a custom Kotlin/Jetpack Compose Android app with threaded chats, tasks, reminders, and settings backup.}
+\resumeItem{Connected all profiles directly to OpenCode Go with per-tab model selection; domain capabilities via Go MCP servers (money, cookbook, health-check) plus Playwright browser automation on every profile.}
+\resumeItem{Ships as one Podman Compose stack (gateway, nginx proxy, Go health-api, retention job); dev checkouts target a throwaway Atlas database so development never touches production data.}
+\resumeItem{Built a Health Connect pipeline with hourly background syncs of steps, sleep, and workouts from the app through the Go API into per-day MongoDB docs; releases ship as versioned APKs with in-app updates via CI.}
+\resumeItem{Automated data lifecycle with a nightly retention binary (90-day transaction wipes, 30-day health-data pruning; weight and cookbook data permanent) and kept all secrets in a single git-ignored .env.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Schedio: Project Sharing Platform}{}{React, Node, Express, Gemini API, MongoDB, Scrapy, Vercel, Docker}{github.com/vsreddyh/schedio}
+{Schedio: Project Sharing Platform}{}{React, Node, Express, Gemini API, MongoDB, Docker, Vercel}{github.com/vsreddyh/schedio}
 \resumeSubHeadingListStart
-\resumeItem{Built a full-stack collaboration platform connecting students, colleges, and recruiters for project discovery and collaboration, featuring role-based access control and profile management.}
-\resumeItem{Scraped data from over 10,000 colleges to create an institutional dataset.}
-\resumeItem{Implemented advanced search, filtering, and code exploration tools with tokenized search, plagiarism detection, and AI-powered code explanations (Gemini API).}
-\resumeItem{Enabled file uploads (code, images, videos), analytics, PDF exports, and contributor management, streamlining project sharing and evaluation.}
-\resumeItem{Supports Docker for development/production, with live access via Vercel.}
+\resumeItem{Built a full-stack collaboration platform connecting students, colleges, and recruiters for project discovery, with email + JWT + session auth and role-based access across three user types.}
+\resumeItem{Implemented tokenized + regex hybrid search with language/domain filters, recruiter bookmarking, likes/comments, and college-side monthly analytics rendered with Chart.js.}
+\resumeItem{Enabled ZIP, video, and image uploads to GridFS with a file-tree code viewer, per-file AI explanations via Gemini, and description plagiarism checks via RapidAPI.}
+\resumeItem{Added password reset via Gmail templates and print-friendly profiles; ships via Docker for dev/production, with live access via Vercel.}
 \resumeItem{\textbf{Demo:} schedio-coral.vercel.app}
 \resumeSubHeadingListEnd
 
 \resumeSubheading{Identiscan: Scalable Face Recognition Based Attendance System}{}{React, TailwindCSS, Node, Express, Flask, MongoDB, ElectronJS}{github.com/vsreddyh/identiscan}
 \resumeSubHeadingListStart
-\resumeItem{Engineered a self hostable, scalable facial recognition attendance system using Python and the face\_recognition library, achieving 99.38\% accuracy in identifying individuals.}
+\resumeItem{Engineered a self hostable, scalable facial recognition attendance system using Python and the face\_recognition library (dlib model, 99.38\% on LFW), with a check-in/out engine enforcing a 6-hour minimum stay rule.}
   \resumeItem{Built a comprehensive web portal for managing attendance records, including batch wise and class wise organization, and a student dashboard interface to check attendance status.}
   \resumeItem{Created an application for Linux using ElectronJS, which featured a custom-built virtual keyboard for seamless use on touchscreen devices.}
 \resumeSubHeadingListEnd
@@ -154,7 +153,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Building a cross-platform mobile application to assist doctors in clinical decision-making and patient data management.}
 \resumeItem{Integrating AI (Gemini API) to predict disease risks from patient inputs, reducing review time and improving diagnostic accuracy.}
-\resumeItem{Designed a secure Node.js + MongoDB backend to handle patient records and model predictions with scalable API endpoints.}
+\resumeItem{Designed a Node.js + MongoDB backend (Mongoose schemas for patients, old-age homes, reports) with Express routes for caretaker/doctor sessions, patient management, PDF report upload, and LLM-assisted review.}MLElement
 \resumeItem{Modeled patients, old-age homes, and reports as Mongoose schemas with verified/unverified report arrays, severity scores, and AI-generated summaries.}
 \resumeItem{Built Express routes for caretaker/doctor session login, patient management, PDF report upload, and LLM-assisted report review, with an Expo frontend supporting PDF viewing and document picking.}
 \resumeItem{Ongoing personal project.}
