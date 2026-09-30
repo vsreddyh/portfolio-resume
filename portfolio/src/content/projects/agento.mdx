@@ -28,9 +28,10 @@ health data captured automatically, and old data cleaned up on its own.
 ## What it is now
 
 Agento is a Hermes-based stack, not a Discord bot fleet. ONE multiplexed gateway
-container serves three profiles: **god** (main — money, cookbook, health, tasks),
+container serves three profiles: **god** (main — money, cookbook, health, tasks, projects),
 **story** (a lore vault backed by a Git repo), and **resumes** (LaTeX resume
-tailoring backed by the repo hosting this site). Each profile has its own workspace, skills,
+tailoring backed by its own git repo, whose master `Main_Resume.tex` also
+supplies the PDF linked from this site). Each profile has its own workspace, skills,
 and credential scope.
 
 The frontend is the **Agento Android app** (Jetpack Compose) — the app is Agento's
