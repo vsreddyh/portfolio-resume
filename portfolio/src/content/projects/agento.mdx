@@ -28,21 +28,25 @@ health data captured automatically, and old data cleaned up on its own.
 ## What it is now
 
 Agento is a Hermes-based stack, not a Discord bot fleet. ONE multiplexed gateway
-container serves three profiles: **god** (main — money tracking, cookbook, health),
+container serves three profiles: **god** (main — money, cookbook, health, tasks),
 **story** (a lore vault backed by a Git repo), and **resumes** (LaTeX resume
-tailoring backed by this very repo). Each profile has its own workspace, skills,
+tailoring backed by the repo hosting this site). Each profile has its own workspace, skills,
 and credential scope.
 
-The frontend is **Agento**, a custom Android app (Jetpack Compose): God/Story/Resumes
-chat tabs with threaded, on-device-persisted conversations, plus Tasks, Storage,
-Reminders, and Settings. One Server URL + Password — the app talks to an nginx
-proxy (`:8080`) that routes `/p/*` to the gateway's OpenAI-compatible chat API
-(`:8642`) and `/api/*` to the health-sync service.
+The frontend is the **Agento Android app** (Jetpack Compose) — the app is Agento's
+front end, not a separate product. God/Story/Resumes chat tabs carry threaded,
+on-device-persisted conversations; the rest of the surface is Projects, Task Manager
+(tasks, due-time reminders and a home-screen widget), Storage, Scheduler, Skills,
+Tools and Settings. One Server URL + Password — the app talks to an nginx proxy
+(`:8080`) that routes `/p/*` to the gateway's OpenAI-compatible chat API (`:8642`)
+and `/api/*` to the health-sync service.
 
 All three profiles reason through **OpenCode Go directly** (`mimo-v2.6-flash`),
 with per-tab provider/model selection from the live gateway catalog. Domain
-capabilities come from Go MCP servers I wrote — money, cookbook, health-check —
-plus Playwright browser automation on every profile.
+capabilities come from Go MCP servers I wrote — money, cookbook, health-check,
+task-manager, project-manager — plus Playwright browser automation on every profile.
+No LLM proxy and no failover chain: one provider, one request path, so there is
+nothing to fail over from.
 
 ## How it runs
 
@@ -53,8 +57,8 @@ prunes money transactions older than 90 days and health logs older than 30 days 
 while weight and cookbook data are permanent, and the Git-backed profiles need no
 DB retention at all. Dev checkouts point at a throwaway Atlas database, so
 production data is never at risk. A `hermes.sh` CLI (`init|start|stop|status|clean`)
-orchestrates the whole lifecycle, and every app change ships a versioned release
-APK with in-app updates.
+orchestrates the whole lifecycle (`init|start|stop|restart|status|clean`), and every
+app change ships a versioned release APK with in-app updates.
 
 ## What it taught me
 
