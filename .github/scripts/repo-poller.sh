@@ -28,6 +28,14 @@ tmp_state="$(mktemp)"
 tmp_body="$(mktemp)"
 trap 'rm -f "$tmp_state" "$tmp_state.new" "$tmp_body"' EXIT
 [[ -f "$STATE_FILE" ]] || echo '{}' >"$STATE_FILE" # first run / renamed state
+if ! jq -e '.watched | type == "array" and length > 0' "$CONFIG" >/dev/null; then
+  echo "error: $CONFIG must define a non-empty .watched array" >&2
+  exit 1
+fi
+if ! jq empty "$STATE_FILE" 2>/dev/null; then
+  echo "error: $STATE_FILE is not valid JSON - refusing to run (fix by hand, do not delete history)" >&2
+  exit 1
+fi
 cp "$STATE_FILE" "$tmp_state"
 changed=0
 

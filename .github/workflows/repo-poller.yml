@@ -28,7 +28,7 @@ jobs:
       - name: Poll watched repos
         env:
           REPO_SYNC_TOKEN: ${{ secrets.REPO_SYNC_TOKEN }}
-          DRY_RUN: ${{ inputs.dry_run == true && '1' || '0' }}
+          DRY_RUN: ${{ (github.event_name == 'schedule' || inputs.dry_run != true) && '0' || '1' }}
         run: bash .github/scripts/repo-poller.sh
       - name: Commit state
         if: github.event_name == 'schedule' || inputs.dry_run != true
