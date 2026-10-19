@@ -1,5 +1,4 @@
 {
-  "$schema": "https://example.com/repo-sync-config",
   "targetRepo": "vsreddyh/portfolio-resume",
   "label": "repo-sync",
   "watched": [

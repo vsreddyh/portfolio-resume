@@ -31,7 +31,7 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run == true && '1' || '0' }}
         run: bash .github/scripts/repo-poller.sh
       - name: Commit state
-        if: inputs.dry_run != true
+        if: github.event_name == 'schedule' || inputs.dry_run != true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -21,18 +21,31 @@ if [[ -z "$GH_TOKEN" && "$DRY_RUN" != "1" ]]; then
   exit 1
 fi
 
-gh label create "$LABEL" --repo "$TARGET_REPO" --color "1f883d" \
-  --description "Upstream repo update detected by poller" 2>/dev/null || true
-
 tmp_state="$(mktemp)"
+tmp_body="$(mktemp)"
+trap 'rm -f "$tmp_state" "$tmp_state.new" "$tmp_body"' EXIT
 cp "$STATE_FILE" "$tmp_state"
 changed=0
+
+save_repo_state() {
+  jq --arg r "$1" --arg s "$2" '.[$r] = $s' "$tmp_state" >"$tmp_state.new"
+  mv "$tmp_state.new" "$tmp_state"
+  if [[ "$DRY_RUN" != "1" ]]; then
+    cp "$tmp_state" "$STATE_FILE" # write-through: state survives mid-loop failures
+  fi
+}
 
 while IFS= read -r entry; do
   repo="$(jq -r .repo <<<"$entry")"
   portfolio="$(jq -r '.portfolio // "none (resume-only)"' <<<"$entry")"
-  branch="$(gh api "repos/$repo" --jq .default_branch)"
-  head_sha="$(gh api "repos/$repo/commits/$branch" --jq .sha)"
+  if ! branch="$(gh api "repos/$repo" --jq .default_branch 2>/dev/null)"; then
+    echo "WARN $repo: failed to read repo metadata, skipping"
+    continue
+  fi
+  if ! head_sha="$(gh api "repos/$repo/commits/$branch" --jq .sha 2>/dev/null)"; then
+    echo "WARN $repo: failed to read HEAD SHA, skipping"
+    continue
+  fi
   old_sha="$(jq -r --arg r "$repo" '.[$r] // ""' "$tmp_state")"
 
   if [[ "$head_sha" == "$old_sha" ]]; then
@@ -41,8 +54,7 @@ while IFS= read -r entry; do
   fi
   if [[ -z "$old_sha" ]]; then
     echo "BASELINE $repo ($head_sha, no prior state - recording only)"
-    jq --arg r "$repo" --arg s "$head_sha" '.[$r] = $s' "$tmp_state" >"$tmp_state.new"
-    mv "$tmp_state.new" "$tmp_state"
+    save_repo_state "$repo" "$head_sha"
     changed=1
     continue
   fi
@@ -53,20 +65,20 @@ while IFS= read -r entry; do
     continue
   fi
 
+  expected_title="[repo-sync] $repo updated"
   open_issue="$(gh issue list --repo "$TARGET_REPO" --label "$LABEL" --state open \
-    --search "\"$repo\" in:title" --json number --jq '.[0].number // ""')"
+    --json number,title --jq --arg t "$expected_title" '[.[] | select(.title == $t)][0].number // ""')"
   if [[ -n "$open_issue" ]]; then
     echo "COMMENT $repo -> issue #$open_issue ($old_sha -> $head_sha)"
-    gh issue comment "$open_issue" --repo "$TARGET_REPO" --body "$(cat <<EOF
+    cat >"$tmp_body" <<EOF
 $repo moved again: [\`$old_sha\`...\`$head_sha\`]($compare_url)
 
 Portfolio file: \`$portfolio\`
 EOF
-)"
+    gh issue comment "$open_issue" --repo "$TARGET_REPO" --body-file "$tmp_body"
   else
     echo "FILE $repo ($old_sha -> $head_sha)"
-    gh issue create --repo "$TARGET_REPO" --label "$LABEL" \
-      --title "[repo-sync] $repo updated" --body "$(cat <<EOF
+    cat >"$tmp_body" <<EOF
 Upstream repo **$repo** moved on \`$branch\`:
 
 - Before: \`$old_sha\`
@@ -77,20 +89,18 @@ Portfolio file: \`$portfolio\` (resume: \`resume/Main_Resume.tex\`)
 
 One open issue per repo is kept by the poller; further pushes comment here until this is closed.
 EOF
-)"
+    gh issue create --repo "$TARGET_REPO" --label "$LABEL" \
+      --title "$expected_title" --body-file "$tmp_body"
   fi
 
-  jq --arg r "$repo" --arg s "$head_sha" '.[$r] = $s' "$tmp_state" >"$tmp_state.new"
-  mv "$tmp_state.new" "$tmp_state"
+  save_repo_state "$repo" "$head_sha"
   changed=1
 done < <(jq -c '.watched[]' "$CONFIG")
 
-if [[ "$changed" == "1" && "$DRY_RUN" != "1" ]]; then
-  cp "$tmp_state" "$STATE_FILE"
-  echo "STATE updated: $STATE_FILE"
-elif [[ "$DRY_RUN" == "1" ]]; then
+if [[ "$DRY_RUN" == "1" ]]; then
   echo "DRY-RUN: state untouched"
+elif [[ "$changed" == "1" ]]; then
+  echo "STATE updated: $STATE_FILE"
 else
   echo "STATE unchanged"
 fi
-rm -f "$tmp_state"
