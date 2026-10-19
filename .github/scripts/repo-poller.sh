@@ -14,6 +14,9 @@ LABEL="${LABEL:-repo-sync}"
 CONFIG="${CONFIG:-.github/repo-sync.json}"
 STATE_FILE="${STATE_FILE:-.github/repo-sync-state.json}"
 DRY_RUN="${DRY_RUN:-0}"
+# BOOTSTRAP=1 records unknown repos silently instead of filing for them.
+# Used for first-ever runs; afterwards new `watched` entries file normally.
+BOOTSTRAP="${BOOTSTRAP:-0}"
 
 export GH_TOKEN="${GH_TOKEN:-${REPO_SYNC_TOKEN:-}}"
 if [[ -z "$GH_TOKEN" && "$DRY_RUN" != "1" ]]; then
@@ -52,14 +55,22 @@ while IFS= read -r entry; do
     echo "SKIP $repo (unchanged $head_sha)"
     continue
   fi
-  if [[ -z "$old_sha" ]]; then
-    echo "BASELINE $repo ($head_sha, no prior state - recording only)"
+  if [[ -z "$old_sha" && "$BOOTSTRAP" == "1" ]]; then
+    if [[ "$DRY_RUN" == "1" ]]; then
+      echo "WOULD-BASELINE $repo ($head_sha, bootstrap - would record silently)"
+    else
+      echo "BASELINE $repo ($head_sha, bootstrap - recording only)"
+    fi
     save_repo_state "$repo" "$head_sha"
     changed=1
     continue
   fi
-
-  compare_url="https://github.com/$repo/compare/$old_sha...$head_sha"
+  if [[ -z "$old_sha" ]]; then
+    old_sha="(first seen; no prior state)"
+    compare_url="https://github.com/$repo/commits/$branch"
+  else
+    compare_url="https://github.com/$repo/compare/$old_sha...$head_sha"
+  fi
   if [[ "$DRY_RUN" == "1" ]]; then
     echo "WOULD-FILE $repo ($old_sha -> $head_sha)"
     continue

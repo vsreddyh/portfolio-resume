@@ -11,10 +11,15 @@ permissions:
   pull-requests: write
   issues: write
 
+concurrency:
+  group: repo-sync-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
 jobs:
   sync:
     if: contains(github.event.issue.labels.*.name, 'repo-sync')
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,6 +37,8 @@ jobs:
             This issue reports an upstream repo update (title, before/after SHAs,
             compare link, and portfolio file mapping are in the issue body).
             1. Inspect the upstream diff via `gh api` (public repos, read-only).
+               Never push, commit, or open PRs in upstream repos — all writes
+               stay in this repo (portfolio-resume).
             2. If it warrants it, update the mapped portfolio file under
                `portfolio/src/content/projects/` and/or the matching project entry
                in `resume/Main_Resume.tex`, following `resume/AGENTS.md`
