@@ -27,6 +27,7 @@ fi
 tmp_state="$(mktemp)"
 tmp_body="$(mktemp)"
 trap 'rm -f "$tmp_state" "$tmp_state.new" "$tmp_body"' EXIT
+[[ -f "$STATE_FILE" ]] || echo '{}' >"$STATE_FILE" # first run / renamed state
 cp "$STATE_FILE" "$tmp_state"
 changed=0
 
@@ -78,7 +79,7 @@ while IFS= read -r entry; do
 
   expected_title="[repo-sync] $repo updated"
   open_issue="$(gh issue list --repo "$TARGET_REPO" --label "$LABEL" --state open \
-    --json number,title --jq --arg t "$expected_title" '[.[] | select(.title == $t)][0].number // ""')"
+    --json number,title | jq -r --arg t "$expected_title" '[.[] | select(.title == $t)][0].number // ""')"
   if [[ -n "$open_issue" ]]; then
     echo "COMMENT $repo -> issue #$open_issue ($old_sha -> $head_sha)"
     cat >"$tmp_body" <<EOF
