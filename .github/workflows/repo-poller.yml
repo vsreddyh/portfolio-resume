@@ -21,6 +21,7 @@ concurrency:
 jobs:
   poll:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,5 +37,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .github/repo-sync-state.json
-          git diff --cached --quiet || git commit -m "chore(repo-sync): update last-seen SHAs"
-          git pull --rebase --autostash && git push
+          if git diff --cached --quiet; then
+            echo "no state changes, skipping push"
+          else
+            git commit -m "chore(repo-sync): update last-seen SHAs"
+            git pull --rebase --autostash
+            git push
+          fi

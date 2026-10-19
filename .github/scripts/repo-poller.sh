@@ -38,6 +38,8 @@ if ! jq empty "$STATE_FILE" 2>/dev/null; then
 fi
 cp "$STATE_FILE" "$tmp_state"
 changed=0
+total=0
+skipped=0
 
 save_repo_state() {
   jq --arg r "$1" --arg s "$2" '.[$r] = $s' "$tmp_state" >"$tmp_state.new"
@@ -47,15 +49,16 @@ save_repo_state() {
   fi
 }
 
-while IFS= read -r entry; do
-  repo="$(jq -r .repo <<<"$entry")"
-  portfolio="$(jq -r '.portfolio // "none (resume-only)"' <<<"$entry")"
+while IFS=$'\t' read -r repo portfolio; do
+  total=$((total + 1))
   if ! branch="$(gh api "repos/$repo" --jq .default_branch 2>/dev/null)"; then
     echo "WARN $repo: failed to read repo metadata, skipping"
+    skipped=$((skipped + 1))
     continue
   fi
   if ! head_sha="$(gh api "repos/$repo/commits/$branch" --jq .sha 2>/dev/null)"; then
     echo "WARN $repo: failed to read HEAD SHA, skipping"
+    skipped=$((skipped + 1))
     continue
   fi
   old_sha="$(jq -r --arg r "$repo" '.[$r] // ""' "$tmp_state")"
@@ -115,7 +118,12 @@ EOF
 
   save_repo_state "$repo" "$head_sha"
   changed=1
-done < <(jq -c '.watched[]' "$CONFIG")
+done < <(jq -r '.watched[] | "\(.repo)\t\(.portfolio // "none (resume-only)")"' "$CONFIG")
+
+if [[ "$total" -gt 0 && "$skipped" -eq "$total" ]]; then
+  echo "error: all $total repos skipped - likely expired REPO_SYNC_TOKEN or rate limit (re-run to surface API errors)" >&2
+  exit 1
+fi
 
 if [[ "$DRY_RUN" == "1" ]]; then
   echo "DRY-RUN: state untouched"
