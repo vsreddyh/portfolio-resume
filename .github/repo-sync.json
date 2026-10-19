@@ -1,0 +1,19 @@
+{
+  "targetRepo": "vsreddyh/portfolio-resume",
+  "label": "repo-sync",
+  "watched": [
+    { "repo": "vsreddyh/Agento", "portfolio": "portfolio/src/content/projects/agento.mdx" },
+    { "repo": "vsreddyh/schedio", "portfolio": "portfolio/src/content/projects/schedio.mdx" },
+    { "repo": "vsreddyh/identiscan", "portfolio": "portfolio/src/content/projects/identiscan.mdx" },
+    { "repo": "vsreddyh/Minio-S3", "portfolio": "portfolio/src/content/projects/minio-gallery.mdx" },
+    { "repo": "vsreddyh/mysaanj", "portfolio": "portfolio/src/content/projects/saanjh-sahayak.mdx" },
+    { "repo": "vsreddyh/rouge_automaton", "portfolio": "portfolio/src/content/projects/rouge-automaton.mdx" },
+    { "repo": "vsreddyh/leetcode-scoreboard", "portfolio": "portfolio/src/content/projects/leetcode-scoreboard.mdx" },
+    { "repo": "vsreddyh/Daily_Gita", "portfolio": "portfolio/src/content/projects/daily-gita.mdx" },
+    { "repo": "vsreddyh/Past-Placements-XLSX-generator", "portfolio": null },
+    { "repo": "vsreddyh/birthdayCalendar", "portfolio": null },
+    { "repo": "vsreddyh/Wigikin", "portfolio": null },
+    { "repo": "vsreddyh/warner-bash", "portfolio": null },
+    { "repo": "vsreddyh/games", "portfolio": null }
+  ]
+}

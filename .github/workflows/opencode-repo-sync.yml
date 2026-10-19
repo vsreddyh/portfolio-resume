@@ -1,0 +1,51 @@
+name: opencode-repo-sync
+
+# Fires on poller-filed issues (filed via REPO_SYNC_TOKEN PAT so this trigger runs;
+# issues filed with GITHUB_TOKEN would NOT re-trigger workflows).
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: repo-sync-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: contains(github.event.issue.labels.*.name, 'repo-sync')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: anomalyco/opencode/github@latest
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          # OpenCode-managed model (auth via OPENCODE_API_KEY). Change if needed.
+          model: opencode-go/muse-spark-1.3-contributor
+          variant: minimal
+          use_github_token: true
+          prompt: |
+            This issue reports an upstream repo update (title, before/after SHAs,
+            compare link, and portfolio file mapping are in the issue body).
+            1. Inspect the upstream diff via `gh api` (public repos, read-only).
+               Never push, commit, or open PRs in upstream repos — all writes
+               stay in this repo (portfolio-resume).
+            2. If it warrants it, update the mapped portfolio file under
+               `portfolio/src/content/projects/` and/or the matching project entry
+               in `resume/Main_Resume.tex`, following `resume/AGENTS.md`
+               (honesty rules: no invented metrics; changelog in your reply).
+            3. If changes were made, open a PR, link it, and comment the summary
+               on this issue. If nothing warrants a change, explain why and close
+               the issue. Never touch `.github/repo-sync-state.json`.
+      - name: Enforce state untouched
+        if: always()
+        run: git diff --quiet -- .github/repo-sync-state.json || git checkout -- .github/repo-sync-state.json

@@ -1,0 +1,46 @@
+name: repo-poller
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # daily 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Report only (no issues, no state writes)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: repo-poller
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_SYNC_TOKEN }}
+      - name: Poll watched repos
+        env:
+          REPO_SYNC_TOKEN: ${{ secrets.REPO_SYNC_TOKEN }}
+          DRY_RUN: ${{ (github.event_name == 'schedule' || inputs.dry_run != true) && '0' || '1' }}
+        run: bash .github/scripts/repo-poller.sh
+      - name: Commit state
+        if: github.event_name == 'schedule' || inputs.dry_run != true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/repo-sync-state.json
+          if git diff --cached --quiet; then
+            echo "no state changes, skipping push"
+          else
+            git commit -m "chore(repo-sync): update last-seen SHAs"
+            git pull --rebase --autostash
+            git push
+          fi
