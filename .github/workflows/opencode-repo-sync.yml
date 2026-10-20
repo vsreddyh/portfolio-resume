@@ -23,7 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          # Must persist GITHUB_TOKEN so opencode's internal
+          # `git push -u origin <branch>` is authenticated.
+          # (persist-credentials:false leaves no auth -> push fails
+          # with "could not read Username".)
+          persist-credentials: true
       - name: Configure git identity for opencode
         run: |
           git config user.name "github-actions[bot]"
