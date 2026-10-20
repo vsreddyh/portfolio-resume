@@ -162,8 +162,8 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubheading
 {Rouge Automaton: Go Discord RAG Bot}{}{Go, discordgo, MongoDB, Podman Compose}{github.com/vsreddyh/rouge\_automaton}
 \resumeSubHeadingListStart
-\resumeItem{Built a Go Discord bot serving game intel through a direct gateway plus an OpenCode relay client, backed by a MongoDB store with keyword retrieval and cited context.}
-\resumeItem{Implemented a wiki ingestion pipeline with RecentChanges polling, wikitext parsers, and a live war-status feed, falling back to live wiki lookup with source links on local misses.}
+\resumeItem{Built a Go Discord bot serving game intel through a direct gateway plus an OpenCode relay client, backed by a MongoDB store with keyword retrieval and cited context, client-side rate limiting, and /status + /cooldown ops commands.}
+\resumeItem{Implemented a wiki ingestion pipeline with RecentChanges polling, wikitext parsers, and a live war-status feed with a generic war-summary tool, falling back to live wiki lookup with source links on local misses.}
 \resumeItem{Shipped multi-service Podman Compose deployment (bot, watcher, Mongo) from a distroless image, with a standalone MCP server over the shared tool executor and Go tests across packages.}
 \resumeItem{Seeds MongoDB from checked-in JSON intel organized by faction through a one-shot ingest command.}
 \resumeSubHeadingListEnd
