@@ -6,7 +6,7 @@ github: "https://github.com/vsreddyh/Agento"
 featured: true
 order: 1
 kicker: "Personal AI stack"
-outcome: "One Compose stack: app, gateway, health sync, retention"
+outcome: "One Compose stack: app, gateway, health sync, retention — plus approval gates, memory, taught skills"
 diagram: |
   flowchart LR
     App["Agento Android\nGod · Story · Resumes chats"] --> PX["proxy :8080\n/p/* → chat · /api/* → sync"]
@@ -48,6 +48,16 @@ capabilities come from Go MCP servers I wrote — money, cookbook, health-check,
 task-manager, project-manager — plus Playwright browser automation on every profile.
 No LLM proxy and no failover chain: one provider, one request path, so there is
 nothing to fail over from.
+
+Chat turns are server-side **runs**: killing the app mid-reply no longer kills
+the work — reopening the thread picks up the same run, with steer-while-running,
+stop, and a runs list per thread. Sensitive agent actions (money writes,
+deletes, destructive rewrites) pause behind **approval gates** — the turn holds,
+the app raises a badged Approvals entry with redacted arguments plus an audit
+trail, and deny fails the call back as a tool error. The agent also carries
+**per-profile memory** (durable facts land pending for review, then inject into
+the prompt) and **taught skills** (any conversation can become a tested,
+activatable draft skill, optionally scheduled as a cron routine).
 
 ## How it runs
 
