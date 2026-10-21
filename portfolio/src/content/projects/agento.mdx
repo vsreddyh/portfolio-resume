@@ -51,7 +51,8 @@ nothing to fail over from.
 
 Chat turns are server-side **runs**: killing the app mid-reply no longer kills
 the work — reopening the thread picks up the same run, with steer-while-running,
-stop, and a runs list per thread. Sensitive agent actions (money writes,
+stop, and a runs list per thread. Voice works as a live call mode with barge-in,
+so interrupting the readout steers the turn instead of talking over it. Sensitive agent actions (money writes,
 deletes, destructive rewrites) pause behind **approval gates** — the turn holds,
 the app raises a badged Approvals entry with redacted arguments plus an audit
 trail, and deny fails the call back as a tool error. The agent also carries
