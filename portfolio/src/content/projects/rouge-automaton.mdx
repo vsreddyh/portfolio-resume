@@ -1,6 +1,6 @@
 ---
 title: "Rouge Automaton"
-description: "Go Discord RAG bot with a 6-tool model loop, wiki watcher, and a roleplayed defector persona."
+description: "Go Discord RAG bot with a 10-round model tool loop, exact-match Mongo intel tools, catalog + wiki sync, and a roleplayed defector persona."
 stack: ["Go", "discordgo", "MongoDB", "Podman Compose"]
 github: "https://github.com/vsreddyh/rouge_automaton"
 featured: false
@@ -24,24 +24,28 @@ with a personality players actually enjoy talking to.
 ## What I built
 
 A Go-only bot (no Python runtime) roleplaying a defected informant. Questions
-flow through a think-act loop capped at 3 tool rounds over six model tools —
-unit/gear/world search, generic war summary, named-planet status, wiki
+flow through a think-act loop of up to 10 tool rounds (4096 tokens, clarification
+allowed) over exact-match Mongo intel tools —
+unit/gear/world lookups, generic war summary, named-planet status, wiki
 search — defined once and shared
-between the relay client and an MCP stdio server. Retrieval is Mongo keyword
-search with cited context; on a local miss it falls back to live wiki lookup
-with source links, plus a live war-status API that answers generic "how goes
-the war" questions without needing a planet name. A separate watcher polls the
-wiki RecentChanges feed every 5 minutes and re-parses only changed pages.
+between the relay client and an MCP stdio server. Retrieval is Mongo exact-match
+with cited context (collated indexes, alias handling); on a local miss it falls back to live wiki lookup
+with source links, plus a live war-status feed sourced from the Training Manual API
+with a staleness guard that answers generic "how goes
+the war" questions without needing a planet name. Gear shelves sync daily from a
+public catalog snapshot (ETag-conditional, cached in Mongo); units and world are
+crawled politely from the wiki, and a self-feeding watcher polls the
+wiki RecentChanges feed every 5 minutes, routes unseen pages to a shelf, and re-parses only changed pages.
 
 The craft is in the guardrails: allowlist + mention gating with auto-threads,
 answers truncated to Discord's 2000-rune limit, the persona compiled into the
 binary with serial numbers redacted and every transmission ending in `Over.`,
 and failure voiced in character — a 429 gets a "busy spreading democracy"
 reply with a liberation ETA, never silence. Client-side token-bucket rate
-limiting backs that up, with `/status` (health + relay probe) and `/cooldown`
-(quota inquiry) ops commands and a typing indicator while the model works. Four static binaries ship in a
-distroless image under Podman Compose (bot, watcher, Mongo), seeded by a
-one-shot ingest from checked-in intel data.
+ limiting backs that up, with `/status` (health + relay probe) and `/cooldown`
+ (quota inquiry) ops commands and a typing indicator while the model works. Static binaries ship in a
+ distroless image under Podman Compose (bot, watcher, catalog sync, crawl, Mongo), seeded by a
+ one-shot ingest from checked-in intel data covering units, gear, and world shelves.
 
 ## What it taught me
 
