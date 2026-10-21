@@ -11,7 +11,10 @@ diagram: |
     B --> RL["OpenCode relay\nResponses API + tool loop"]
     B --> DB[(MongoDB\nwiki intel cache)]
     W["watcher\nRecentChanges · 5 min"] --> DB
-    B --> WF["helldivers.wiki.gg\nfallback + war status"]
+    C["catalog sync\ndaily ETag"] --> DB
+    CR["crawl\nunits + world"] --> DB
+    B --> TM["Training Manual API\nwar status"]
+    B --> WK["helldivers.wiki.gg\nlookup fallback"]
 ---
 
 ## The problem
