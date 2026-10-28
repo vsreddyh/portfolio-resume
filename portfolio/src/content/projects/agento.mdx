@@ -1,22 +1,22 @@
 ---
 title: "Agento"
-description: "Personal AI stack: one multiplexed gateway serving three profiles, driven from a custom Android app."
-stack: ["Kotlin", "Jetpack Compose", "Go", "Podman Compose", "MongoDB", "Hermes"]
+description: "Personal AI stack: one Pi agent container behind an OpenAI-compatible gateway, driven from a custom Android app."
+stack: ["Kotlin", "Jetpack Compose", "Go", "Podman Compose", "MongoDB", "Pi"]
 github: "https://github.com/vsreddyh/Agento"
 featured: true
 order: 1
 kicker: "Personal AI stack"
-outcome: "One Compose stack: app, gateway, health sync, retention — plus approval gates, memory, taught skills"
+outcome: "One Compose stack: app, agent, health sync, retention — plus approval gates, memory, taught skills"
 diagram: |
   flowchart LR
-    App["Agento Android\nGod · Story · Resumes chats"] --> PX["proxy :8080\n/p/* → chat · /api/* → sync"]
-    PX --> GW["ONE gateway container\ngod + story + resumes · :8642"]
+    App["Agento Android\nChat · Projects · Tasks · Files"] --> PX["proxy :8080\n/p/* → chat · /api/* → sync"]
+    PX --> PI["ONE pi container\npi-gateway :8643"]
     PX --> HA["health-api :8001"]
-    GW --> OC["OpenCode Go direct\nmimo-v2.6-flash"]
-    GW --> DB[(MongoDB Atlas\nmoney · health · cookbook)]
+    PI --> OC["OpenCode Go direct\nmimo-v2.6-flash"]
+    PI --> DB[(MongoDB Atlas\nmoney · health · cookbook)]
     HA --> DB
     RT["retention one-shot\ncron 03:00"] -.-> DB
-    GW --- MCPs["Go MCPs\nmoney · cookbook · health-check"]
+    PI --- MCPs["8 Go MCPs\nmoney · cookbook · health · tasks · projects · notes · memory · browser"]
 ---
 
 ## The problem
@@ -27,57 +27,61 @@ health data captured automatically, and old data cleaned up on its own.
 
 ## What it is now
 
-Agento is a Hermes-based stack, not a Discord bot fleet. ONE multiplexed gateway
-container serves three profiles: **god** (main — money, cookbook, health, tasks, projects),
-**story** (a lore vault backed by a Git repo), and **resumes** (LaTeX resume
-tailoring backed by its own git repo, whose master `Main_Resume.tex` also
-supplies the PDF linked from this site). Each profile has its own workspace, skills,
-and credential scope.
+Agento is a Pi-based stack, not a Discord bot fleet. ONE container runs one `pi`
+process for a single **chat** profile, fronted by a `pi-gateway` that serves the
+OpenAI-compatible surface the app already speaks. The agent's workspace, skills,
+and credential scope all live in that one profile.
 
 The frontend is the **Agento Android app** (Jetpack Compose) — the app is Agento's
-front end, not a separate product. God/Story/Resumes chat tabs carry threaded,
-on-device-persisted conversations; the rest of the surface is Projects, Task Manager
-(tasks, due-time reminders and a home-screen widget), Storage, Scheduler, Skills,
-Tools and Settings. One Server URL + Password — the app talks to an nginx proxy
-(`:8080`) that routes `/p/*` to the gateway's OpenAI-compatible chat API (`:8642`)
-and `/api/*` to the health-sync service.
+front end, not a separate product. A single Chat tab carries threaded,
+on-device-persisted conversations with attachments; the rest of the surface is
+Projects, Task Manager (tasks, due-time reminders and a home-screen widget),
+Files, Scheduler, Skills, Tools and Settings. One Server URL + Password — the app
+talks to an nginx proxy (`:8080`) that routes `/p/*` to the Pi gateway's
+OpenAI-compatible chat API (`:8643`) and `/api/*` to the health-sync service.
 
-All three profiles reason through **OpenCode Go directly** (`mimo-v2.6-flash`),
-with per-tab provider/model selection from the live gateway catalog. Domain
-capabilities come from Go MCP servers I wrote — money, cookbook, health-check,
-task-manager, project-manager — plus Playwright browser automation on every profile.
-No LLM proxy and no failover chain: one provider, one request path, so there is
-nothing to fail over from.
+The agent reasons through **OpenCode Go directly** (`mimo-v2.6-flash`), with the
+model and reasoning effort picked in Settings from the live gateway catalog.
+Domain capabilities come from eight Go MCP servers I wrote — money, cookbook,
+health-check, task-manager, project-manager, notes, memory and browser (headless
+Chromium, where each domain holds for approval before it loads). No LLM proxy and
+no failover chain: one provider, one request path, so there is nothing to fail
+over from.
 
 Chat turns are server-side **runs**: killing the app mid-reply no longer kills
 the work — reopening the thread picks up the same run, with steer-while-running,
-stop, and a runs list per thread. Voice works as a **live call mode** with
-barge-in — interrupting the readout steers the turn instead of talking over it.
+stop, and a runs list per thread. A reply that finished while the app was closed
+is adopted into the thread instead of being lost. Voice works as a **live call
+mode** with barge-in — interrupting the readout steers the turn instead of
+talking over it. The agent can also pause mid-turn to **ask a question**: an
+inline card with buttons or a free-text field, and the turn waits for the answer.
 
 Sensitive agent actions (money writes, deletes, destructive rewrites) pause behind
 **approval gates** — the turn holds, the app raises a badged Approvals entry with
 redacted arguments plus an audit trail, and deny fails the call back as a tool
-error. The agent also carries
-**per-profile memory** (durable facts land pending for review, then inject into
-the prompt) and **taught skills** (any conversation can become a tested,
-activatable draft skill, optionally scheduled as a cron routine).
+error. The agent also carries **durable memory** (facts land pending, are
+confirmed on the Memory screen, then inject into the prompt) and **taught skills**
+(any conversation can become a tested, activatable draft skill, invoked from the
+composer's `/` menu or scheduled as a cron routine). Task changes go into a
+90-day change log — what changed and when — that outlives the three-day TTL on
+completed tasks.
 
 ## How it runs
 
-One Podman Compose file: gateway, health-api, proxy, and a one-shot retention
-job. Health Connect syncs (steps, sleep, workouts) flow from the app through
-health-api into per-day MongoDB docs. Every night at 03:00 the retention binary
-prunes money transactions older than 90 days and health logs older than 30 days —
-while weight and cookbook data are permanent, and the Git-backed profiles need no
-DB retention at all. Dev checkouts point at a throwaway Atlas database, so
-production data is never at risk. A `hermes.sh` CLI (`init|start|stop|status|clean`)
-orchestrates the whole lifecycle (`init|start|stop|restart|status|clean`), and every
-app change ships a versioned release APK with in-app updates.
+One Podman Compose file: pi, health-api, proxy, and a one-shot retention job.
+Health Connect syncs (steps, sleep, workouts) flow from the app through health-api
+into per-day MongoDB docs on an hourly WorkManager cadence (configurable 1–24h).
+Every night at 03:00 the retention binary prunes money transactions older than 90
+days and health logs older than 30 days — while weight, notes and cookbook data
+are permanent. Dev checkouts point at a throwaway Atlas database, so production
+data is never at risk. A `hermes.sh` CLI (`init|start|stop|restart|status|clean`)
+— the name is a leftover from the Hermes era — orchestrates the whole lifecycle,
+and every app change ships a versioned release APK with in-app updates.
 
 ## What it taught me
 
-Multiplexing beats multiplicity: one gateway process with three scoped profiles
-is simpler to operate than a fleet of bots. And reliability is designed, not
-hoped for — isolated credentials, automated pruning, and a single secret store
-(the git-ignored `.env`) matter more than model choice. Most of this system
-exists so that nothing pages me.
+Multiplexing lost to maintenance: the stack began as one gateway with three scoped
+profiles and converged on a single chat profile in a single container. And
+reliability is designed, not hoped for — approval-gated writes, automated pruning,
+and a single secret store (the git-ignored `.env`) matter more than model choice.
+Most of this system exists so that nothing pages me.
