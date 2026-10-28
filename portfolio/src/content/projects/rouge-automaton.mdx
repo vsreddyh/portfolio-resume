@@ -41,15 +41,17 @@ every 5 minutes, routes unseen pages to a shelf, and re-parses only changed
 pages.
 
 The craft is in the guardrails: allowlist + mention gating with auto-threads,
-answers truncated to Discord's 2000-rune limit, the persona compiled into the
+model replies bounded at 1900 runes with an in-voice "cut short" trailer so the
+sign-off lands inside Discord's 2000-rune ceiling, the persona compiled into the
 binary with serial numbers redacted and every transmission ending in `Over.`,
-and failure voiced in character — a 429 gets a "busy spreading democracy"
-reply with a liberation ETA, never silence. Client-side token-bucket rate
-limiting backs that up, with `/status` (health + relay probe) and `/cooldown`
-(quota inquiry) ops commands and a typing indicator while the model works. Our
-services ship as static binaries in a distroless image under Podman Compose
-(bot, watcher, catalog sync, crawl), alongside Mongo, seeded by a one-shot
-ingest from checked-in intel data covering units, gear, and world shelves.
+and unreleased gear met with a requisition refusal instead of guessed handling.
+Failure is voiced in character — a 429 gets a "busy spreading democracy" reply
+with a liberation ETA, never silence. Client-side token-bucket rate limiting
+backs that up, with `/status` (health + relay probe) and `/cooldown` (quota
+inquiry) ops commands and a typing indicator while the model works. Services
+ship as static binaries in a distroless image under Podman Compose (bot,
+watcher, catalog sync, crawl), alongside Mongo, seeded by a one-shot ingest from
+checked-in intel data covering units, gear, and world shelves.
 
 ## What it taught me
 
