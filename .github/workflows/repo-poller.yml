@@ -23,9 +23,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           token: ${{ secrets.REPO_SYNC_TOKEN }}
+      # Check the write credential before filing or commenting on anything:
+      # a read-only PAT otherwise only reveals itself at the final `git push`,
+      # and the undelivered state re-files the same comments every run.
+      - name: Preflight - credential can push
+        if: github.event_name == 'schedule' || inputs.dry_run != true
+        run: bash .github/scripts/preflight-push.sh
       - name: Poll watched repos
         env:
           REPO_SYNC_TOKEN: ${{ secrets.REPO_SYNC_TOKEN }}

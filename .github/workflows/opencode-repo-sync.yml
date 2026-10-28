@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Use the PAT so pushes/PRs author as vsreddyh, not
           # github-actions[bot] (bot-authored PRs fail the
@@ -37,6 +37,10 @@ jobs:
         run: |
           git config user.name "vsreddyh"
           git config user.email "shouryanreddyh@gmail.com"
+      # The agent's own `git push` would otherwise be the first thing to
+      # discover a read-only token, ~35s into a paid run.
+      - name: Preflight - credential can push
+        run: bash .github/scripts/preflight-push.sh
       - uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
