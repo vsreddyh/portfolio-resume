@@ -1,7 +1,7 @@
 ---
 title: "LeetCode Scoreboard"
-description: "Difficulty-weighted rankings with a write/read split: cron syncs, dashboard never touches LeetCode."
-stack: ["Next.js", "TypeScript", "MongoDB", "Mongoose", "Web Push"]
+description: "Difficulty-weighted rankings with a write/read split and a multi-range cumulative progress chart; cron syncs, dashboard never touches LeetCode."
+stack: ["Next.js", "TypeScript", "MongoDB", "Mongoose", "Web Push", "ECharts"]
 github: "https://github.com/vsreddyh/leetcode-scoreboard"
 featured: false
 order: 5
@@ -32,6 +32,11 @@ An end-of-day refresh folds into the first tick after 23:30 IST. The dashboard
 reads pre-aggregated Mongo data only — it never calls LeetCode — and each sync
 with new solves pushes a summary (solver counts, today's points, leader) via
 Web Push, pruning dead subscriptions automatically.
+
+A cumulative **score-progress chart** (ECharts) lines every tracked user over
+1D, 1W, 1M, 6M, 1Y and ALL ranges, fed by a dedicated per-user-per-day
+`/api/history` read, so the graph stays on the same pre-aggregated side of the
+write/read split as the rest of the dashboard.
 
 Around it: a password-cookie admin panel with HMAC-signed sessions for tracked
 users and manual syncs, PWA install support, and dark/light theming.
