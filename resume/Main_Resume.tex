@@ -105,14 +105,14 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \section*{Projects}
 
 \resumeSubheading
-{Agento: Personal AI Stack (Hermes + Android App)}{}{Kotlin, Jetpack Compose, Go, Podman Compose, MongoDB, Hermes}{github.com/vsreddyh/Agento}
+{Agento: Personal AI Stack (Pi + Android App)}{}{Kotlin, Jetpack Compose, Go, Podman Compose, MongoDB, Pi}{github.com/vsreddyh/Agento}
 \resumeSubHeadingListStart
-\resumeItem{Built a personal AI stack on Hermes: one multiplexed gateway serving god + story/resumes profiles with isolated workspaces and per-profile credentials, driven from a custom Kotlin/Jetpack Compose Android app with threaded chats, tasks, reminders, and settings backup.}
-\resumeItem{Connected all profiles directly to OpenCode Go with per-tab model selection; domain capabilities via Go MCP servers (money, cookbook, health-check) plus Playwright browser automation on every profile.}
-\resumeItem{Ships as one Podman Compose stack (gateway, nginx proxy, Go health-api, retention job); dev checkouts target a throwaway Atlas database so development never touches production data.}
+\resumeItem{Built a personal AI stack on Pi: one containerized agent serving a chat profile behind an OpenAI-compatible gateway, driven from a custom Kotlin/Jetpack Compose Android app with threaded chats, tasks, reminders, projects, and files.}
+\resumeItem{Connected the agent directly to OpenCode Go with per-model and reasoning-effort selection; capabilities come from eight Go MCP servers (money, cookbook, health, tasks, projects, notes, memory, browser) with headless-Chromium web tasks gated per domain.}
+\resumeItem{Ships as one Podman Compose stack (pi, nginx proxy, Go health-api, retention job); dev checkouts target a throwaway Atlas database so development never touches production data.}
 \resumeItem{Built a Health Connect pipeline with hourly background syncs of steps, sleep, and workouts from the app through the Go API into per-day MongoDB docs; releases ship as versioned APKs with in-app updates via CI.}
-\resumeItem{Chat turns run as server-side runs that survive app kills with steer/stop and a per-thread runs list; sensitive agent actions pause behind approval gates with redacted arguments and an audit trail.}
-\resumeItem{Added per-profile agent memory (reviewed durable facts injected into the prompt) and taught skills (conversations saved as tested, activatable procedures, optionally scheduled as cron routines).}
+\resumeItem{Chat turns run as server-side runs that survive app kills with steer/stop and a per-thread runs list; sensitive agent actions pause behind approval gates with redacted arguments and an audit trail, and the agent can ask a question inline mid-turn.}
+\resumeItem{Added durable memory (facts land pending, confirmed before injection) and taught skills (conversations saved as tested, activatable procedures, invoked from a \texttt{/} menu or scheduled as cron routines).}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
