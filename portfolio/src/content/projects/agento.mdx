@@ -16,7 +16,7 @@ diagram: |
     PI --> DB[(MongoDB Atlas\nmoney · health · cookbook)]
     HA --> DB
     RT["retention one-shot\ncron 03:00"] -.-> DB
-    PI --- MCPs["8 Go MCPs\nmoney · cookbook · health · tasks · projects · notes · memory · browser"]
+    PI --- MCPs["10 Go MCPs\nmoney · cookbook · health · tasks · projects · notes · memory · browser · gmail · calendar"]
 ---
 
 ## The problem
@@ -42,9 +42,11 @@ OpenAI-compatible chat API (`:8643`) and `/api/*` to the health-sync service.
 
 The agent reasons through **OpenCode Go directly** (`mimo-v2.6-flash`), with the
 model and reasoning effort picked in Settings from the live gateway catalog.
-Domain capabilities come from eight Go MCP servers I wrote — money, cookbook,
-health-check, task-manager, project-manager, notes, memory and browser (headless
-Chromium, where each domain holds for approval before it loads). No LLM proxy and
+Domain capabilities come from ten Go MCP servers I wrote — money, cookbook,
+health-check, task-manager, project-manager, notes, memory, browser (headless
+Chromium, where each domain holds for approval before it loads), plus Gmail and
+Calendar over OAuth grants (read plus draft-only compose — sends are refused
+with the draft path). No LLM proxy and
 no failover chain: one provider, one request path, so there is nothing to fail
 over from.
 
