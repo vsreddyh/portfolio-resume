@@ -6,7 +6,7 @@ github: "https://github.com/vsreddyh/Agento"
 featured: true
 order: 1
 kicker: "Personal AI stack"
-outcome: "One Compose stack: app, agent, health sync, retention — plus approval gates, memory, taught skills"
+outcome: "One Compose stack: app, agent, health sync, retention — plus approval gates, memory, taught skills, Gmail/Calendar connectors"
 diagram: |
   flowchart LR
     App["Agento Android\nChat · Projects · Tasks · Files"] --> PX["proxy :8080\n/p/* → chat · /api/* → sync"]
@@ -65,6 +65,11 @@ confirmed on the Memory screen, then inject into the prompt) and **taught skills
 composer's `/` menu or scheduled as a cron routine). Task changes go into a
 90-day change log — what changed and when — that outlives the three-day TTL on
 completed tasks.
+
+The agent also reads **Gmail and Calendar through OAuth connectors**: grants are
+sealed server-side in MongoDB (never in the app or chat), reads stay ungated,
+and the risky directions stay draft-only — sends and invites are refused with
+"create a draft instead" rather than gated, so a send can never run free.
 
 ## How it runs
 
