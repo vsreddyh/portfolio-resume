@@ -113,6 +113,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeItem{Built a Health Connect pipeline with hourly background syncs of steps, sleep, and workouts from the app through the Go API into per-day MongoDB docs; releases ship as versioned APKs with in-app updates via CI.}
 \resumeItem{Chat turns run as server-side runs that survive app kills with steer/stop and a per-thread runs list; sensitive agent actions pause behind approval gates with redacted arguments and an audit trail, and the agent can ask a question inline mid-turn.}
 \resumeItem{Added durable memory (facts land pending, confirmed before injection) and taught skills (conversations saved as tested, activatable procedures, invoked from a \texttt{/} menu or scheduled as cron routines).}
+\resumeItem{Added Gmail and Calendar OAuth connectors with server-side sealed tokens in MongoDB; reads stay ungated while sends and invites are refused draft-only, so a send can never run free.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
