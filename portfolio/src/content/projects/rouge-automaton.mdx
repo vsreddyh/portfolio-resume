@@ -1,6 +1,6 @@
 ---
 title: "Rouge Automaton"
-description: "Go Discord RAG bot with a 10-round tool loop, exact-match Mongo intel tools, catalog + wiki sync, and a roleplayed defector persona."
+description: "Go Discord RAG bot with a 10-round tool loop, exact-match Mongo intel tools, live war status + Major Orders, catalog + wiki sync, and a roleplayed defector persona."
 stack: ["Go", "discordgo", "MongoDB", "Podman Compose"]
 github: "https://github.com/vsreddyh/rouge_automaton"
 featured: false
@@ -28,7 +28,9 @@ with a personality players actually enjoy talking to.
 
 A Go-only bot (no Python runtime) roleplaying a defected informant. Questions
 flow through a think-act loop of up to 10 tool rounds over exact-match Mongo
-intel tools — unit/gear/world lookups, generic war summary, named-planet
+  intel tools — unit/gear/world lookups, generic war summary, Major Order
+  briefing (title, kill/objective progress, expiry, reward, plus companion
+  strategic-threat tasks), named-planet
 status, wiki search — defined once and shared between the relay client and an
 MCP stdio server. Retrieval is Mongo exact-match with cited context (collated
 indexes, alias handling); on a local miss it falls back to live wiki lookup
