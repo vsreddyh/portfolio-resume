@@ -1,0 +1,123 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage[none]{hyphenat}
+\sloppy
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer with backend and distributed systems experience in Python, Java, C++, and Go. Built event-driven, low-latency trading infrastructure and Go microservices, plus secure platforms using OAuth 2.0, JWT, and audited approval flows. Strong foundation in data structures and algorithms; ships reviewed, tested, documented code and debugs issues across service, network, and data layers.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 - 2026}
+{B.Tech in Computer Science and Engineering}{} \\
+\textbf{Relevant Coursework:} Data Structures and Algorithms, Computer Networks, Operating Systems, Database Management, Software Engineering
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 - Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 - Present}
+\resumeSubHeadingListStart
+\resumeItem{Led a team of 3 building event-driven, low-latency trading infrastructure with Node.js, ClickHouse, and PostgreSQL for real-time market alerts and fast order execution.}
+\resumeItem{Built a role-based web platform for advertising agencies using React, Node.js, and Convex, managing influencer partnerships from campaign creation to offer distribution.}
+\resumeItem{Developed User and Domain Extensions for ProCAD (Revalize) from client requirements, delivering adapter functionality following coding standards and SDLC practices.}
+\resumeItem{Built AI content tools with React, Node.js, and SQLite, including a news-driven reel-idea generator and a cost-optimized text-to-video pipeline.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 - Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Designed and evaluated predictive models with Python, scikit-learn, and Pandas, combining ML and rule-based checks with simulation and backtesting for correctness.}
+\resumeItem{Built an NLP pipeline with Python, PyTorch, and Transformers plus an LLM search layer to extract insights from unstructured text streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} Python, Java, C++, Go, JavaScript, TypeScript, SQL, C\#
+\item \textbf{Backend:} Node.js, Express, FastAPI, Django, Flask
+\item \textbf{Databases:} PostgreSQL, ClickHouse, Redis, MongoDB, SQLite, Microsoft SQL Server
+\item \textbf{Cloud, DevOps \& CI/CD:} Docker, Docker Compose, GitHub Actions, Amazon Web Services, Amazon S3, Linux
+\item \textbf{APIs \& Integration:} REST, GraphQL, OAuth 2.0, JWT, Web Push
+\item \textbf{Testing:} Go testing, Jest, React Testing Library
+\item \textbf{Tools:} Git, GitHub, Postman, Neovim, Bun
+\end{itemize}
+\vspace{-0.2em}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Agento: Personal AI Stack (Pi + Android App)}{}{Kotlin, Jetpack Compose, Go, Podman Compose, MongoDB, Pi}{github.com/vsreddyh/Agento}
+\resumeSubHeadingListStart
+\resumeItem{Built a containerized Go agent backend with OAuth connectors using server-side sealed tokens.}
+\resumeItem{Gated sensitive agent actions behind approval flows with an audit trail and durable server-side runs.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Rouge Automaton: Go Discord RAG Bot}{}{Go, discordgo, MongoDB, Podman Compose}{github.com/vsreddyh/rouge\_automaton}
+\resumeSubHeadingListStart
+\resumeItem{Built a 5-service Go microservice stack with Mongo, serving cited intel with client-side rate limiting.}
+\resumeItem{Implemented ETag-cached syncs and a wiki crawl with staleness guards, shipping Go tests.}
+\resumeSubHeadingListEnd
+
+
+\vspace{-0.6em}
+
+
+\end{document}
