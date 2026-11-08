@@ -1,0 +1,123 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage[none]{hyphenat}
+\sloppy
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Full-stack Software Engineer building customer-facing platforms with React, Node.js, Express, and FastAPI using Java and JavaScript. Event-driven low-latency systems, microservices and REST APIs, relational and NoSQL stores, and AWS plus Docker delivery under Agile and SDLC.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 - 2026}
+{B.Tech in Computer Science and Engineering}{}
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 - Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 - Present}
+\resumeSubHeadingListStart
+\resumeItem{Built a role-based web platform for advertising agencies using React, Node.js, and Convex, managing influencer partnerships from campaign creation to offer distribution.}
+\resumeItem{Built AI content tools with React, Node.js, and SQLite, including a news-driven reel-idea generator and a cost-optimized text-to-video pipeline.}
+\resumeItem{Developed User and Domain Extensions for ProCAD (Revalize) from client requirements, delivering adapter functionality following coding standards and SDLC practices.}
+\resumeItem{Led a team of 3 building event-driven, low-latency trading infrastructure with Node.js, ClickHouse, and PostgreSQL for real-time alerts and fast execution.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 - Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Designed and evaluated predictive models using Python, scikit-learn, and Pandas, combining machine learning and rule-based approaches with simulation and backtesting techniques.}
+\resumeItem{Built an NLP pipeline with Python, PyTorch, and Transformers plus an LLM search layer to extract insights from unstructured streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} Java, JavaScript, TypeScript, Python, SQL
+\item \textbf{Backend:} Node.js, Express, FastAPI
+\item \textbf{Frontend:} React, Next.js, TailwindCSS
+\item \textbf{Databases:} PostgreSQL, MongoDB, Redis, MySQL, SQLite, ClickHouse
+\item \textbf{Cloud, DevOps \& CI/CD:} Docker, Docker Compose, GitHub Actions, Amazon Web Services, Amazon S3
+\item \textbf{APIs \& Integration:} REST, OAuth 2.0, JWT
+\end{itemize}
+\vspace{-0.2em}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Schedio: Project Sharing Platform}{}{React, Node, Express, MongoDB, Docker, Vercel}{github.com/vsreddyh/schedio}
+\resumeSubHeadingListStart
+\resumeItem{Built a full-stack collaboration platform with JWT plus session auth and role-based access across three user types, live as an external site via Vercel.}
+\resumeItem{Added hybrid search with filters, bookmarking and comments, plus GridFS uploads with per-file AI explanations.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
+\resumeSubHeadingListStart
+\resumeItem{Designed an event-driven media pipeline with MinIO ingest, nightly S3 mirror, and short-lived signed URLs, cutting S3 request charges by about 10-25\%.}
+\resumeItem{Built a FastAPI backend issuing presigned URLs with MongoDB metadata and Redis caching to cut latency on repeat access.}
+\resumeSubHeadingListEnd
+
+
+\vspace{-0.6em}
+
+
+
+
+\end{document}
