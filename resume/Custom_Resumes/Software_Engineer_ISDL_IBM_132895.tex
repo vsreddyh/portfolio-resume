@@ -1,0 +1,121 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer with B.Tech in Computer Science, focused on systems and cloud software and AI solutions on Linux. Full-lifecycle development (design, build, test, support) with Python, Go, C++, REST microservices, Docker/Podman, GitHub Actions, and open-source GitHub workflows. OS concepts, PostgreSQL/MongoDB/Redis, performance analysis, and ML/NLP (scikit-learn, PyTorch, Transformers) in Agile teams.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 -- 2026}
+{B.Tech in Computer Science and Engineering}{}
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 -- Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 -- Present}
+\resumeSubHeadingListStart
+\resumeItem{Designed, built, and tested an event-driven trading stack with Node.js, ClickHouse, and PostgreSQL for real-time alerts and fast execution, with debugging and performance analysis.}
+\resumeItem{Built a role-based web platform with React, Node.js, and Convex with REST APIs and role-based access, from campaign creation to offer distribution, in an Agile team.}
+\resumeItem{Built AI content tools with React, Node.js, and SQLite, combining news aggregation with LLM generation plus a cost-optimized text-to-video pipeline.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 -- Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Designed and evaluated predictive models with Python, scikit-learn, and Pandas, combining machine learning with simulation and backtesting.}
+\resumeItem{Built an NLP pipeline with Python, PyTorch, and Transformers plus an LLM search layer to extract insights from unstructured text streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} C++, Python, Go, Java, JavaScript, TypeScript, SQL, Bash, HTML, CSS
+\item \textbf{Backend:} Node.js, Express, FastAPI, Django, Flask
+\item \textbf{Frontend:} React, Next.js, TailwindCSS, Vite
+\item \textbf{Databases:} PostgreSQL, MongoDB, Redis, SQLite, ClickHouse, Convex
+\item \textbf{Cloud/DevOps:} Docker, Docker Compose, Podman, GitHub Actions, Amazon Web Services, Amazon S3, MinIO, Linux
+\item \textbf{AI/ML:} Scikit-learn, XGBoost, PyTorch, Transformers, Pandas, NumPy, Jupyter, Gemini API
+\item \textbf{Tools:} Git, GitHub, Jest, React Testing Library, Postman, Bun
+\end{itemize}
+\vspace{-0.2em}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
+\resumeSubHeadingListStart
+\resumeItem{Designed an event-driven media pipeline with MinIO ingest, nightly S3 mirror, and short-lived signed URLs, cutting S3 request charges by about 10--25\%.}
+\resumeItem{Built a FastAPI REST backend with MongoDB metadata and Redis-cached URLs, containerized with Docker Compose for reproducible deployment.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Agento: Personal AI Stack (Hermes + Android App)}{}{Go, Podman Compose, MongoDB, Kotlin, Jetpack Compose}{github.com/vsreddyh/Agento}
+\resumeSubHeadingListStart
+\resumeItem{Built a personal AI stack on Hermes with isolated workspaces and per-profile credentials, driven from a Kotlin app, backed by Go MCP servers and browser automation.}
+\resumeItem{Deployed on a VPS as one Podman Compose stack with a Go health API and nightly retention jobs on Linux, fronted by an nginx reverse proxy, with versioned releases shipped through CI.}
+\resumeSubHeadingListEnd
+
+
+\vspace{-0.6em}
+
+
+
+
+\end{document}

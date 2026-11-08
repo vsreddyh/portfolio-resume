@@ -1,5 +1,10 @@
 # AGENTS.md
 
+## Build policy (npm builds are CI-only)
+
+- NEVER run `npm run build` (or `astro build` directly) locally on this machine. This is a 2-vCPU shared host — parallel sessions running builds pegged CPU at 100% on 2026-10-28. `deploy-portfolio.yml` builds on `main`; PRs are verified by review + CI, never by a local build.
+- `npm ci` and `npm run dev` are fine for local iteration.
+
 ## Agent skills
 
 ### Issue tracker

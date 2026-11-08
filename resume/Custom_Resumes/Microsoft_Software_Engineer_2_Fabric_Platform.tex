@@ -1,0 +1,116 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer building customer-facing web experiences with React and TypeScript backed by scalable backend platform services (Node.js, SQL/NoSQL, Redis, Docker). Experienced in event-driven, low-latency systems and data pipelines, with hands-on ML, NLP, search, and LLM-based automation of manual workflows. Focused on secure, performant, resilient services with end-to-end ownership and close cross-functional collaboration.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 -- 2026}
+{B.Tech in Computer Science and Engineering}{} \\
+\textbf{Relevant Coursework:} Computer Networks, Operating Systems, Database Management, Software Engineering
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 -- Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 -- Present}
+\resumeSubHeadingListStart
+\resumeItem{Built a customer-facing, role-based web platform for advertising agencies using React, Node.js, and Convex, with end-to-end ownership from campaign creation to collaboration offer distribution.}
+\resumeItem{Developed an AI-powered content UX using React, Node.js, and SQLite that combines real-time news aggregation with LLM-based generation to surface trending video ideas, automating manual content workflows.}
+\resumeItem{Engineered a cost-optimized text-to-video pipeline in React and Node.js with prompt and model-inference optimization to cut generation cost while holding output quality.}
+\resumeItem{Designed event-driven, low-latency trading infrastructure using Node.js, ClickHouse, and PostgreSQL for real-time market alerts and fast order execution with a focus on performance and reliability.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 -- Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Designed and evaluated predictive models using Python, scikit-learn, and Pandas, combining machine learning and rule-based approaches with simulation and backtesting.}
+\resumeItem{Built an NLP pipeline using Python, PyTorch, and Transformers to extract insights from unstructured text data.}
+\resumeItem{Implemented a Python + LLM + search layer system to verify signals and surface emerging trends in real time from continuous data streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} Python, Java, C++, C\#, TypeScript, JavaScript, SQL, HTML, CSS, Go, Bash
+\item \textbf{Frontend:} React, Next.js, TypeScript, HTML, CSS, TailwindCSS, React Native
+\item \textbf{Backend:} Node.js, Express, FastAPI, Django, ASP.NET
+\item \textbf{Databases:} Microsoft SQL Server, PostgreSQL, MySQL, SQLite, MongoDB, Redis, ClickHouse, Convex
+\item \textbf{Cloud, DevOps \& CI/CD:} Docker, Docker Compose, GitHub Actions, Amazon Web Services, Amazon S3, Vercel, MinIO, Linux
+\item \textbf{AI/ML:} PyTorch, Transformers, Scikit-learn, Gemini API, Pandas, NumPy, XGBoost, LightGBM, Jupyter
+\item \textbf{Tools:} Git, GitHub
+\end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+
+\resumeSubheading
+{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
+\resumeSubHeadingListStart
+\resumeItem{Designed an event-driven, cost-optimized media ingestion pipeline: uploads hit MinIO for fast, bursty ingest, a nightly mirror syncs to S3 and purges MinIO, and access is short-lived via signed S3 URLs (about 10--25\% fewer request charges).}
+\resumeItem{Built a FastAPI backend issuing presigned URLs with metadata in MongoDB and Redis-cached signed URLs to cut repeat-access latency; shipped as a Docker Compose stack.}
+\resumeSubHeadingListEnd
+
+\vspace{-0.6em}
+
+
+
+
+\end{document}

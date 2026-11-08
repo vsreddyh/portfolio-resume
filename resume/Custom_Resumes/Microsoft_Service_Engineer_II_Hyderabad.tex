@@ -1,0 +1,120 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer focused on AI-driven automation, reliability, and full-stack internal tools, with hands-on debugging across APIs, databases, and distributed systems. Experienced in production Python/Node.js services, REST APIs with auth, SQL-backed data work, CI/CD with code review, and test coverage. Daily user of AI-assisted development to ship maintainable code, triage live issues, and build self-serve troubleshooting workflows.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 -- 2026}
+{B.Tech in Computer Science and Engineering}{} \\
+\textbf{Relevant Coursework:} Computer Networks, Operating Systems, Database Management, Software Engineering
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 -- Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 -- Present}
+\resumeSubHeadingListStart
+\resumeItem{Built role-based advertising web platform with React, Node.js, and Convex for influencer campaigns, from creation to collaboration offer distribution.}
+\resumeItem{Built AI automation tools with React, Node.js, and SQLite (news aggregation + LLM generation, cost-optimized text-to-video with prompt/inference tuning).}
+\resumeItem{Led team of 3 building event-driven, low-latency trading services on Node.js, ClickHouse, and PostgreSQL for real-time alerts and fast execution.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 -- Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Evaluated Python/scikit-learn/Pandas models with rule-based checks, simulation, and backtesting to explain trends from noisy data.}
+\resumeItem{Built Python/PyTorch/Transformers NLP pipeline plus LLM + search verification to surface emerging signals from live text streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} C\#, Python, TypeScript, JavaScript, SQL, Java, C++, Bash
+\item \textbf{Backend:} Node.js, Express, ASP.NET, FastAPI, Django, Flask
+\item \textbf{Frontend:} React, Next.js, TailwindCSS, React Native, Expo
+\item \textbf{Databases:} Microsoft SQL Server, PostgreSQL, MySQL, SQLite, Redis, MongoDB, ClickHouse
+\item \textbf{Cloud, DevOps \& CI/CD:} Docker, Docker Compose, GitHub Actions, GitHub, Linux
+\item \textbf{AI/ML:} PyTorch, Transformers, Scikit-learn, Pandas, Gemini API
+\item \textbf{APIs, Testing \& Tools:} REST, JWT/session auth, Jest, Git, Postman
+\end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
+\resumeSubHeadingListStart
+\resumeItem{Built an anonymous image-sharing app: uploads land in fast MinIO storage, a nightly job moves saved files to S3 and clears MinIO, and viewers open short-lived signed links — so S3 stores only what matters.}
+\resumeItem{FastAPI backend hands out upload/view links, stores file info in MongoDB, and caches links in Redis for fast repeat views; whole setup runs with one Docker Compose file.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Rouge Automaton: Go Discord Bot (MCP tools)}{}{Go, discordgo, MongoDB, Podman Compose}{github.com/vsreddyh/rouge\_automaton}
+\resumeSubHeadingListStart
+\resumeItem{Built a Discord bot that answers Helldivers 2 game questions (units, gear, live war status) while acting as an in-game character, quoting its sources from the game wiki and database; rate-limited, with /status and /cooldown commands, runs on Podman Compose.}
+\resumeItem{Keeps answers fresh on its own: daily gear updates, wiki crawls, and a check every 5 minutes for changed wiki pages; starts from built-in game data and is covered by Go tests.}
+\resumeSubHeadingListEnd
+
+\vspace{-0.6em}
+
+
+
+
+\end{document}
