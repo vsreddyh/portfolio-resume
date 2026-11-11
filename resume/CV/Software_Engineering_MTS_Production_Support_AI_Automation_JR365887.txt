@@ -1,0 +1,16 @@
+Vishnu Shouryan Reddy
+shouryanreddyh@gmail.com
+
+November 11, 2026
+
+Hiring Manager, Salesforce
+Hyderabad, India
+
+Re: Software Engineering MTS - Production Support & AI Automation, JR365887
+
+Dear Hiring Manager,
+
+I am an early-career software engineer who builds automation and AI tooling. At 5th Bridge I shipped LLM content tools and led a three-person team on event-driven alerting infrastructure; in personal projects I built a Go RAG bot and an agent stack with approval gates, audit trails, and ops commands. Though I have not worked with Apex or Salesforce administration, I am eager to earn the certification and bring strong Python, Go, and debugging fundamentals to production support.
+
+Sincerely,
+Vishnu Shouryan Reddy

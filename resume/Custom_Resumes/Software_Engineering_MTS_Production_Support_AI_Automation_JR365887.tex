@@ -1,0 +1,127 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage[none]{hyphenat}
+\sloppy
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer with experience in Python, Go, TypeScript, and Java, building AI-powered automation, internal tooling, and reliable cloud systems. Ships containerized services with monitoring, gated approvals, and audit trails. Currently focused on automation workflows and the development of Agento, a personal productivity application.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 - 2026}
+{B.Tech in Computer Science and Engineering}{}
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 - Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 - Present}
+\resumeSubHeadingListStart
+\resumeItem{Built AI-powered content tools with Node.js, SQLite, and LLMs, including a news-driven reel-idea generator and a cost-optimized text-to-video pipeline.}
+\resumeItem{Built a role-based platform with React, Node.js, and Convex for influencer campaigns, and delivered ProCAD (Revalize) User and Domain Extensions.}
+\resumeItem{Led a team of 3 building event-driven, low-latency trading infrastructure with Node.js, ClickHouse, and PostgreSQL for real-time alerts and fast execution.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 - Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Implemented Python, LLM, and search-layer systems to verify emerging-trend signals from continuous data streams.}
+\resumeItem{Built NLP and predictive-model pipelines with PyTorch, Transformers, scikit-learn, and Pandas, using simulation and backtesting.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} Python, Go, Java, TypeScript, JavaScript, SQL, Bash
+\item \textbf{Backend \& APIs:} Node.js, Express, FastAPI, Flask, Django, REST, GraphQL
+\item \textbf{Databases:} PostgreSQL, MongoDB, Redis, ClickHouse, SQLite, Microsoft SQL Server, MySQL
+\item \textbf{Cloud, DevOps \& Monitoring:} Docker, Podman, Compose, GitHub Actions, AWS, S3, Linux
+\item \textbf{AI/ML \& Retrieval:} PyTorch, Transformers, Scikit-learn, Pandas, NumPy, Gemini API, LLMs, RAG, MCP
+\item \textbf{Testing \& Tools:} Go testing, Jest, React Testing Library, Git, Postman, OAuth 2.0, JWT, Agile, SDLC
+\end{itemize}
+\vspace{-0.2em}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Agento: Personal AI Stack (Pi + Android App)}{}{Kotlin, Jetpack Compose, Go, Podman Compose, MongoDB, Pi}{github.com/vsreddyh/Agento}
+\resumeSubHeadingListStart
+\resumeItem{Built a personal AI stack on a Pi: a containerized agent behind an OpenAI-compatible gateway serving a Kotlin/Jetpack Compose app, with eight Go MCP servers for tasks, notes, memory, health, and browser work.}
+\resumeItem{Gated agent actions behind approvals with redacted arguments and an audit trail; sends are draft-only.}
+\resumeItem{Added durable memory confirmed before injection and tested skills that run from a menu or cron.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Rouge Automaton: Go Discord RAG Bot}{}{Go, discordgo, MongoDB, Podman Compose}{github.com/vsreddyh/rouge\_automaton}
+\resumeSubHeadingListStart
+\resumeItem{Built a Go Discord RAG bot serving cited game intel via an OpenCode relay client with client-side rate limiting.}
+\resumeItem{Shipped a 5-service Podman Compose stack with cached syncs, staleness guards, ops commands, and Go tests.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Warner-bash: Hardware Resource Monitor Script}{}{Bash, Linux}{github.com/vsreddyh/warner-bash}
+\resumeSubHeadingListStart
+\resumeItem{Authored a Bash monitor for CPU, RAM, disk, temperature, and battery on Linux with user-defined thresholds.}
+\resumeItem{Added real time threshold alerts to prevent overheating and overuse damage.}
+\resumeSubHeadingListEnd
+
+
+\vspace{-0.6em}
+
+\end{document}
