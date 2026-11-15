@@ -21,6 +21,7 @@
 9. Never remove an experience (role) section from a custom resume. If one page is tight, trim bullets, projects, skills, or other sections instead. An experience section may be trimmed down to two bullet points if needed: keep the most JD-relevant point first, and make the second point a one-line summary of the rest of the work.
 10. Keep every bullet point to at most two lines; prefer a single line. Trim wording to fit, never facts.
 11. Typography: body text is justified with hyphenation disabled — every new `.tex` file must include `\usepackage[none]{hyphenat}` and `\sloppy` in the preamble so words never split across lines. Rendered text uses normal hyphens only (`-`): never `--`, `---`, or em-dashes in dates, figures, or prose (e.g. `2022 - 2026`, `10-25\%`). `%---` comment separators are fine; they don't render.
+12. Professional Summary honesty: the summary may be tuned to the custom resume's emphasis (reorder or foreground the skills/experience the tailored resume keeps), but it must describe what the user actually does and builds per `Main_Resume.tex`. Whatever the user is currently building per the master resume must never be changed, dropped, or reframed into the JD's domain. JD keywords may only appear in the summary where the user's own facts support them.
 
 ## Changelog responses
 
