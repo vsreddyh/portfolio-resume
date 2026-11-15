@@ -75,8 +75,6 @@ jobs:
           fi
 
       - name: Check shipped resume PDF matches the master source
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
           if [ ! -f resume/Main_Resume.pdf ]; then
@@ -84,13 +82,16 @@ jobs:
             exit 1
           fi
 
-          # Regression guard for the stale-PDF bug: editing the master without
-          # rebuilding it is what shipped a two-month-old resume.
-          changed="$(git diff -z --diff-filter=ACMR --name-only "$BASE_SHA...HEAD" -- \
-            resume/Main_Resume.tex resume/Main_Resume.pdf | tr '\0' '\n')"
-          if grep -qx 'resume/Main_Resume.tex' <<<"$changed" &&
-             ! grep -qx 'resume/Main_Resume.pdf' <<<"$changed"; then
-            echo "::error file=resume/Main_Resume.tex::master resume changed without rebuilding resume/Main_Resume.pdf"
+          # Regression guard for the stale-PDF bug (#50): the shipped PDF must be
+          # rebuilt after the last source change. Commit topology, not file mtimes,
+          # so clock skew and same-second commits cannot hide a stale PDF.
+          tex_commit="$(git log -1 --format=%H -- resume/Main_Resume.tex)"
+          pdf_commit="$(git log -1 --format=%H -- resume/Main_Resume.pdf)"
+          echo "source last changed in $tex_commit"
+          echo "PDF last rebuilt in    $pdf_commit"
+          if [ "$tex_commit" != "$pdf_commit" ] &&
+             git merge-base --is-ancestor "$pdf_commit" "$tex_commit"; then
+            echo "::error file=resume/Main_Resume.tex::resume/Main_Resume.pdf was not rebuilt after the last source change"
             exit 1
           fi
 
