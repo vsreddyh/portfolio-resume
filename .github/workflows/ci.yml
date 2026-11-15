@@ -89,10 +89,16 @@ jobs:
           pdf_commit="$(git log -1 --format=%H -- resume/Main_Resume.pdf)"
           echo "source last changed in $tex_commit"
           echo "PDF last rebuilt in    $pdf_commit"
-          if [ "$tex_commit" != "$pdf_commit" ] &&
-             git merge-base --is-ancestor "$pdf_commit" "$tex_commit"; then
-            echo "::error file=resume/Main_Resume.tex::resume/Main_Resume.pdf was not rebuilt after the last source change"
-            exit 1
+          if [ "$tex_commit" != "$pdf_commit" ]; then
+            if git merge-base --is-ancestor "$pdf_commit" "$tex_commit"; then
+              echo "::error file=resume/Main_Resume.tex::resume/Main_Resume.pdf was not rebuilt after the last source change"
+              exit 1
+            fi
+            # Rewritten history (or unrelated branches) can make the two commits
+            # incomparable; flag it for the reviewer instead of guessing.
+            if ! git merge-base --is-ancestor "$tex_commit" "$pdf_commit"; then
+              echo "::warning file=resume/Main_Resume.tex::cannot order the master source and PDF commits; confirm the PDF was rebuilt"
+            fi
           fi
 
       - name: Compile changed resumes
@@ -116,9 +122,14 @@ jobs:
           fi
 
           failed=0
+          workdir="$(mktemp -d)"
+          trap 'rm -rf "$workdir"' EXIT
           for tex in "${tex_files[@]}"; do
             name="${tex%.tex}"
-            outdir="$(mktemp -d)"
+            # Keep the source's directory in the path: Custom_Resumes/<x>.tex and
+            # CV/<x>.tex share a basename and must not share an output directory.
+            outdir="$workdir/$name"
+            mkdir -p "$outdir"
             echo "::group::$tex"
 
             if ! tectonic -X compile "$tex" --outdir "$outdir"; then
