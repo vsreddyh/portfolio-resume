@@ -30,7 +30,14 @@ jobs:
           cache: npm
           cache-dependency-path: portfolio/package-lock.json
       - name: Use Main_Resume as site resume
-        run: mkdir -p portfolio/public && cp resume/Main_Resume.pdf portfolio/public/resume.pdf
+        run: |
+          set -euo pipefail
+          if [ ! -f resume/Main_Resume.pdf ]; then
+            echo "::error file=resume/Main_Resume.pdf::tracked PDF is missing; deploy-portfolio.yml ships this exact file"
+            exit 1
+          fi
+          mkdir -p portfolio/public
+          cp resume/Main_Resume.pdf portfolio/public/resume.pdf
       - name: Install
         run: npm ci
         working-directory: portfolio
@@ -60,8 +67,32 @@ jobs:
           tar xzf /tmp/tectonic.tar.gz -C /tmp tectonic
           sudo install -m 0755 /tmp/tectonic /usr/local/bin/tectonic
           tectonic --version
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq poppler-utils
+          # pdfinfo/pdftotext ship with the runner image often enough to skip the
+          # ~30s apt update; install only when missing.
+          if ! command -v pdfinfo >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq poppler-utils
+          fi
+
+      - name: Check shipped resume PDF matches the master source
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ ! -f resume/Main_Resume.pdf ]; then
+            echo "::error file=resume/Main_Resume.pdf::tracked PDF is missing; deploy-portfolio.yml ships this exact file"
+            exit 1
+          fi
+
+          # Regression guard for the stale-PDF bug: editing the master without
+          # rebuilding it is what shipped a two-month-old resume.
+          changed="$(git diff -z --diff-filter=ACMR --name-only "$BASE_SHA...HEAD" -- \
+            resume/Main_Resume.tex resume/Main_Resume.pdf | tr '\0' '\n')"
+          if grep -qx 'resume/Main_Resume.tex' <<<"$changed" &&
+             ! grep -qx 'resume/Main_Resume.pdf' <<<"$changed"; then
+            echo "::error file=resume/Main_Resume.tex::master resume changed without rebuilding resume/Main_Resume.pdf"
+            exit 1
+          fi
 
       - name: Compile changed resumes
         env:
@@ -70,13 +101,13 @@ jobs:
           set -euo pipefail
 
           # Assignment failure aborts under `set -e`; process substitution would not.
-          changed="$(git diff --diff-filter=ACMR --name-only "$BASE_SHA...HEAD" -- \
-            'resume/Custom_Resumes/*.tex' 'resume/CV/*.tex')"
-          if [ -n "$changed" ]; then
-            mapfile -t tex_files <<<"$changed"
-          else
-            tex_files=()
+          # -z keeps unusual file names intact.
+          listing="$(mktemp)"
+          if ! git diff -z --diff-filter=ACMR --name-only "$BASE_SHA...HEAD" -- \
+            'resume/Custom_Resumes/*.tex' 'resume/CV/*.tex' >"$listing"; then
+            exit 1
           fi
+          mapfile -d '' -t tex_files <"$listing"
 
           if [ "${#tex_files[@]}" -eq 0 ]; then
             echo "No derived .tex changes; nothing to compile."
@@ -115,6 +146,8 @@ jobs:
 
             text="$outdir/text.txt"
             pdftotext "$pdf" "$text"
+            # AGENTS rule 11 disables hyphenation, so a line ending in "-" means a
+            # word was split. Baseline over the 28-file corpus: zero matches.
             if grep -qE '[A-Za-z]-$' "$text"; then
               echo "::error file=$tex::a word is split across lines (line ends in a hyphen)"
               grep -nE '[A-Za-z]-$' "$text" || true
