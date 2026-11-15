@@ -137,7 +137,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 {Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
 \resumeSubHeadingListStart
 \resumeItem{Designed an event-driven, cost-optimized media ingestion pipeline: uploads hit MinIO for fast, bursty ingest. A nightly mirror syncs to S3 and purges MinIO. Access is short-lived via signed S3 URLs.}
-\resumeItem{Reduced S3 costs by cutting noisy request overhead and only retaining curated files in S3 (about 10–25\% fewer request charges).}
+\resumeItem{Reduced S3 costs by cutting noisy request overhead and only retaining curated files in S3.}
 \resumeItem{Developed a FastAPI backend that issues presigned URLs. Stores a list of images in MongoDB. Used Redis for caching signed URLs, cutting latency on repeat access.}
 \resumeItem{Containerized the stack with Docker Compose. Bun/Vite frontend, FastAPI backend, MongoDB, Redis, and MinIO for reproducible local and cloud deployment.}
 \resumeSubHeadingListEnd
@@ -146,14 +146,14 @@ Software Engineer with experience in full-stack web development, mobile applicat
 {Warner-bash: Hardware Resource Monitor Script}{}{BashScript, Linux}{github.com/vsreddyh/warner-bash}
 \resumeSubHeadingListStart
 \resumeItem{Authored a lightweight Bash script to monitor CPU, RAM, disk, temperature, and battery state on Linux systems against user-defined thresholds.}
-\resumeItem{Implemented real time notifications that trigger when user defined thresholds are crossed, preventing potential hardware damage due to overheating or overuse.}
+\resumeItem{Implemented notifications that trigger when user defined thresholds are crossed, preventing potential hardware damage due to overheating or overuse.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
 {Saanjh Sahayak: Clinical Decision Support Mobile App}{}{React Native, Expo, Nativewind, Node, Express, Mongoose, Gemini API, MongoDB, Vercel}{github.com/vsreddyh/mysaanj}
 \resumeSubHeadingListStart
 \resumeItem{Building a cross-platform mobile application to assist doctors in clinical decision-making and patient data management.}
-\resumeItem{Integrating AI (Gemini API) to predict disease risks from patient inputs, reducing review time and improving diagnostic accuracy.}
+\resumeItem{Integrating AI (Gemini API) to predict disease risks from patient inputs.}
 \resumeItem{Modeled patients, old-age homes, and reports as Mongoose schemas with verified/unverified report arrays, severity scores, and AI-generated summaries.}
 \resumeItem{Built Express routes for caretaker/doctor session login, patient management, PDF report upload, and LLM-assisted report review, with an Expo frontend supporting PDF viewing and document picking.}
 \resumeSubHeadingListEnd
