@@ -1,0 +1,122 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage[none]{hyphenat}
+\sloppy
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer with experience in systems analysis, debugging, and performance and reliability engineering. Works with telemetry-adjacent data analysis, scripting and automation on Linux, and data-driven diagnosis of software behavior at scale. Currently focused on automation workflows and the development of Agento, a personal productivity application.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 - 2026}
+{B.Tech in Computer Science and Engineering}{} \\
+\textbf{Relevant Coursework:} Computer Networks, Operating Systems, Database Management, Software Engineering
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 - Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 - Present}
+\resumeSubHeadingListStart
+\resumeItem{Engineered event-driven, low-latency trading infrastructure using Node.js, ClickHouse, and PostgreSQL for market alerts and fast execution; used data to guide reliability and latency tradeoffs.}
+\resumeItem{Led a team of 3 (self + 2 interns); also built a role-based React and Node.js platform on Convex, AI content tools with LLM-based generation, and ProCAD extensions.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 - Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Designed predictive models using Python, scikit-learn, and Pandas with simulation and backtesting to evaluate tradeoffs and prioritize data-driven decisions.}
+\resumeItem{Built an NLP pipeline using Python, PyTorch, and Transformers plus an LLM and search layer to identify emerging patterns from continuous text streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} C\#, Python, C++, Java, JavaScript, SQL, Bash, HTML, CSS
+\item \textbf{Backend:} ASP.NET, Node.js, Express, FastAPI
+\item \textbf{Databases:} ClickHouse, PostgreSQL, Microsoft SQL Server, SQLite, MongoDB, Redis, Convex
+\item \textbf{Cloud, DevOps \& CI/CD:} Linux, Docker, Docker Compose, GitHub Actions, Amazon Web Services, Amazon S3
+\item \textbf{AI/ML:} Scikit-learn, Pandas, NumPy, PyTorch, Transformers, Gemini API
+\item \textbf{APIs \& Integration:} REST, GraphQL
+\item \textbf{Tools:} Git, GitHub
+\end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Warner-bash: Hardware Resource Monitor Script}{}{BashScript, Linux}{github.com/vsreddyh/warner-bash}
+\resumeSubHeadingListStart
+\resumeItem{Authored a lightweight Bash monitor for CPU, RAM, disk, temperature, and battery state on Linux against user-defined thresholds.}
+\resumeItem{Added threshold-crossing notifications covering overheating, overuse, and battery state to protect device health and sustainability.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
+\resumeSubHeadingListStart
+\resumeItem{Diagnosed cost and latency drivers in a media ingestion pipeline, then optimized it: bursty ingest to MinIO, nightly mirror to S3 with purge, short-lived signed URLs (about 10-25\% fewer request charges).}
+\resumeItem{Built a FastAPI backend issuing presigned URLs with MongoDB metadata and Redis-cached URLs to cut repeat-access latency; containerized with Docker Compose.}
+\resumeSubHeadingListEnd
+
+
+\vspace{-0.6em}
+
+
+
+
+\end{document}

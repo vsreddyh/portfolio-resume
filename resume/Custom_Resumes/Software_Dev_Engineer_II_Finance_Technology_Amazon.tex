@@ -1,0 +1,123 @@
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage[none]{hyphenat}
+\sloppy
+
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
+
+\newcommand{\resumeItem}[1]{\item \small{#1}}
+\newcommand{\resumeSubheading}[4]{%
+  \textbf{#1} \hfill \textbf{#2} \\
+{#3} \hfill {#4}
+}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+
+\begin{document}
+\pagestyle{empty}
+\raggedbottom
+\addtolength{\textheight}{2\baselineskip}
+\small
+
+%----------------------------------------------------------------------------------------
+% HEADER & CONTACT
+%----------------------------------------------------------------------------------------
+\begin{center}
+  {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
+  shouryanreddyh@gmail.com \\[0.3em]
+  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+\end{center}
+\vspace{-0.8em}
+
+%----------------------------------------------------------------------------------------
+% ABOUT ME
+%----------------------------------------------------------------------------------------
+\section*{Professional Summary}
+
+Software Engineer with full-stack, distributed storage, caching, and AI automation experience in Java, C\#, Python, and Go. Built event-driven low-latency systems, cost-optimized pipelines, and LLM stacks with inference optimization. Ships agile, reviewed, tested code for reliability and scaling. Currently building automation workflows and Agento, a personal productivity app.
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+\section*{Education}
+
+\resumeSubheading
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 - 2026}
+{B.Tech in Computer Science and Engineering}{} \\
+\textbf{Relevant Coursework:} Computer Networks, Operating Systems, Database Management, Software Engineering
+
+
+%----------------------------------------------------------------------------------------
+% EXPERIENCE
+%----------------------------------------------------------------------------------------
+\section*{Experience}
+
+\resumeSubheading
+{5th Bridge Data Technologies}{Jan 2026 - Present}
+{Hyderabad}{}
+
+\textbf{Software Engineer} \hfill {Jun 2026 - Present}
+\resumeSubHeadingListStart
+\resumeItem{Led 3 engineers building event-driven low-latency trading infra with Node.js, ClickHouse, and PostgreSQL for real-time alerts and execution.}
+\resumeItem{Built a role-based agency platform with React, Node.js, and Convex using OO design, code reviews, and full SDLC practices.}
+\resumeItem{Developed User and Domain Extensions for ProCAD (Revalize) from client requirements, applying design patterns for reliability and scaling.}
+\resumeItem{Built cost-optimized AI tools with React, Node.js, and SQLite, including a news-driven idea generator and text-to-video pipeline.}
+\resumeSubHeadingListEnd
+
+\textbf{Software Engineer Intern} \hfill {Jan 2026 - Jun 2026}
+\resumeSubHeadingListStart
+\resumeItem{Designed predictive models with Python, scikit-learn, and Pandas, combining ML and rules with backtesting over training and inference stages.}
+\resumeItem{Built an NLP pipeline with Python, PyTorch, and Transformers plus an LLM search layer for insight extraction from text streams.}
+\resumeSubHeadingListEnd
+
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+\section*{Technical Skills}
+\begin{itemize}
+\item \textbf{Languages:} Java, C\#, C++, Python, Go, TypeScript, SQL
+\item \textbf{Backend:} ASP.NET, Node.js, Express, FastAPI, Django
+\item \textbf{Databases:} PostgreSQL, ClickHouse, Redis, MongoDB, SQLite
+\item \textbf{Cloud, DevOps \& CI/CD:} Amazon Web Services, Amazon S3, Docker, GitHub Actions, MinIO, Linux
+\item \textbf{AI/ML:} PyTorch, Transformers, Scikit-learn, XGBoost, NumPy, Pandas, Gemini API
+\item \textbf{Testing \& Tools:} Go testing, Jest, Git, GitHub, Postman, Bun
+\end{itemize}
+\vspace{-0.2em}
+
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+\section*{Projects}
+
+\resumeSubheading
+{Anonymous Image Gallery: Cost Optimized Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Amazon S3}{github.com/vsreddyh/Minio-S3}
+\resumeSubHeadingListStart
+\resumeItem{Built event-driven storage with MinIO for bursty ingest and nightly S3 mirror with purge, served via short-lived signed URLs.}
+\resumeItem{Cached signed URLs in Redis to cut repeat-access latency, keeping only curated files in S3 for 10-25\% lower request overhead.}
+\resumeSubHeadingListEnd
+
+\resumeSubheading
+{Agento: Personal AI Stack}{}{Go, Kotlin, Jetpack Compose, Podman Compose, MongoDB}{github.com/vsreddyh/Agento}
+\resumeSubHeadingListStart
+\resumeItem{Built a containerized Go agent behind an OpenAI-compatible gateway with per-model and reasoning-effort selection.}
+\resumeItem{Shipped as a Podman Compose stack with server-side runs, approval gates with audit trail, and durable memory as cron routines.}
+\resumeSubHeadingListEnd
+
+
+\vspace{-0.6em}
+
+
+
+\end{document}
