@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vsreddyh.github.io/portfolio-resume/sitemap.xml

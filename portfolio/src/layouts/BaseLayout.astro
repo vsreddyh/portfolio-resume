@@ -8,6 +8,7 @@ interface Props {
 }
 
 const base = import.meta.env.BASE_URL;
+const canonical = new URL(Astro.url.pathname, 'https://vsreddyh.github.io');
 const {
   title = 'Vishnu Shouryan Reddy — Software Engineer',
   description = 'Full-stack software engineer: React, Node.js, Python, cloud, and AI-powered automation.',
@@ -28,9 +29,17 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <ClientRouter />
     <noscript><style>.reveal{opacity:1 !important;transform:none !important}</style></noscript>
-    <script is:inline defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script is:inline defer src="https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js" integrity="sha384-N3QqR/7q+xm3BGX+CBbNI8AUmRRqcsDzToy+0z1NLDI0QmTKW8zvwLvqulJgk3dP" crossorigin="anonymous"></script>
     <script is:inline defer>
       (function () {
         var counter = 0;
@@ -88,6 +97,7 @@ const nav = [
     </script>
   </head>
   <body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-emerald-400 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-950">Skip to content</a>
     <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-zinc-950/80 backdrop-blur">
       <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6" aria-label="Main">
         <a href={`${base}#home`} class="text-sm font-bold tracking-tight">
@@ -123,7 +133,7 @@ const nav = [
       </nav>
     </header>
 
-    <main>
+    <main id="main">
       <slot />
     </main>
 
