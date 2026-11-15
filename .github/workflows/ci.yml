@@ -87,6 +87,10 @@ jobs:
           # so clock skew and same-second commits cannot hide a stale PDF.
           tex_commit="$(git log -1 --format=%H -- resume/Main_Resume.tex)"
           pdf_commit="$(git log -1 --format=%H -- resume/Main_Resume.pdf)"
+          if [ -z "$tex_commit" ] || [ -z "$pdf_commit" ]; then
+            echo "::error file=resume/Main_Resume.tex::no git history for the master source or PDF; cannot verify freshness"
+            exit 1
+          fi
           echo "source last changed in $tex_commit"
           echo "PDF last rebuilt in    $pdf_commit"
           if [ "$tex_commit" != "$pdf_commit" ]; then
@@ -107,9 +111,12 @@ jobs:
         run: |
           set -euo pipefail
 
+          workdir="$(mktemp -d)"
+          trap 'rm -rf "$workdir"' EXIT
+          listing="$workdir/changed"
+
           # Assignment failure aborts under `set -e`; process substitution would not.
           # -z keeps unusual file names intact.
-          listing="$(mktemp)"
           if ! git diff -z --diff-filter=ACMR --name-only "$BASE_SHA...HEAD" -- \
             'resume/Custom_Resumes/*.tex' 'resume/CV/*.tex' >"$listing"; then
             exit 1
@@ -122,8 +129,6 @@ jobs:
           fi
 
           failed=0
-          workdir="$(mktemp -d)"
-          trap 'rm -rf "$workdir"' EXIT
           for tex in "${tex_files[@]}"; do
             name="${tex%.tex}"
             # Keep the source's directory in the path: Custom_Resumes/<x>.tex and
@@ -158,11 +163,11 @@ jobs:
 
             text="$outdir/text.txt"
             pdftotext "$pdf" "$text"
-            # AGENTS rule 11 disables hyphenation, so a line ending in "-" means a
+            # AGENTS rule 11 disables hyphenation, so any line ending in "-" means a
             # word was split. Baseline over the 28-file corpus: zero matches.
-            if grep -qE '[A-Za-z]-$' "$text"; then
+            if grep -qE -- '-$' "$text"; then
               echo "::error file=$tex::a word is split across lines (line ends in a hyphen)"
-              grep -nE '[A-Za-z]-$' "$text" || true
+              grep -nE -- '-$' "$text" || true
               failed=1
             fi
 
