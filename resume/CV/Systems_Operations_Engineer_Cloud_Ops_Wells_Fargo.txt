@@ -1,7 +1,7 @@
 Vishnu Shouryan Reddy
 shouryanreddyh@gmail.com
 
-November 11, 2026
+November 15, 2026
 
 Hiring Manager, Wells Fargo Cloud Ops
 Hyderabad, India
@@ -10,7 +10,7 @@ Re: Systems Operations Engineer - Cloud Ops, R-586134
 
 Dear Hiring Manager,
 
-I am a Software Engineer working on automation workflows and Agento, a personal productivity application. I ship containerized Podman and Docker Compose stacks with status checks and CI-driven releases, keep data fresh with cached syncs and staleness guards, and automate repetitive work with Python and Shell. My debugging across Node.js services, PostgreSQL, MongoDB, and Redis fits the team's L2 support, monitoring, and reliability mission. I would welcome the chance to contribute.
+I am a Software Engineer working on automation workflows and Agento, a personal productivity application. I ship containerized Podman and Docker Compose stacks with status checks and CI-driven releases, keep data fresh with cached syncs, and automate repetitive work with Python and Shell. My debugging across Node.js services, PostgreSQL, MongoDB, and Redis fits the team's L2 support, monitoring, and reliability mission. I would welcome the chance to contribute.
 
 Sincerely,
 Vishnu Shouryan Reddy

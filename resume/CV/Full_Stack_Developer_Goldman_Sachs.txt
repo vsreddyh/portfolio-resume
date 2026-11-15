@@ -1,1 +1,16 @@
-I apply for the Full Stack Developer role on Digital Client Experience Engineering. I build customer-facing full-stack platforms with React, Node.js, Express, and FastAPI, using Java and JavaScript across event-driven microservices and REST APIs. At 5th Bridge I shipped role-based web platforms, ProCAD client extensions, and a low-latency trading stack on Node.js, ClickHouse, and PostgreSQL, plus external sites on Vercel with AWS and S3. Though I have not used Spring Boot, Kafka, Rx variants, or AEM, my distributed systems, API, and Agile delivery experience transfers directly, and I ramp fast.
+Vishnu Shouryan Reddy
+shouryanreddyh@gmail.com
+
+November 15, 2026
+
+Hiring Manager
+Goldman Sachs
+
+Re: Application for Full Stack Developer, Digital Client Experience Engineering
+
+Dear Hiring Manager,
+
+I apply for the Full Stack Developer role on Digital Client Experience Engineering. I build customer-facing platforms with React, Node.js, Express, and FastAPI across event-driven microservices and REST APIs. At 5th Bridge I shipped role-based platforms, ProCAD extensions, and a low-latency trading stack on Node.js, ClickHouse, and PostgreSQL. Though I have not used Spring Boot, Kafka, Rx variants, or AEM, my distributed systems and Agile delivery experience transfers directly; I ramp fast.
+
+Sincerely,
+Vishnu Shouryan Reddy

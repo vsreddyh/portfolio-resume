@@ -1,7 +1,7 @@
 Vishnu Shouryan Reddy
 shouryanreddyh@gmail.com
 
-November 8, 2026
+November 15, 2026
 
 Hiring Manager, Microsoft Windows + Devices Fundamentals
 Hyderabad, India
@@ -10,7 +10,7 @@ Re: Software Engineer - II, Windows + Devices Fundamentals, Job 200064608
 
 Dear Hiring Manager,
 
-I am a Software Engineer working on automation workflows and Agento, a personal productivity application. I built a Linux Bash monitor for CPU, RAM, disk, temperature, and battery with threshold alerts, engineered low-latency services with Node.js, ClickHouse, and PostgreSQL, and cut cost and repeat-access latency with S3 and Redis tuning. My data-driven debugging with Python and pandas fits the team's reliability, performance, and battery-life mission. I would welcome the chance to contribute.
+I am a Software Engineer working on Agento, a personal productivity application. I built a Linux Bash monitor for CPU, RAM, disk, and battery with threshold alerts, engineered low-latency services with Node.js, ClickHouse, and PostgreSQL, and cut cost and latency with S3 and Redis tuning. My debugging with Python and pandas fits the team's reliability, performance, and battery-life mission. I would welcome the chance to contribute.
 
 Sincerely,
 Vishnu Shouryan Reddy

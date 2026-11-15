@@ -1,1 +1,16 @@
-I apply for Platform Software Engineer 2 (ID 348618). My platform experience maps directly: versioned REST APIs with Express and FastAPI, event-driven microservices on Docker/Podman Compose, and OAuth 2.0/JWT auth across production apps. At 5th Bridge I built shared platforms, ProCAD integration extensions, and a real-time trading stack on Node.js, ClickHouse, and PostgreSQL, with Redis caching, monitoring, and CI-tested rollouts. Though I have not worked with Oracle Database, my relational experience across PostgreSQL, SQL Server, and MySQL transfers readily, and I ramp fast on new platforms.
+Vishnu Shouryan Reddy
+shouryanreddyh@gmail.com
+
+November 15, 2026
+
+Hiring Manager
+Oracle
+
+Re: Application for Platform Software Engineer 2 (Requisition 348618), India
+
+Dear Hiring Manager,
+
+I apply for Platform Software Engineer 2 (348618). My platform experience: versioned REST APIs with Express and FastAPI, microservices on Docker/Podman Compose, and OAuth 2.0/JWT auth. At 5th Bridge I built shared platforms, ProCAD extensions, and a trading stack on Node.js, ClickHouse, and PostgreSQL, with Redis caching and CI rollouts. Though I have not worked with Oracle Database, my relational experience across PostgreSQL, SQL Server, and MySQL transfers readily; I ramp fast.
+
+Sincerely,
+Vishnu Shouryan Reddy
