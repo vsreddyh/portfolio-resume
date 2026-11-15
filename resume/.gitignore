@@ -1,5 +1,7 @@
 .vscode/settings.json
 *.pdf
+# Exception: the shipped master resume is force-tracked so deploy-portfolio.yml can serve it.
+!Main_Resume.pdf
 *.aux
 *.log
 *.out

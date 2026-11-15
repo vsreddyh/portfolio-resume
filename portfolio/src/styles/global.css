@@ -21,7 +21,7 @@ html {
 }
 
 /* Scroll-reveal: JS adds .is-visible via IntersectionObserver.
-   Content is visible by default if JS is off (no-JS safe). */
+   Hidden until revealed; the noscript override in BaseLayout keeps content visible with JS off. */
 .reveal {
   opacity: 0;
   transform: translateY(24px);
