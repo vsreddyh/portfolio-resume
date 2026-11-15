@@ -1,0 +1,16 @@
+Vishnu Shouryan Reddy
+shouryanreddyh@gmail.com
+
+November 12, 2026
+
+Hiring Manager, Microsoft (M365 Copilot Search / Fabric IQ)
+Hyderabad, India
+
+Re: Software Engineer 2 - Frontend (Copilot Search), Job 200063249; Software Engineer II - Front End (Fabric/IQ), Job 200063991
+
+Dear Hiring Manager,
+
+I am a Software Engineer building React and TypeScript web products with Node.js backends, working on automation workflows and Agento, a personal productivity application. At 5th Bridge I shipped a role-based React platform and AI content tools pairing retrieval with LLM generation, and built hybrid search with cited answers. My focus on fast repeat loads, RAG with MCP servers, and reliable delivery fits both the Copilot Search experience and the Fabric/Microsoft IQ front-end mission. I would welcome the chance to contribute.
+
+Sincerely,
+Vishnu Shouryan Reddy
