@@ -29,7 +29,14 @@ jobs:
           cache: npm
           cache-dependency-path: portfolio/package-lock.json
       - name: Use Main_Resume as site resume
-        run: mkdir -p portfolio/public && cp resume/Main_Resume.pdf portfolio/public/resume.pdf
+        run: |
+          set -euo pipefail
+          if [ ! -f resume/Main_Resume.pdf ]; then
+            echo "::error file=resume/Main_Resume.pdf::tracked PDF is missing; it is the file this site serves"
+            exit 1
+          fi
+          mkdir -p portfolio/public
+          cp resume/Main_Resume.pdf portfolio/public/resume.pdf
       - name: Install
         run: npm ci
         working-directory: portfolio
