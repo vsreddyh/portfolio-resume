@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  TECTONIC_VERSION: 0.17.0
+  TECTONIC_SHA256: 8533d07f9ccbd7a65824b9e0459041bca34af1eb33daba48f59215593753a3b7
+
+jobs:
+  portfolio:
+    name: portfolio build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+      - name: Use Main_Resume as site resume
+        run: mkdir -p portfolio/public && cp resume/Main_Resume.pdf portfolio/public/resume.pdf
+      - name: Install
+        run: npm ci
+        working-directory: portfolio
+      - name: Build
+        run: npm run build
+        working-directory: portfolio
+
+  resume:
+    name: resume compile
+    # Derived resumes and CVs have a one-page rule; the master does not, so only
+    # pull requests need this check.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install tectonic and poppler-utils
+        run: |
+          set -euo pipefail
+          url="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          curl -fsSL -o /tmp/tectonic.tar.gz "$url"
+          echo "${TECTONIC_SHA256}  /tmp/tectonic.tar.gz" | sha256sum -c -
+          tar xzf /tmp/tectonic.tar.gz -C /tmp tectonic
+          sudo install -m 0755 /tmp/tectonic /usr/local/bin/tectonic
+          tectonic --version
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+
+      - name: Compile changed resumes
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+
+          # Assignment failure aborts under `set -e`; process substitution would not.
+          changed="$(git diff --diff-filter=ACMR --name-only "$BASE_SHA...HEAD" -- \
+            'resume/Custom_Resumes/*.tex' 'resume/CV/*.tex')"
+          if [ -n "$changed" ]; then
+            mapfile -t tex_files <<<"$changed"
+          else
+            tex_files=()
+          fi
+
+          if [ "${#tex_files[@]}" -eq 0 ]; then
+            echo "No derived .tex changes; nothing to compile."
+            exit 0
+          fi
+
+          failed=0
+          for tex in "${tex_files[@]}"; do
+            name="${tex%.tex}"
+            outdir="$(mktemp -d)"
+            echo "::group::$tex"
+
+            if ! tectonic -X compile "$tex" --outdir "$outdir"; then
+              echo "::error file=$tex::tectonic failed to compile $tex"
+              failed=1
+              echo "::endgroup::"
+              continue
+            fi
+
+            # One output directory per source, so Custom_Resumes/<name>.tex and
+            # CV/<name>.tex cannot overwrite each other.
+            pdf="$outdir/$(basename "$name").pdf"
+            if [ ! -f "$pdf" ]; then
+              echo "::error file=$tex::expected PDF $pdf was not produced"
+              failed=1
+              echo "::endgroup::"
+              continue
+            fi
+
+            pages="$(pdfinfo "$pdf" | awk '/^Pages:/ {print $2}')"
+            echo "pages: $pages"
+            if [ "$pages" != "1" ]; then
+              echo "::error file=$tex::renders to $pages pages; derived resumes and CVs must fit on one page"
+              failed=1
+            fi
+
+            text="$outdir/text.txt"
+            pdftotext "$pdf" "$text"
+            if grep -qE '[A-Za-z]-$' "$text"; then
+              echo "::error file=$tex::a word is split across lines (line ends in a hyphen)"
+              grep -nE '[A-Za-z]-$' "$text" || true
+              failed=1
+            fi
+
+            echo "::endgroup::"
+          done
+
+          exit "$failed"
