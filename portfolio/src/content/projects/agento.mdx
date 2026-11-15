@@ -16,7 +16,7 @@ diagram: |
     PI --> DB[(MongoDB Atlas\nmoney · health · cookbook)]
     HA --> DB
     RT["retention one-shot\ncron 03:00"] -.-> DB
-    PI --- MCPs["Go MCPs\nmoney · cookbook · health · tasks · projects · notes · memory · browser\n+ read-only Gmail MCP"]
+    PI --- MCPs["Go MCPs\nmoney · cookbook · health · tasks · projects · notes · memory · browser\n+ Gmail MCP (label-only writes)"]
 ---
 
 ## The problem
@@ -46,7 +46,10 @@ Domain capabilities come from Go MCP servers I wrote — money, cookbook,
 health-check, task-manager, project-manager, notes, memory and browser (headless
 Chromium, where each domain holds for approval before it loads) — plus a
 read-only Gmail MCP server (three read tools, no send/delete) so Gmail reads
-stay off the custom connector path. No LLM proxy and
+stay off the custom connector path. The Gmail surface has since widened to
+label-only writes (ADR-0014): `gmail.modify` solely so the agent can mark mail
+read, with send/draft/label-management tools disabled and the two label-modify
+tools behind approval gates. No LLM proxy and
 no failover chain: one provider, one request path, so there is nothing to fail
 over from.
 
