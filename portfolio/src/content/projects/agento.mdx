@@ -36,7 +36,10 @@ The frontend is the **Agento Android app** (Jetpack Compose) — the app is Agen
 front end, not a separate product. A single Chat tab carries threaded,
 on-device-persisted conversations with attachments; the rest of the surface is
 Projects, Task Manager (tasks, due-time reminders and a home-screen widget),
-Files, Scheduler, Skills, Tools and Settings. One Server URL + Password — the app
+Files, Scheduler, Skills, Tools and Settings. The Projects board groups cards
+into collapsible status sections (Ongoing, Testing, Paused, Todo, Done) with
+swipe-to-edit/delete, drag-to-reorder persisted server-side, and manual order
+as the default sort. One Server URL + Password — the app
 talks to an nginx proxy (`:8080`) that routes `/p/*` to the Pi gateway's
 OpenAI-compatible chat API (`:8643`) and `/api/*` to the health-sync service.
 
