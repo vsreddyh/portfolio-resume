@@ -44,6 +44,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - name: Validate PR number
+        run: |
+          if [[ ! "${PR_NUMBER}" =~ ^[0-9]+$ ]]; then
+            echo "::error::PR_NUMBER is '${PR_NUMBER}' — expected a numeric PR number"
+            exit 1
+          fi
+      - name: PR must exist (dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr view "${PR_NUMBER}" --json number,title --jq '"ok: #\(.number) \(.title)"'
       - uses: actions/checkout@v5
         if: github.event_name == 'pull_request'
         with:
@@ -161,7 +173,11 @@ jobs:
             }
 
   cleanup:
-    if: github.event.action == 'closed'
+    # Same guard as build-and-push: fork PRs never got a preview, and the
+    # deploy key doesn't exist for them — fail closed instead of noisily.
+    if: >-
+      github.event.action == 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
