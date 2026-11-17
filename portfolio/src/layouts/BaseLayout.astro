@@ -61,7 +61,7 @@ const nav = [
           >
             Resume
           </a>
-          <details class="relative md:hidden">
+          <details class="relative md:hidden" data-menu>
             <summary class="cursor-pointer rounded-lg border border-white/15 px-3 py-1.5 text-sm list-none">
               Menu
             </summary>
@@ -98,17 +98,30 @@ const nav = [
           .map((a) => document.getElementById(a.getAttribute('data-spy') || ''))
           .filter(Boolean);
 
+        // Mobile <details> menu: close it once a link is picked, and on Escape.
+        document.querySelectorAll('[data-menu]').forEach((menu) => {
+          menu.querySelectorAll('a').forEach((a) =>
+            a.addEventListener('click', () => menu.removeAttribute('open')),
+          );
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Escape') return;
+          document.querySelectorAll('[data-menu][open]').forEach((menu) =>
+            menu.removeAttribute('open'),
+          );
+        });
+
         if ('IntersectionObserver' in window && sections.length > 0) {
           const spy = new IntersectionObserver(
             (entries) => {
               for (const entry of entries) {
                 if (entry.isIntersecting) {
-                  links.forEach((a) =>
-                    a.setAttribute(
-                      'data-active',
-                      a.getAttribute('data-spy') === entry.target.id ? 'true' : 'false',
-                    ),
-                  );
+                  links.forEach((a) => {
+                    const active = a.getAttribute('data-spy') === entry.target.id;
+                    a.setAttribute('data-active', active ? 'true' : 'false');
+                    if (active) a.setAttribute('aria-current', 'true');
+                    else a.removeAttribute('aria-current');
+                  });
                 }
               }
             },
@@ -128,6 +141,13 @@ const nav = [
             { threshold: 0.12 },
           );
           document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => revealer.observe(el));
+
+          // Safety net: never leave content invisible if the observer never fires.
+          setTimeout(() => {
+            document
+              .querySelectorAll('.reveal:not(.is-visible)')
+              .forEach((el) => el.classList.add('is-visible'));
+          }, 4000);
         } else {
           document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
         }
