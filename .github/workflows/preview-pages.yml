@@ -55,7 +55,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr view "${PR_NUMBER}" --json number,title --jq '"ok: #\(.number) \(.title)"'
+          gh pr view "${PR_NUMBER}" --repo "${{ github.repository }}" --json number,title --jq '"ok: #\(.number) \(.title)"'
       - uses: actions/checkout@v5
         if: github.event_name == 'pull_request'
         with:
