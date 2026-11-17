@@ -18,6 +18,13 @@ diagram: |
     E --> G[(GridFS\nZIPs · video · photos)]
     E <--> GE["Gemini 2.5-flash\nper-file explanations"]
     E <--> PL["Smodin API\nplagiarism check"]
+decisions:
+  - title: "Three role tiers, one codebase"
+    text: "T1 students, T2 colleges and T3 recruiters each get a scoped view — colleges only see their own students' projects, recruiters see everything — behind one React app and one Express API."
+  - title: "Big files in GridFS, metadata in MongoDB"
+    text: "Project ZIPs, video and photos are stored in GridFS while documents keep only metadata, so uploads never ride inside a document and the queries stay small."
+  - title: "Checking happens where the upload happens"
+    text: "Gemini explains uploaded code file-by-file and a plagiarism API scores submissions in the same flow, so a project is reviewed before it ever appears in a feed."
 ---
 
 ## The problem

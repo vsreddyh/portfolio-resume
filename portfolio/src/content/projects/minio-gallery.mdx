@@ -16,6 +16,13 @@ diagram: |
       CL[Client] --> FA["FastAPI\npresigned URLs"] --> RD[(Redis\n55-min TTL)] --> S3
       MDB[(MongoDB index)] -.-> FA
     end
+decisions:
+  - title: "Hot write, cold store"
+    text: "Uploads land in self-hosted MinIO; at midnight a cron mirrors curated objects to S3 and purges them from MinIO, so the expensive store only holds what survived review."
+  - title: "Presigned URLs cached in Redis"
+    text: "A read resolves Redis → MinIO (1h URL) → S3 fallback and then caches the signed URL for 55 minutes, so repeat reads never reach S3 at all."
+  - title: "Health covers all four backends"
+    text: "/health pings MinIO, MongoDB, Redis and S3 and reports 503 degraded unless Mongo is healthy, so one endpoint answers whether the pipeline can serve."
 ---
 
 ## The problem
