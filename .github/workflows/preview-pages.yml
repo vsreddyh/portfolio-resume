@@ -102,8 +102,8 @@ jobs:
           # Astro emits _astro/; without this, Pages' Jekyll would ignore it.
           touch previews/.nojekyll
           # Checkout used HTTPS (no credentials); push over SSH with our key.
-          git remote set-url origin "git@github.com:vsreddyh/portfolio-previews.git"
           cd previews
+          git remote set-url origin "git@github.com:vsreddyh/portfolio-previews.git"
           git add -A
           if git diff --cached --quiet; then
             echo "Preview unchanged; nothing to push."
@@ -177,8 +177,8 @@ jobs:
           chmod 600 "$keyfile"
           export GIT_SSH_COMMAND="ssh -i $keyfile -o StrictHostKeyChecking=accept-new"
           # Checkout used HTTPS (no credentials); push over SSH with our key.
-          git remote set-url origin "git@github.com:vsreddyh/portfolio-previews.git"
           cd previews
+          git remote set-url origin "git@github.com:vsreddyh/portfolio-previews.git"
           rm -rf "pr-${PR_NUMBER}"
           git add -A
           if git diff --cached --quiet; then
