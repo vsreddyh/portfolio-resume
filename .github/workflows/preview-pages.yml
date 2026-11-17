@@ -101,6 +101,8 @@ jobs:
           rsync -a --delete portfolio/dist/ "$dest/"
           # Astro emits _astro/; without this, Pages' Jekyll would ignore it.
           touch previews/.nojekyll
+          # Checkout used HTTPS (no credentials); push over SSH with our key.
+          git remote set-url origin "git@github.com:vsreddyh/portfolio-previews.git"
           cd previews
           git add -A
           if git diff --cached --quiet; then
@@ -109,11 +111,19 @@ jobs:
             git -c user.name=github-actions -c user.email=github-actions@github.com \
               commit -m "preview pr-${PR_NUMBER} ${GITHUB_SHA::7}"
             # Rebase + retry: rapid syncs can race each other on main.
+            pushed=""
             for i in 1 2 3; do
-              git pull --rebase origin main && git push origin HEAD:main && break
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                pushed=1
+                break
+              fi
               echo "push attempt $i failed; retrying"
               sleep 5
             done
+            if [ -z "$pushed" ]; then
+              echo "::error::push to portfolio-previews failed after 3 attempts"
+              exit 1
+            fi
           fi
 
       - name: Comment preview URL
@@ -166,6 +176,8 @@ jobs:
           printf '%s' "$PREVIEWS_DEPLOY_KEY" > "$keyfile"
           chmod 600 "$keyfile"
           export GIT_SSH_COMMAND="ssh -i $keyfile -o StrictHostKeyChecking=accept-new"
+          # Checkout used HTTPS (no credentials); push over SSH with our key.
+          git remote set-url origin "git@github.com:vsreddyh/portfolio-previews.git"
           cd previews
           rm -rf "pr-${PR_NUMBER}"
           git add -A
@@ -174,9 +186,17 @@ jobs:
           else
             git -c user.name=github-actions -c user.email=github-actions@github.com \
               commit -m "remove preview pr-${PR_NUMBER}"
+            pushed=""
             for i in 1 2 3; do
-              git pull --rebase origin main && git push origin HEAD:main && break
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                pushed=1
+                break
+              fi
               echo "push attempt $i failed; retrying"
               sleep 5
             done
+            if [ -z "$pushed" ]; then
+              echo "::error::push to portfolio-previews failed after 3 attempts"
+              exit 1
+            fi
           fi
