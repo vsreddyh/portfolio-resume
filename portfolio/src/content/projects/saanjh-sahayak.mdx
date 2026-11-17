@@ -42,8 +42,10 @@ patient's unverified reports. A doctor's note promotes a report to verified.
 Late prototype, stalled since 2024: the pipeline and review loop are real, but
 authentication is stubbed — the login endpoints set a hardcoded session and no
 query is scoped to the caller, so anyone who knows an id can read that patient's
-reports. The repo also still has a committed `.env` with provider keys, which
-needs rotating and purging from history before the code is public again.
+reports. The repo also still tracks a `backend/.env` from 2024; the provider
+keys and database password in it were rotated since, so what is left in history
+is stale config rather than a live credential — worth untracking, not an
+incident.
 
 It needs real auth and per-user scoping before it touches real patients. I'm
 keeping it here because the two-stage extraction design is the interesting part,
