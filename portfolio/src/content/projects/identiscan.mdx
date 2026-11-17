@@ -17,7 +17,7 @@ decisions:
   - title: "Face matching lives in its own service"
     text: "Flask + dlib sits behind /compare on :5004 while Express keeps the records. The matcher can be redeployed, or swapped for another model, without touching attendance rules or the admin app."
   - title: "The capture is forwarded, never stored"
-    text: "Only the enrolled photo lives in GridFS; the live photo from the kiosk is held in memory, posted to the matcher and dropped, so the stored biometric surface stays one image per student."
+    text: "Only the enrolled photo lives in GridFS; the live photo arrives as an express-fileupload buffer and is appended straight into the compare request (backend/controllers/mark.js:47-53, 73-82) — no write path puts a check-in photo on disk."
   - title: "Rules live in the API, not the kiosk"
     text: "Check-in before 12:00, checkout after a 6-hour gap and one in/out pair per day are enforced server-side, so editing the kiosk app cannot talk it into marking someone present."
 ---

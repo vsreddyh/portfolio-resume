@@ -16,8 +16,8 @@ decisions:
     text: "The whole Gita is a 2.8 MB SQLite file bundled as an asset, opened by SQLiteProvider on first launch. No accounts, no backend, no sync conflict to resolve — the app works in a metro tunnel."
   - title: "Scrape once, per language"
     text: "One Scrapy spider per language writes a trilingual CSV, and the database is built from that file. Re-scraping is a batch job, not an app release."
-  - title: "History at the edge"
-    text: "The history table is local and disposable: reading never needs the network, and losing the device loses nothing but a list of dates."
+  - title: "History is meant to stay on the device"
+    text: "The schema has a local history table so a reading log never needs a server, but nothing writes to it yet — the design keeps reads local, not the feature shipped."
 ---
 
 ## The problem
