@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       pr:
-        description: 'PR number to preview (builds refs/pull/<pr>/merge)'
+        description: 'PR number to preview (builds that PRs head commit)'
         required: true
 
 permissions:
@@ -52,7 +52,10 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         with:
           persist-credentials: false
-          ref: refs/pull/${{ github.event.inputs.pr }}/merge
+          # Head, not the merge ref: refs/pull/<n>/merge doesn't exist when
+          # the PR conflicts with its base, while head always does. For a
+          # preview, the PR's own code is what we want anyway.
+          ref: refs/pull/${{ github.event.inputs.pr }}/head
 
       - uses: actions/setup-node@v7
         with:

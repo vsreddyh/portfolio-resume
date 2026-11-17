@@ -7,10 +7,11 @@ import tailwindcss from '@tailwindcss/vite';
 // For a user site (vsreddyh.github.io repo), use base: '/'.
 // PR previews override this via SITE_BASE (see preview-pages.yml);
 // production deploys keep the default below.
-const previewBase = process.env.SITE_BASE || undefined;
+// `||` (not `??`) so an explicitly empty SITE_BASE also falls back.
+const previewBase = process.env.SITE_BASE || '/portfolio-resume/';
 export default defineConfig({
   site: 'https://vsreddyh.github.io',
-  base: previewBase ?? '/portfolio-resume/',
+  base: previewBase,
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],
