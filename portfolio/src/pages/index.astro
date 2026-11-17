@@ -3,180 +3,169 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
-const featured = (await getCollection('projects'))
-  .filter((p) => p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
-const archive = (await getCollection('projects'))
-  .filter((p) => !p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
+const all = await getCollection('projects');
+const featured = all.filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order);
+const archive = all.filter((p) => !p.data.featured).sort((a, b) => a.data.order - b.data.order);
+
+const now = [
+  {
+    title: 'Agento',
+    status: 'running',
+    href: `${base}projects/agento/`,
+    note: 'Daily driver: Compose client, Go API on one box, six MCP servers in T3 Code.',
+  },
+  {
+    title: 'Daily Gita',
+    status: 'in progress',
+    href: `${base}projects/daily-gita/`,
+    note: 'Corpus is finished and bundled; the reading loop is what is left.',
+  },
+  {
+    title: 'Saanjh Sahayak',
+    status: 'paused',
+    href: `${base}projects/saanjh-sahayak/`,
+    note: 'Two-stage report extraction works; auth and per-user scoping do not exist yet.',
+  },
+];
 ---
 <BaseLayout>
-  <!-- HERO: thesis, not summary -->
-  <section id="home" class="mx-auto flex min-h-[92vh] max-w-6xl flex-col justify-center px-4 pt-24 sm:px-6">
-    <p class="reveal text-sm font-semibold uppercase tracking-widest text-emerald-400">
-      Vishnu Shouryan Reddy · Software Engineer @ 5th Bridge
-    </p>
-    <h1 class="reveal mt-4 max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl" style="--reveal-delay:80ms">
-      I build AI systems and full-stack products that survive production.
+  <section id="home" class="mx-auto max-w-6xl px-6 pb-24 pt-20 sm:pt-28">
+    <p class="mono-label">Vishnu Shouryan Reddy · Software engineer, Hyderabad</p>
+    <h1 class="mt-6 max-w-4xl text-[clamp(2.4rem,6vw,4.25rem)] leading-[1.02] tracking-[-0.02em]">
+      I write software that runs unattended.
     </h1>
-    <p class="reveal mt-5 max-w-2xl text-lg text-zinc-300" style="--reveal-delay:160ms">
-      From a single Go bot answering game intel from Discord, to an Android client
-      whose agent runs on the host in T3 Code over six MCP servers — I care about
-      systems that are cheap to run and easy to reason about.
+    <p class="mt-7 max-w-[36rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
+      Go and Node services, an Android client, and the cron jobs that keep them
+      tidy. I work on event-driven trading infrastructure at 5th Bridge; the
+      projects below are the ones I run myself, and each page ends with what is
+      still missing from it.
     </p>
-    <div class="reveal mt-8 flex flex-wrap gap-3" style="--reveal-delay:240ms">
-      <a href={`${base}#work`} class="rounded-full bg-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300">
-        Selected work
-      </a>
-      <a href="https://github.com/vsreddyh" class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
-        GitHub
-      </a>
-      <a href={`${base}#contact`} class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
-        Get in touch
-      </a>
+    <div class="mt-9 flex flex-wrap items-baseline gap-x-7 gap-y-3">
+      <a href="#work" class="btn">Selected work <span aria-hidden="true">↓</span></a>
+      <a href="https://github.com/vsreddyh" class="btn">GitHub <span aria-hidden="true">↗</span></a>
+      <a href="mailto:shouryanreddyh@gmail.com" class="btn">Email</a>
     </div>
   </section>
 
-  <!-- SELECTED WORK: 3 deep, rest archived -->
-  <section id="work" class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-    <div class="reveal flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Selected work</h2>
-        <p class="mt-2 max-w-xl text-zinc-400">
-          Three projects that show how I think — each one a full case study.
+  <section id="work" class="border-t border-rule">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <div class="flex flex-wrap items-baseline justify-between gap-3">
+        <h2 class="text-3xl">Selected work</h2>
+        <p class="mono-label">Three systems · diagrams · known limits</p>
+      </div>
+
+      <div class="mt-10">
+        {featured.map((p, i) => (
+          <a href={`${base}projects/${p.id}/`} class="row">
+            <span class="mono-label">0{i + 1}</span>
+            <span>
+              <span class="row-title block text-2xl leading-snug">{p.data.title}</span>
+              <span class="mt-1 block max-w-xl text-sm leading-relaxed text-muted">{p.data.description}</span>
+            </span>
+            <span class="mono-label hidden text-right sm:block">{p.data.stack.slice(0, 3).join(' · ')}</span>
+            <span class="row-arrow text-right" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-16 grid gap-x-12 sm:grid-cols-2">
+        {archive.map((p) => (
+          <a href={`${base}projects/${p.id}/`} class="block border-t border-rule py-4 no-underline">
+            <span class="flex items-baseline justify-between gap-4">
+              <span class="text-[0.9375rem] text-ink">{p.data.title}</span>
+              <span class="mono-label whitespace-nowrap">{p.data.stack[0]}</span>
+            </span>
+            <span class="mt-1 block max-w-md text-sm leading-relaxed text-muted">{p.data.description}</span>
+          </a>
+        ))}
+        <p class="border-t border-rule py-4 text-sm text-muted sm:col-span-2">
+          Also CLI games, a bash hardware monitor and placement-data tooling —
+          <a class="link" href="https://github.com/vsreddyh?tab=repositories">everything else is on GitHub ↗</a>
         </p>
       </div>
     </div>
-    <div class="mt-8 grid gap-5 lg:grid-cols-3">
-      {featured.map((p, i) => (
-        <article
-          class="reveal group flex flex-col rounded-2xl border border-white/10 bg-zinc-900/60 p-6 transition hover:-translate-y-1 hover:border-emerald-400/50"
-          style={`--reveal-delay:${Math.min(i, 5) * 70}ms`}
-        >
-          <p class="text-xs font-semibold uppercase tracking-widest text-emerald-400">{p.data.kicker}</p>
-          <h3 class="mt-2 text-xl font-bold">
-            <a href={`${base}projects/${p.id}/`} class="group-hover:text-emerald-300">{p.data.title}</a>
-          </h3>
-          <p class="mt-2 flex-1 text-sm leading-relaxed text-zinc-400">{p.data.description}</p>
-          <p class="mt-3 text-sm font-semibold text-zinc-200">→ {p.data.outcome}</p>
-          <div class="mt-4 flex flex-wrap gap-1.5">
-            {p.data.stack.slice(0, 4).map((s) => (
-              <span class="rounded-full bg-white/5 px-2.5 py-0.5 text-xs text-zinc-300">{s}</span>
-            ))}
-          </div>
-          <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
-            <a href={`${base}projects/${p.id}/`} class="text-emerald-400 hover:text-emerald-300">Case study →</a>
-            {p.data.demo && (
-              <a href={p.data.demo} class="text-zinc-200 hover:text-white">Live demo ↗</a>
-            )}
-            {p.data.github && (
-              <a href={p.data.github} class="text-zinc-400 hover:text-white">Repo ↗</a>
-            )}
-          </div>
-        </article>
-      ))}
-    </div>
+  </section>
 
-    <div class="reveal mt-10 rounded-2xl border border-white/10 p-6">
-      <h3 class="text-sm font-semibold uppercase tracking-widest text-zinc-400">More projects</h3>
-      <ul class="mt-3 divide-y divide-white/5 text-sm">
-        {archive.map((p) => (
-          <li>
-            <a href={`${base}projects/${p.id}/`} class="flex flex-wrap items-baseline justify-between gap-2 py-2.5 transition hover:text-emerald-300">
-              <span class="font-medium">{p.data.title}</span>
-              <span class="text-zinc-400">{p.data.description}</span>
-            </a>
+  <section id="about" class="border-t border-rule bg-paper-raised/60">
+    <div class="mx-auto grid max-w-6xl gap-8 px-6 py-20 sm:grid-cols-[8rem_1fr]">
+      <h2 class="text-2xl">About</h2>
+      <div class="max-w-[36rem] space-y-4 text-[1.0625rem] leading-[1.7] text-ink-soft">
+        <p>
+          I'm a software engineer in Hyderabad. Most of my work is backend and
+          infrastructure: Go, Node and Python services on Postgres, ClickHouse and
+          Mongo, with enough frontend to ship the thing end to end.
+        </p>
+        <p>
+          I default to boring operations. Compose files over bespoke platforms,
+          cron over always-on workers, SQLite before anything exotic. The projects
+          here are mostly experiments in how much can run without me.
+        </p>
+        <p class="text-muted">
+          Software engineer at 5th Bridge Data Technologies. B.Tech in computer
+          science at KMIT, 2022–2026.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="border-t border-rule">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="text-3xl">Experience</h2>
+      <div class="mt-8 border-t border-rule pt-6">
+        <div class="flex flex-wrap items-baseline justify-between gap-3">
+          <h3 class="text-lg font-semibold text-ink">Software Engineer — 5th Bridge Data Technologies</h3>
+          <span class="mono-label">Jun 2026 – present</span>
+        </div>
+        <p class="mt-3 max-w-[38rem] text-[0.9375rem] leading-relaxed text-ink-soft">
+          Small team, event-driven trading infrastructure: Node services, ClickHouse
+          and PostgreSQL, alongside an influencer-marketing platform and AI content
+          tooling. Earlier intern work (ML models, NLP pipelines, trend detection)
+          is in the résumé.
+        </p>
+        <p class="mt-4 text-sm">
+          <a class="link" href={`${base}resume.pdf`}>Full history and education (PDF)</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="now" class="border-t border-rule bg-paper-raised/60">
+    <div class="mx-auto grid max-w-6xl gap-8 px-6 py-20 sm:grid-cols-[8rem_1fr]">
+      <h2 class="text-2xl">Now</h2>
+      <ul class="max-w-[36rem] divide-y divide-rule">
+        {now.map((item) => (
+          <li class="py-4 first:pt-0">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <a class="link font-medium" href={item.href}>{item.title}</a>
+              <span class="mono-label">{item.status}</span>
+            </div>
+            <p class="mt-1 text-sm leading-relaxed text-muted">{item.note}</p>
           </li>
         ))}
-        <li class="py-2.5 text-zinc-400">
-          Plus CLI games, a bash hardware monitor, placement-data tooling and more —
-          <a href="https://github.com/vsreddyh?tab=repositories" class="font-medium text-emerald-400 hover:text-emerald-300">everything lives on GitHub ↗</a>
-        </li>
       </ul>
     </div>
   </section>
 
-  <!-- ABOUT: voice, not summary -->
-  <section id="about" class="border-y border-white/10 bg-zinc-900/40">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-      <h2 class="reveal text-2xl font-bold tracking-tight sm:text-3xl">About</h2>
-      <div class="reveal mt-4 max-w-3xl space-y-4 text-zinc-300" style="--reveal-delay:100ms">
-        <p>
-          I'm a software engineer in Hyderabad working across the stack — React and
-          Node on the frontend-facing side, Python/Go/FastAPI and Postgres-flavoured
-          infrastructure underneath, with a growing obsession for agentic AI that
-          actually runs reliably outside a demo.
-        </p>
-        <p>
-          My bias is toward boring operations: Docker Compose over bespoke platforms,
-          nightly batch jobs over always-on spend, SQLite and Postgres before exotic
-          stores. Most of my side projects are experiments in how much can run
-          unattended — retention jobs, cron syncs, self-hosted search — without me
-          babysitting them.
-        </p>
-        <p>
-          Currently a Software Engineer at 5th Bridge Data Technologies, and a B.Tech
-          CSE student at KMIT (2022–2026). When I'm not shipping, I'm usually
-          automating something in my own setup that didn't need automating.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE: compressed, resume holds details -->
-  <section id="experience" class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-    <h2 class="reveal text-2xl font-bold tracking-tight sm:text-3xl">Experience</h2>
-    <div class="mt-8 space-y-4">
-      <article class="reveal rounded-2xl border border-white/10 bg-zinc-900/60 p-6">
-        <div class="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 class="text-lg font-semibold">Software Engineer — 5th Bridge Data Technologies</h3>
-          <span class="text-sm text-zinc-400">Jun 2026 – Present</span>
-        </div>
-        <p class="mt-2 text-sm leading-relaxed text-zinc-300">
-          Leading a small team on event-driven trading infrastructure (Node.js,
-          ClickHouse, PostgreSQL) while shipping an influencer-marketing platform and
-          AI content tooling. Details and earlier intern work (ML models, NLP
-          pipelines, trend detection) are in the resume.
-        </p>
-      </article>
-      <p class="reveal text-sm text-zinc-400" style="--reveal-delay:80ms">
-        Full history, education and certifications →
-        <a href={`${base}resume.pdf`} class="font-medium text-emerald-400 hover:text-emerald-300">Main resume (PDF)</a>
+  <section id="contact" class="border-t border-rule">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="text-3xl">Get in touch</h2>
+      <p class="mt-4 max-w-[34rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
+        Open to software engineering roles, especially teams that own their
+        infrastructure and their on-call. Email is fastest.
       </p>
-    </div>
-  </section>
-
-  <!-- NOW: a resume can't have this -->
-  <section id="now" class="border-y border-white/10 bg-zinc-900/40">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-      <h2 class="reveal text-2xl font-bold tracking-tight sm:text-3xl">Now</h2>
-      <ul class="reveal mt-6 max-w-3xl list-disc space-y-2 pl-5 text-zinc-300" style="--reveal-delay:100ms">
-        <li>Running <a href={`${base}projects/agento/`} class="text-emerald-400 hover:text-emerald-300">Agento</a>, my personal AI stack: a thin Jetpack Compose client, six Go MCP servers wired into T3 Code on the host, and nightly retention — after deleting my own chat/runs/approvals stack.</li>
-        <li>Prototyping <a href={`${base}projects/saanjh-sahayak/`} class="text-emerald-400 hover:text-emerald-300">Saanjh Sahayak</a>, a clinical-decision mobile app — the two-stage report-analysis pipeline works, auth is next.</li>
-        <li>Wiring up <a href={`${base}projects/daily-gita/`} class="text-emerald-400 hover:text-emerald-300">Daily Gita</a>, a fully offline multilingual verse app — trilingual scrape done (701 rows, ~590 distinct, dedupe pending), reading loop in progress.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-    <div class="reveal rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-400/10 to-transparent p-8 text-center sm:p-12">
-      <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Let's talk</h2>
-      <p class="mx-auto mt-3 max-w-xl text-zinc-300">
-        Open to software engineering roles — especially teams shipping AI-powered
-        products or event-driven systems. Email is fastest.
-      </p>
-      <div class="mt-6 flex flex-wrap justify-center gap-3">
-        <a href="mailto:shouryanreddyh@gmail.com" class="rounded-full bg-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300">
+      <p class="mt-6">
+        <a
+          class="text-[clamp(1.35rem,3vw,2rem)] leading-tight text-ink underline decoration-rule decoration-1 underline-offset-4 transition hover:text-rust hover:decoration-rust"
+          href="mailto:shouryanreddyh@gmail.com"
+        >
           shouryanreddyh@gmail.com
         </a>
-        <a href="https://linkedin.com/in/vsreddyh" class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
-          LinkedIn
-        </a>
-        <a href={`${base}resume.pdf`} class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
-          Resume (PDF)
-        </a>
-      </div>
+      </p>
+      <p class="mono-label mt-6 flex flex-wrap gap-5">
+        <a class="link" href="https://linkedin.com/in/vsreddyh">LinkedIn ↗</a>
+        <a class="link" href={`${base}resume.pdf`}>Résumé (PDF)</a>
+        <a class="link" href="https://github.com/vsreddyh">GitHub ↗</a>
+      </p>
     </div>
   </section>
 </BaseLayout>

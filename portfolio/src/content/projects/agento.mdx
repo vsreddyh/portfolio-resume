@@ -1,115 +1,33 @@
 ---
 title: "Agento"
-description: "Thin Android client plus the Go backend it syncs with — and an agent that runs on the host in T3 Code over six MCP servers."
+description: "Android app and Go API sharing one Mongo database, with six MCP servers I use from T3 Code."
 stack: ["Kotlin", "Jetpack Compose", "Go", "MCP", "Podman Compose", "MongoDB Atlas"]
 github: "https://github.com/vsreddyh/Agento"
 featured: true
 order: 1
-kicker: "Personal AI stack"
-outcome: "Deleted my own chat stack, kept the domain tools: the app is a client, the agent is a host tool, one Atlas database behind both"
+problem: "I wanted one place for tasks, money, health and notes that I run myself, without maintaining another chatbot to talk to it."
 diagram: |
   flowchart LR
-    App["Agento Android\nTasks · Projects · Files · Mail · Health"] --> PX["nginx proxy :8080"]
-    PX --> HA["health-api :8001\nsync · tasks · projects · files · reports"]
-    HA --> DB[(MongoDB Atlas)]
-    T3["T3 Code on the host\nagent + MCP client"] --> MCPs["six Go MCP servers\ntask · project · miser-money · cookbook · health-check · reports"]
+    App["Android app"] --> PX["nginx :8080"]
+    PX --> API["health-api :8001"]
+    API --> DB[(MongoDB Atlas)]
+    T3["T3 Code on host"] --> MCPs["six Go MCP servers"]
     MCPs --> DB
-    T3 --> GM["workspace-mcp\nGmail: read + labels"]
-    RT["retention one-shot\ncron + on start"] -.-> DB
-    subgraph retired["Removed in #487 to #495"]
-      PI["pi container\npi-gateway :8643"] -.-> X["chat · runs · approvals\nmemory · skills · voice · connectors"]
-    end
-decisions:
-  - title: "The agent is a host tool, not a service"
-    text: "A container was the wrong shape for something I talk to. T3 Code runs on the host, spawns the MCP servers as local binaries, and the compose stack keeps only what has to be always-on: health-api, the proxy and retention."
-  - title: "Six servers are the whole agent surface"
-    text: "task-manager, project-manager, miser-money, cookbook, health-check and reports each own one domain in Mongo. Adding a capability means adding a server, not growing a chat app."
-  - title: "Retention per domain, not per database"
-    text: "Money prunes at 90 days and meal/day logs at 30, weight and cookbook data are permanent, and read + unstarred reports go after 7 days — each collection gets the lifetime its data actually deserves."
-  - title: "One URL for the app"
-    text: "The phone only knows a server URL and a password. An nginx proxy routes /api/* and /health to health-api, so the app never learns how the services behind it are arranged."
+    RT["retention job"] -.-> DB
 ---
 
-## The problem
+## How it works
 
-I wanted a personal AI setup that runs day-to-day without babysitting: distinct
-spaces for different parts of my life, health data captured automatically, and
-old data cleaned up on its own. The app was the interesting part; the agent was
-supposed to be the easy part.
+Two halves, one database.
 
-## What it is now
+The Android app is a thin client: tasks, projects, files, mail reports, Health Connect sync, settings. It knows one server URL and one password. An nginx proxy routes `/api/*` to `health-api`, which owns sync and storage on MongoDB Atlas.
 
-Two halves that share one database.
+The agent runs on the host in T3 Code, not in the app and not in a container. Six Go MCP servers I wrote — task, project, money, cookbook, health-check, reports — read and write the same collections the phone reads. Gmail goes through one extra server, read and label changes only.
 
-The **Agento Android app** (Jetpack Compose) is a thin client: Tasks/Projects,
-a Task Manager with due-time reminders and a home-screen widget, Files, ∃-Mail
-(reports), Health Connect sync and Settings. One Server URL + one Password, and
-it talks to an nginx proxy (`:8080`) that routes `/api/*` and `/health` to
-`health-api` (`:8001`), which owns sync, tasks, projects, files and reports on
-MongoDB Atlas.
+I built the chat myself twice before this: a Hermes runtime, then a Pi container with runs, approvals, memory, skills and voice. Both worked. Both were a second chatbot to maintain, with a matching set of app screens for every feature. I deleted them over #487–#495 and kept the domain servers, which were the only part that was mine. T3 Code already does turns, permissions and tool loops.
 
-The **agent is not in the app and not in a container**. It runs on the host in
-**T3 Code**, configured from the repo (`opencode.json` + `.opencode/`), and it
-reaches the same Atlas database through six Go MCP servers I wrote —
-`task-manager`, `project-manager`, `miser-money`, `cookbook`, `health-check`,
-`reports` — built into local binaries and launched through a wrapper that loads
-`MONGODB_URI`/`MONGODB_DB` from the root `.env`. One external server handles
-Gmail as read + label changes only; there is no send, draft or filter management.
+Retention runs on cron and on stack start: money after 90 days, meals and day logs after 30, read and unstarred reports after 7. Weight, notes and cookbook data stay. Dev checkouts point at a throwaway Atlas database.
 
-## The part I deleted
+## Limits
 
-I built the chat myself, more than once.
-
-First a **Hermes** runtime with the conversation loop, transcripts and scheduled
-chats in my own process. Then a **Pi** container: a `pi-gateway` serving an
-OpenAI-compatible surface over SSE, resumable runs that survived the app being
-killed, in-process approval holds with an in-app approval queue, durable memory,
-user-taught skills, live voice with barge-in, and Gmail/Calendar OAuth
-connectors. Later I ran the same idea on **opencode** as the proxy in front of
-the model.
-
-Every version worked. None of them were worth keeping. What I was maintaining
-was a worse version of a chat client: turn plumbing, streaming, approvals,
-memory, a skill editor, a voice mode, reconnect logic — and every feature needed
-a matching screen in the app. The domain tools were the only part that was
-actually mine.
-
-So I dropped it. Chat, scheduled chats, runs, approval gates, memory, skills,
-voice and the connector store were removed over #487–#495, with the container,
-the gateway packages and the app screens deleted bottom-up. **T3 Code was simply
-the better alternative**: a harness that already does turns, permissions and
-tool loops, kept up to date by someone else.
-
-What I kept is the part that had value: the six domain servers are now wired
-into T3 Code directly. The agent asks `miser-money` to log a transaction,
-`task-manager` to move a task, `health-check` to read the last 30 days of sleep —
-and hits the same collections the phone reads. Approvals became T3 Code's
-permission prompts (`*delete*`, `*log_transaction*`, `*modify_gmail_message_labels*`
-all ask), and the audit trail is a Mongo row instead of an in-app queue.
-
-## How it runs
-
-One Podman Compose file with three services: `health-api`, the nginx `proxy`, and
-a one-shot `retention` job. Health Connect data flows from the app through
-`health-api` into per-day MongoDB docs on an hourly WorkManager cadence
-(configurable 1–24h). Retention runs on host cron and once on stack start: money
-older than 90 days, meals and day logs older than 30, read and unstarred reports
-after 7 — while weight, notes and cookbook data are permanent. Dev checkouts
-point at a throwaway Atlas database, so production data is never at risk.
-
-`hermes.sh` (`init|start|stop|restart|status|clean`) still orchestrates the stack;
-the name is a leftover from the runtime it used to start. Every app change ships a
-versioned release APK with in-app updates.
-
-## What it taught me
-
-Multiplexing lost to maintenance twice: first from three scoped profiles down to
-one, then from a whole agent deployment down to nothing but a host command. The
-tell was that deleting features made the product better — the app got smaller,
-the stack got smaller, and the agent got capabilities I had spent weeks failing to
-build well.
-
-The rule I take from it: build the tools that are yours, rent the harness that
-isn't. And reliability is designed, not hoped for — permission prompts on the
-destructive paths, automated pruning per domain, and a single secret store matter
-more than which model answers.
+Single user, single phone. The agent only exists where T3 Code is installed, so a fresh machine means reinstalling the host side. There is no iOS client and no sharing model — adding a second person would mean rethinking auth, not just adding a login screen.

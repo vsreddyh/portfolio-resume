@@ -2,14 +2,15 @@
 interface Props {
   chart: string;
   label: string;
+  caption?: string;
 }
 
-const { chart, label } = Astro.props;
+const { chart, label, caption = 'Diagram' } = Astro.props;
 ---
-<figure class="min-h-[180px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 p-4 sm:p-6">
-  <pre class="mermaid-diagram text-left text-xs leading-relaxed" data-chart={chart} role="img" aria-label={label} aria-busy="true">{chart}</pre>
-  <figcaption data-mermaid-status class="mt-2 text-xs text-zinc-400">Rendering diagram…</figcaption>
-  <noscript><p class="mt-2 text-xs text-zinc-400">Diagram source shown — enable JavaScript to render it.</p></noscript>
+<figure class="diagram">
+  <pre class="mermaid-diagram" data-chart={chart} role="img" aria-label={label} aria-busy="true">{chart}</pre>
+  <figcaption data-mermaid-status>{caption}</figcaption>
+  <noscript><p class="mono-label">Diagram source shown — enable JavaScript to render it.</p></noscript>
 </figure>
 <script is:inline>
   (function () {
@@ -22,16 +23,13 @@ const { chart, label } = Astro.props;
     function setStatus(pre, text) {
       var fig = pre.closest('figure');
       var cap = fig && fig.querySelector('[data-mermaid-status]');
-      if (cap) {
-        if (!text) cap.remove();
-        else cap.textContent = text;
-      }
+      if (cap) cap.textContent = text;
     }
 
     function failOne(pre) {
       pre.setAttribute('data-failed', 'true');
       pre.setAttribute('aria-busy', 'false');
-      setStatus(pre, 'Diagram failed to load — source shown.');
+      setStatus(pre, 'Diagram failed to load — source shown above.');
     }
 
     function ensureLib(done) {
@@ -72,21 +70,25 @@ const { chart, label } = Astro.props;
     function initMermaid() {
       window.mermaid.initialize({
         startOnLoad: false,
-        theme: 'dark',
-        fontFamily: 'system-ui, sans-serif',
+        theme: 'base',
+        fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+        flowchart: { curve: 'basis', htmlLabels: true, padding: 16 },
         themeVariables: {
-          primaryColor: '#131a16',
-          primaryBorderColor: '#34d399',
-          primaryTextColor: '#e4e4e7',
-          secondaryColor: '#18181b',
-          tertiaryColor: '#18181b',
-          lineColor: '#34d399',
-          textColor: '#e4e4e7',
-          mainBkg: '#131a16',
-          nodeBorder: '#34d399',
-          clusterBkg: 'transparent',
-          clusterBorder: '#3f3f46',
-          edgeLabelBackground: '#09090b',
+          fontSize: '14px',
+          background: '#f7f5f0',
+          primaryColor: '#fffdf8',
+          primaryTextColor: '#171512',
+          primaryBorderColor: '#8a7f6b',
+          secondaryColor: '#efeade',
+          tertiaryColor: '#f7f5f0',
+          lineColor: '#6d6558',
+          textColor: '#171512',
+          mainBkg: '#fffdf8',
+          nodeBorder: '#8a7f6b',
+          clusterBkg: '#fffdf8',
+          clusterBorder: '#c9bfa9',
+          edgeLabelBackground: '#f7f5f0',
+          titleColor: '#171512',
         },
       });
     }
@@ -100,7 +102,6 @@ const { chart, label } = Astro.props;
             pre.innerHTML = res.svg;
             pre.setAttribute('data-done', 'true');
             pre.setAttribute('aria-busy', 'false');
-            setStatus(pre, '');
           })
           .catch(function () {
             failOne(pre);
@@ -135,6 +136,5 @@ const { chart, label } = Astro.props;
     }
 
     renderPending();
-    document.addEventListener('astro:page-load', renderPending);
   })();
 </script>

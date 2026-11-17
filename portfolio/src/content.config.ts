@@ -11,17 +11,9 @@ const projects = defineCollection({
     demo: z.string().url().optional(),
     featured: z.boolean().default(false),
     order: z.number().default(100),
-    kicker: z.string().optional(),
-    outcome: z.string().optional(),
+    // One or two sentences: what was annoying enough to build this.
+    problem: z.string(),
     diagram: z.string().optional(),
-    decisions: z
-      .array(
-        z.object({
-          title: z.string(),
-          text: z.string(),
-        }),
-      )
-      .default([]),
   }),
 });
 

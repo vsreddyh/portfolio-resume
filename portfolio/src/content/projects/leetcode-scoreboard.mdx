@@ -1,68 +1,25 @@
 ---
 title: "LeetCode Scoreboard"
-description: "Acceptance-rate-weighted rankings with a write/read split and a multi-range cumulative progress chart; cron syncs, dashboard never touches LeetCode."
+description: "Group LeetCode board scored by acceptance rate, synced every five minutes."
 stack: ["Next.js", "TypeScript", "MongoDB", "Mongoose", "Web Push", "ECharts"]
 github: "https://github.com/vsreddyh/leetcode-scoreboard"
 featured: false
 order: 5
+problem: "Counting solved problems rewards grinding easies, and hitting LeetCode on every page view is slow."
 diagram: |
   flowchart LR
-    CR["cron-job.org\n5 min"] --> SY["/api/sync\ncookie or CRON_SECRET"]
-    SY --> GQL["LeetCode GraphQL\nsubmissions + acRate"]
-    SY --> DB[(MongoDB\none doc per user+question)]
-    D["/ dashboard\naggregation only"] --> DB
-    AD["/admin\ntracked users"] --> DB
-decisions:
-  - title: "Reads never touch LeetCode"
-    text: "Every write goes through /api/sync on an external 5-minute cron; the dashboard, admin pages and chart only aggregate MongoDB. When LeetCode is slow or rate-limiting, the board still renders."
-  - title: "Score is 100 minus the acceptance rate"
-    text: "Difficulty is already encoded in how many people solve a problem, so the score needs no tier table: a hard question with a low accept rate is worth more automatically, and the number is comparable across years."
-  - title: "One canonical rate per question"
-    text: "Rates drift, so the first sync backfills every question's current acRate for all its solvers and a heal loop rewrites divergences — solving the same problem minutes apart pays the same."
-  - title: "The cron is external on purpose"
-    text: "Vercel has no long-running scheduler here, so cron-job.org hits /api/sync with a seeded CRON_SECRET. The end-of-day refresh folds into the first tick after 23:30 IST instead of a second job."
+    CR["cron, 5 min"] --> SY["/api/sync"]
+    SY --> GQL["LeetCode GraphQL"]
+    SY --> DB[(MongoDB)]
+    D["dashboard"] --> DB
 ---
 
-## The problem
+## How it works
 
-Counting solved problems rewards grinding easies. For a practice group, the
-fair score pays more for harder problems — and the board has to stay fast and
-fresh without hammering LeetCode on every page view.
+Each accepted problem scores `100 − acceptance rate`, pinned the first time it is accepted. An external cron hits `/api/sync` every five minutes, walks tracked users through `recentSubmissionList`, and upserts one document per user and question. The dashboard only ever reads Mongo aggregations — it never calls LeetCode — so the board renders when LeetCode is slow. New solves trigger a Web Push summary.
 
-## What I built
+The progress chart is cumulative per user per day in IST, over 1D to ALL ranges, fed by a dedicated `/api/history` read on the same pre-aggregated data.
 
-Score per accepted problem is `100 − acceptance rate`, bucketed per user per
-day in IST. The key decision is the write/read split: an external cron hits
-`/api/sync` every 5 minutes (admin cookie or a constant-time-compared
-`CRON_SECRET`), which walks tracked users through `recentSubmissionList`,
-upserts one doc per user+question with the score pinned at first accept, and
-backfills canonical per-question rates so solving minutes apart pays the same.
-An end-of-day refresh folds into the first tick after 23:30 IST. The dashboard
-reads pre-aggregated Mongo data only — it never calls LeetCode — and each sync
-with new solves pushes a summary (solver counts, today's points, leader) via
-Web Push, pruning dead subscriptions automatically.
+## Limits
 
-A cumulative **score-progress chart** (ECharts) lines every tracked user over
-1D, 1W, 1M, 6M, 1Y and ALL ranges, fed by a dedicated per-user-per-day
-`/api/history` read, so the graph stays on the same pre-aggregated side of the
-write/read split as the rest of the dashboard. Each range shows per-user
-growth badges (true 1D delta vs the prior close, "new" for zero-baseline
-starts, em-dash when the window covers the whole history), mirrored in the
-legend labels.
-
-Around it: a password-cookie admin panel with HMAC-signed sessions for tracked
-users and manual syncs, PWA install support, and dark/light theming.
-
-## What it taught me
-
-Separate the hot path from the slow source. Polling external APIs on a timer
-into your own store, then serving reads from the store, is a pattern that
-scales from scoreboards to trading infra — and idempotent upserts plus
-canonical scores are what keep concurrent writers honest.
-
-## Where it stops
-
-`recentSubmissionList` only returns the latest 20 submissions per user, so
-history accrues from the day a user is tracked rather than backfilling years of
-solves, and a burst of 20+ acceptances between ticks loses the overflow. The
-chart therefore starts at tracking day, not at account creation.
+`recentSubmissionList` returns the latest 20 submissions, so history starts the day a user is tracked — there is no backfill, and a burst of 20+ acceptances between ticks loses the overflow.

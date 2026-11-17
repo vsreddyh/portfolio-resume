@@ -1,74 +1,27 @@
 ---
 title: "Schedio"
-description: "Three-sided collaboration platform with GridFS uploads, per-file AI explanations, and plagiarism checks."
+description: "Student projects, college views and recruiter search in one React and Express app."
 stack: ["React", "Node.js", "Express", "Gemini API", "MongoDB", "Docker"]
 github: "https://github.com/vsreddyh/schedio"
 demo: "https://schedio-coral.vercel.app"
 featured: true
 order: 2
-kicker: "Full-stack platform"
-outcome: "Live on Vercel; three roles, one codebase"
+problem: "Student work sits on GitHub profiles nobody finds, and recruiters have no way to reach it through colleges."
 diagram: |
   flowchart LR
-    S[T1 Students] --> R["React 18 + MUI"]
-    C[T2 Colleges] --> R
-    Re[T3 Recruiters] --> R
-    R --> E["Express API\nJWT + session auth"]
-    E --> M[(MongoDB\nusers · projects)]
-    E --> G[(GridFS\nZIPs · video · photos)]
-    E <--> GE["Gemini 2.5-flash\nper-file explanations"]
-    E <--> PL["Smodin API\nplagiarism check"]
-decisions:
-  - title: "Three role tiers, one codebase"
-    text: "T1 students, T2 colleges and T3 recruiters each get a scoped view — colleges only see their own students' projects, recruiters see everything — behind one React app and one Express API."
-  - title: "Big files in GridFS, metadata in MongoDB"
-    text: "Project ZIPs, video and photos are stored in GridFS while documents keep only metadata, so uploads never ride inside a document and the queries stay small."
-  - title: "Checking happens where the upload happens"
-    text: "Gemini explains uploaded code file-by-file and a plagiarism API scores submissions in the same flow, so a project is reviewed before it ever appears in a feed."
-  - title: "Sessions, not JWTs, for the app"
-    text: "All three roles live on one MongoDB-backed session with a 6-hour rolling cookie; JWT is used only for the 10-minute password-reset link, where a bearer token is the right shape."
+    UI["React app"] --> API["Express API"]
+    API --> DB[(MongoDB)]
+    API --> G[(GridFS: zips, video)]
+    API --> GE["Gemini: per-file notes"]
+    API --> PL["Plagiarism check"]
 ---
 
-## The problem
+## How it works
 
-Student projects are scattered across GitHub profiles nobody finds, and
-recruiters have no good way to discover them through colleges. I wanted one
-place where students, colleges, and recruiters meet around real work — with
-the evaluation tooling recruiters actually need.
+Three roles, one codebase. Students upload projects, colleges see their own students' work with monthly charts, recruiters search everything with institute and domain filters.
 
-## What I built
+Projects are code zips, video and photos. The zips land in GridFS; the backend unzips them server-side and shows a file tree where each file gets a Gemini explanation. Descriptions go through a plagiarism service before submission. Likes, comments and recruiter bookmarks are in the same API. Auth is email plus bcrypt with Mongo-backed sessions — JWT is only used for the 10-minute password-reset link. Password reset goes out through Gmail templates. It ships with Docker files and runs on Vercel.
 
-Schedio serves three roles from one codebase: students upload and showcase
-projects, colleges manage their students' work with monthly analytics, and
-recruiters search across everything with institute and domain filters.
-Auth is email + bcrypt with Mongo-backed sessions (JWT only for the 10-minute
-password-reset links), and role checks gate the student, college and recruiter
-views.
+## Limits
 
-The core loop is upload → explore → evaluate. Projects bundle code ZIPs,
-videos, and images into GridFS; the backend unzips code server-side and serves
-a file-tree viewer where each file gets its own `gemini-2.5-flash` explanation.
-Project descriptions are scored by a RapidAPI plagiarism service before
-submission, and engagement (likes, comments, recruiter bookmarks) is
-first-class. Colleges get Chart.js monthly analytics; profiles are print-friendly
-for handouts. Password reset flows through Gmail templates, and the whole thing
-ships in Docker (dev + prod Dockerfiles) with the live deployment on Vercel.
-
-## What it taught me
-
-Marketplaces die of emptiness, not bad UI — so the evaluation tooling
-(plagiarism checks, per-file code explanations, analytics) is what makes the
-platform useful to recruiters rather than just a prettier project list.
-And boring auth choices (sessions in Mongo, short-lived reset tokens) pay off
-when three user types share one API.
-
-## Where it stops
-
-It was built for a hackathon and it shows in the edges: search uses Mongo
-`$text` but no text index is created in the repo, so it depends on indexes made
-by hand; the plagiarism verdict is computed from state one render behind
-(`ProjectUploadForm.jsx:236-251` reads `percent` captured before the request),
-so a clean description can be flagged and a flagged one can slip through; and
-there are no tests. The three-role flows are the part that works.
-
-Try it: **[schedio-coral.vercel.app](https://schedio-coral.vercel.app)**.
+Built for a hackathon, and it shows at the edges. Search uses Mongo `$text` but the repo creates no text index, so it depends on indexes made by hand. The plagiarism verdict reads state from one render behind (`ProjectUploadForm.jsx:236-251`), so a clean description can be flagged and a flagged one can pass. No tests.
