@@ -82,18 +82,6 @@ jobs:
           repository: vsreddyh/portfolio-previews
           path: previews
           persist-credentials: false
-      - name: Debug SSH key (temporary)
-        env:
-          PREVIEWS_DEPLOY_KEY: ${{ secrets.PREVIEWS_DEPLOY_KEY }}
-        run: |
-          set -euo pipefail
-          echo "secret bytes: ${#PREVIEWS_DEPLOY_KEY}"
-          keyfile="$(mktemp)"
-          printf '%s' "$PREVIEWS_DEPLOY_KEY" > "$keyfile"
-          chmod 600 "$keyfile"
-          ssh-keygen -lf "$keyfile" || echo "NOT A VALID KEY FILE"
-          ssh -v -o StrictHostKeyChecking=accept-new -o BatchMode=yes -i "$keyfile" -T git@github.com 2>&1 | grep -aE "Offering public key|Server accepts key|Authenticated|Permission denied" | head -n 6 || true
-          rm -f "$keyfile"
       - name: Publish preview
         env:
           PREVIEWS_DEPLOY_KEY: ${{ secrets.PREVIEWS_DEPLOY_KEY }}
@@ -104,7 +92,9 @@ jobs:
           # set up our own key for the push below.
           keyfile="$(mktemp)"
           trap 'rm -f "$keyfile"' EXIT
-          printf '%s' "$PREVIEWS_DEPLOY_KEY" > "$keyfile"
+          # The secret store drops the trailing newline; OpenSSH rejects a
+          # private key file without one, so always terminate it.
+          printf '%s\n' "$PREVIEWS_DEPLOY_KEY" > "$keyfile"
           chmod 600 "$keyfile"
           export GIT_SSH_COMMAND="ssh -i $keyfile -o StrictHostKeyChecking=accept-new"
           dest="previews/pr-${PR_NUMBER}"
@@ -185,7 +175,8 @@ jobs:
           : "${PR_NUMBER:?PR_NUMBER is empty}"
           keyfile="$(mktemp)"
           trap 'rm -f "$keyfile"' EXIT
-          printf '%s' "$PREVIEWS_DEPLOY_KEY" > "$keyfile"
+          # See publish step: the secret store drops the trailing newline.
+          printf '%s\n' "$PREVIEWS_DEPLOY_KEY" > "$keyfile"
           chmod 600 "$keyfile"
           export GIT_SSH_COMMAND="ssh -i $keyfile -o StrictHostKeyChecking=accept-new"
           # Checkout used HTTPS (no credentials); push over SSH with our key.
