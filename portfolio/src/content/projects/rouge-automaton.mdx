@@ -15,6 +15,13 @@ diagram: |
     CR["crawl\nunits + world"] --> DB
     B --> TM["Training Manual API\nwar status"]
     B --> WK["helldivers.wiki.gg\nlookup fallback"]
+decisions:
+  - title: "Tools over a vector store"
+    text: "Retrieval is exact-match Mongo lookups over collated indexes with aliases, not embeddings. Nine tools cover units, gear, places, war status, major orders and wiki search — nothing to re-embed when the wiki edits a page."
+  - title: "One tool definition, two consumers"
+    text: "The same Execute implementation backs the Discord bot's tool loop and the stdio MCP server, so a new capability lands in both places at once and the bot's behaviour can be tested without Discord."
+  - title: "Failure is voiced, never silent"
+    text: "A 429, a dead relay or an exhausted quota each has an in-character reply with an ETA, and replies are capped at 1900 runes so the sign-off always lands inside Discord's 2000-rune ceiling."
 ---
 
 ## The problem
@@ -32,7 +39,9 @@ intel tools — unit/gear/world lookups, generic war summary, Major Order
 briefing (title, kill/objective progress, expiry, reward, plus companion
 strategic-threat tasks), named-planet
 status, wiki search — defined once and shared between the relay client and an
-MCP stdio server. Retrieval is Mongo exact-match with cited context (collated
+MCP stdio server. The relay is OpenCode Go (`muse-spark-1.3-contributor`), one
+provider with no fallback chain. Retrieval is Mongo exact-match with cited
+context (collated
 indexes, alias handling); on a local miss it falls back to live wiki lookup
 with source links. Live war status comes from the Training Manual API with a
 staleness guard, answering generic "how goes the war" questions without

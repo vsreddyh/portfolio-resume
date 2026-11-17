@@ -13,6 +13,13 @@ diagram: |
     F --> E
     E --> M[(MongoDB\nrecords · batches)]
     AD["Admin app\nbatches · % view"] --> E
+decisions:
+  - title: "Face matching lives in its own service"
+    text: "Flask + dlib sits behind /compare on :5004 while Express keeps the records. The matcher can be redeployed, or swapped for another model, without touching attendance rules or the admin app."
+  - title: "The capture is forwarded, never stored"
+    text: "Only the enrolled photo lives in GridFS; the live photo from the kiosk is held in memory, posted to the matcher and dropped, so the stored biometric surface stays one image per student."
+  - title: "Rules live in the API, not the kiosk"
+    text: "Check-in before 12:00, checkout after a 6-hour gap and one in/out pair per day are enforced server-side, so editing the kiosk app cannot talk it into marking someone present."
 ---
 
 ## The problem
@@ -44,3 +51,10 @@ Matching runs on dlib's ResNet embedding (99.38% on LFW, per the model
 publisher). That's the library's benchmark, not an in-repo evaluation — the
 right way to read it is "proven model, threshold tuned for the deployment,"
 not a claim about our hallways.
+
+## Where it stops
+
+Sessions and bcrypt exist, but no route is guarded yet, so auth is scaffolding
+rather than enforcement. Enrolled photos also outlive a student deletion —
+cascade deletes clean the records, not the GridFS bucket. Both are why this is a
+"worked in the hallway, not deployed" project rather than a shipped system.

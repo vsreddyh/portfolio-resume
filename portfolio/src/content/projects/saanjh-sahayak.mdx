@@ -12,6 +12,13 @@ diagram: |
     E --> G[(GridFS\nreport PDFs)]
     E <--> GE["Gemini 1.5-flash\nextract + analyze"]
     D["Doctor review\nunverified → verified"] --> E
+decisions:
+  - title: "Two passes over one PDF"
+    text: "The first Gemini call only extracts parameters with a negative example so non-medical uploads are rejected early; the second turns those parameters into summary, precautions, severity and a specialist. Extraction failing cleanly beats analysis on garbage."
+  - title: "Unverified to verified is the state machine"
+    text: "Every AI report lands in patient.unverifiedreports and only a doctor's note moves it across. The model drafts; it never gets to be the record."
+  - title: "A PDF, a summary, and nothing else in the app"
+    text: "Reports live in GridFS and patients hold references, so the phone never carries lab PDFs on disk and the same report can be reopened by a doctor on another device."
 ---
 
 ## The problem
@@ -23,16 +30,21 @@ reaches the doctor before the visit, not after.
 
 ## What exists (prototype)
 
-An 11-screen Expo app (caretaker flows, doctor flows, PDF viewing) over an
+A 10-screen Expo app (caretaker flows, doctor flows, PDF viewing) over an
 Express API with 18 endpoints. Uploaded PDFs land in GridFS; a two-stage
-Gemini pipeline first extracts structured health parameters (few-shot, with a
-negative example to reject non-medical uploads) and then generates analysis,
-precautions, severity 0–10, and specialist routing, filed under the patient's
-unverified reports. A doctor's note promotes a report to verified.
+Gemini 1.5 Flash pipeline first extracts structured health parameters (few-shot,
+with a negative example to reject non-medical uploads) and then generates
+analysis, precautions, severity 0–10, and specialist routing, filed under the
+patient's unverified reports. A doctor's note promotes a report to verified.
 
 ## Honest status
 
 Late prototype, stalled since 2024: the pipeline and review loop are real, but
-authentication is still stubbed demo sessions — it needs real auth before it
-touches real patients. I'm keeping it here because the two-stage extraction
-design is the interesting part, not because it's shippable.
+authentication is stubbed — the login endpoints set a hardcoded session and no
+query is scoped to the caller, so anyone who knows an id can read that patient's
+reports. The repo also still has a committed `.env` with provider keys, which
+needs rotating and purging from history before the code is public again.
+
+It needs real auth and per-user scoping before it touches real patients. I'm
+keeping it here because the two-stage extraction design is the interesting part,
+not because it's shippable.
