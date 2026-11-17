@@ -1,0 +1,152 @@
+name: PR preview
+
+# Per-PR preview builds, served from a separate repo because GitHub Pages
+# hosts one site per repo:
+#   https://vsreddyh.github.io/portfolio-previews/pr-<number>/
+# Pushes via the PREVIEWS_DEPLOY_KEY deploy key (write access to
+# vsreddyh/portfolio-previews only). That repo's root robots.txt disallows
+# crawling, so previews stay out of search results.
+
+on:
+  pull_request:
+    paths:
+      - 'portfolio/**'
+      - 'resume/Main_Resume.pdf'
+      - '.github/workflows/preview-pages.yml'
+    types: [opened, synchronize, reopened, closed]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number to preview (builds refs/pull/<pr>/merge)'
+        required: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number || github.event.inputs.pr }}
+  cancel-in-progress: true
+
+env:
+  PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr }}
+
+jobs:
+  build-and-push:
+    # Same-repo PRs only: forks get no secrets, so no preview.
+    if: >-
+      github.event.action != 'closed' &&
+      (github.event_name == 'workflow_dispatch' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        if: github.event_name == 'pull_request'
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v5
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          persist-credentials: false
+          ref: refs/pull/${{ github.event.inputs.pr }}/merge
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+      - name: Use Main_Resume as site resume
+        run: |
+          set -euo pipefail
+          if [ ! -f resume/Main_Resume.pdf ]; then
+            echo "::error file=resume/Main_Resume.pdf::tracked PDF is missing; it is the file this site serves"
+            exit 1
+          fi
+          mkdir -p portfolio/public
+          cp resume/Main_Resume.pdf portfolio/public/resume.pdf
+      - name: Install
+        run: npm ci
+        working-directory: portfolio
+      - name: Build preview
+        run: npm run build
+        working-directory: portfolio
+        env:
+          SITE_BASE: /portfolio-previews/pr-${{ env.PR_NUMBER }}/
+
+      - uses: actions/checkout@v5
+        with:
+          repository: vsreddyh/portfolio-previews
+          path: previews
+          ssh-key: ${{ secrets.PREVIEWS_DEPLOY_KEY }}
+          persist-credentials: false
+      - name: Publish preview
+        run: |
+          set -euo pipefail
+          dest="previews/pr-${PR_NUMBER}"
+          mkdir -p "$dest"
+          # --delete so removed pages don't linger in the preview.
+          rsync -a --delete portfolio/dist/ "$dest/"
+          # Astro emits _astro/; without this, Pages' Jekyll would ignore it.
+          touch previews/.nojekyll
+          cd previews
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Preview unchanged; nothing to push."
+          else
+            git -c user.name=github-actions -c user.email=github-actions@github.com \
+              commit -m "preview pr-${PR_NUMBER} ${GITHUB_SHA::7}"
+            git push origin HEAD:main
+          fi
+
+      - name: Comment preview URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- portfolio-preview -->';
+            const url = `https://vsreddyh.github.io/portfolio-previews/pr-${process.env.PR_NUMBER}/`;
+            const body = `${marker}\nPreview build: ${url}\nRebuilt on every push; removed when the PR closes.`;
+            const { data: comments } = await github.rest.issues.listComments({
+              ...context.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find((c) => c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                ...context.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                ...context.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
+  cleanup:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          repository: vsreddyh/portfolio-previews
+          path: previews
+          ssh-key: ${{ secrets.PREVIEWS_DEPLOY_KEY }}
+          persist-credentials: false
+      - name: Remove preview
+        run: |
+          set -euo pipefail
+          cd previews
+          rm -rf "pr-${PR_NUMBER}"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to clean."
+          else
+            git -c user.name=github-actions -c user.email=github-actions@github.com \
+              commit -m "remove preview pr-${PR_NUMBER}"
+            git push origin HEAD:main
+          fi
