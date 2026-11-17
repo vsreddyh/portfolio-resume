@@ -9,7 +9,7 @@ kicker: "Personal AI stack"
 outcome: "Deleted my own chat stack, kept the domain tools: the app is a client, the agent is a host tool, one Atlas database behind both"
 diagram: |
   flowchart LR
-    App["Agento Android\nTasks · Projects · Files · ∃-Mail · Health"] --> PX["nginx proxy :8080"]
+    App["Agento Android\nTasks · Projects · Files · Mail · Health"] --> PX["nginx proxy :8080"]
     PX --> HA["health-api :8001\nsync · tasks · projects · files · reports"]
     HA --> DB[(MongoDB Atlas)]
     T3["T3 Code on the host\nagent + MCP client"] --> MCPs["six Go MCP servers\ntask · project · miser-money · cookbook · health-check · reports"]

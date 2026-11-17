@@ -34,8 +34,7 @@ noise. I wanted an ingestion path that was fast under burst and cheap at rest.
 ## What I built
 
 A tiered pipeline with one Docker Compose file. Uploads land in self-hosted
-MinIO under uuid-hex names (the endpoint 503s unless both MinIO and Mongo are
-up — no half-written state), with metadata in MongoDB. Reads resolve through a
+MinIO under uuid-hex names, with metadata in MongoDB. Reads resolve through a
 chain: Redis first (55-minute TTL on signed URLs), MinIO presigned URL next,
 S3 fallback last. At midnight a cron job mirrors curated files to S3 with
 `mc mirror`, deletes the mirrored objects from MinIO, and invalidates their
@@ -51,3 +50,10 @@ Cost is an architecture constraint, not an invoice surprise. Batching the
 expensive operation (S3 writes) into a nightly job and caching the expensive
 read (signed URLs) is the entire design — everything else is plumbing. This is
 the project that most shaped how I think about building cheap-to-run systems.
+
+## Where it stops
+
+It is an ingestion pipeline, not a product: no auth, no delete endpoint, no
+pagination, and the frontend assumes the API is on `localhost:8000`. The
+interesting part — tiering, caching, invalidation — is complete; the gallery
+around it is not.

@@ -25,6 +25,8 @@ decisions:
     text: "Project ZIPs, video and photos are stored in GridFS while documents keep only metadata, so uploads never ride inside a document and the queries stay small."
   - title: "Checking happens where the upload happens"
     text: "Gemini explains uploaded code file-by-file and a plagiarism API scores submissions in the same flow, so a project is reviewed before it ever appears in a feed."
+  - title: "Sessions, not JWTs, for the app"
+    text: "All three roles live on one MongoDB-backed session with a 6-hour rolling cookie; JWT is used only for the 10-minute password-reset link, where a bearer token is the right shape."
 ---
 
 ## The problem
@@ -39,17 +41,18 @@ the evaluation tooling recruiters actually need.
 Schedio serves three roles from one codebase: students upload and showcase
 projects, colleges manage their students' work with monthly analytics, and
 recruiters search across everything with institute and domain filters.
-Auth is email + bcrypt with JWT and Mongo-backed sessions, and every route
-is gated by user type.
+Auth is email + bcrypt with Mongo-backed sessions (JWT only for the 10-minute
+password-reset links), and role checks gate the student, college and recruiter
+views.
 
 The core loop is upload → explore → evaluate. Projects bundle code ZIPs,
 videos, and images into GridFS; the backend unzips code server-side and serves
-a file-tree viewer where each file gets its own Gemini explanation. Project
-descriptions run through a plagiarism API, and engagement (likes, comments,
-recruiter bookmarks) is first-class. Colleges get Chart.js monthly and
-domain analytics; profiles are print-friendly for handouts. Password reset
-flows through Gmail templates, and the whole thing ships in Docker
-(dev + prod Dockerfiles) with the live deployment on Vercel.
+a file-tree viewer where each file gets its own `gemini-2.5-flash` explanation.
+Project descriptions are scored by a RapidAPI plagiarism service before
+submission, and engagement (likes, comments, recruiter bookmarks) is
+first-class. Colleges get Chart.js monthly analytics; profiles are print-friendly
+for handouts. Password reset flows through Gmail templates, and the whole thing
+ships in Docker (dev + prod Dockerfiles) with the live deployment on Vercel.
 
 ## What it taught me
 
@@ -58,5 +61,14 @@ Marketplaces die of emptiness, not bad UI — so the evaluation tooling
 platform useful to recruiters rather than just a prettier project list.
 And boring auth choices (sessions in Mongo, short-lived reset tokens) pay off
 when three user types share one API.
+
+## Where it stops
+
+It was built for a hackathon and it shows in the edges: search uses Mongo
+`$text` but no text index is created in the repo, so it depends on indexes made
+by hand; the plagiarism verdict is computed from state one render behind
+(`ProjectUploadForm.jsx:236-251` reads `percent` captured before the request),
+so a clean description can be flagged and a flagged one can slip through; and
+there are no tests. The three-role flows are the part that works.
 
 Try it: **[schedio-coral.vercel.app](https://schedio-coral.vercel.app)**.

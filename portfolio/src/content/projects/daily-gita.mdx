@@ -1,6 +1,6 @@
 ---
 title: "Daily Gita"
-description: "Offline-first verse reader: 701 verses bundled as SQLite, scraped trilingually, no backend."
+description: "Offline-first verse reader: a trilingual SQLite corpus (701 scraped rows) bundled as an app asset, no backend."
 stack: ["React Native", "Expo", "expo-sqlite", "Nativewind", "Scrapy"]
 github: "https://github.com/vsreddyh/Daily_Gita"
 featured: false
@@ -11,6 +11,13 @@ diagram: |
     SC --> CSV["data.csv\ntrilingual"]
     CSV --> DB[("gita.db · 701 verses\nbundled asset")]
     DB --> App["Expo app\nSQLiteProvider · offline"]
+decisions:
+  - title: "Ship the corpus, not an API"
+    text: "The whole Gita is a 2.8 MB SQLite file bundled as an asset, opened by SQLiteProvider on first launch. No accounts, no backend, no sync conflict to resolve — the app works in a metro tunnel."
+  - title: "Scrape once, per language"
+    text: "One Scrapy spider per language writes a trilingual CSV, and the database is built from that file. Re-scraping is a batch job, not an app release."
+  - title: "History is meant to stay on the device"
+    text: "The schema has a local history table so a reading log never needs a server, but nothing writes to it yet — the design keeps reads local, not the feature shipped."
 ---
 
 ## The problem
@@ -22,14 +29,18 @@ megabytes, so ship the database with the app and never phone home.
 ## What exists (in development)
 
 Scrapy spiders crawl English, Hindi, and Telugu verse pages into a trilingual
-CSV, compiled into a 701-row SQLite database bundled as an app asset and read
-through `SQLiteProvider` — zero network calls. Around it: drawer + tab
-navigation via expo-router, a language picker, reading history, and full
-in-app Terms/Privacy text framing the offline design.
+CSV, compiled into a SQLite database (701 rows) bundled as a 2.8 MB app asset and
+read through `SQLiteProvider` — zero network calls. Around it: a drawer shell via
+expo-router, Settings, Terms and Privacy screens.
 
 ## Honest status
 
-Late prototype: dataset, bundling, and navigation shell are done; the
-verse-reading loop itself is still being wired (the home screen renders
-placeholders). The data pipeline was the hard part and it's finished — the UI
-is what's left.
+UI prototype. The dataset and bundling are done; the reading loop is not. The
+home screen renders placeholder text, `getVerse()` ignores its arguments and
+returns the first row, the language picker is `useState` that is never persisted,
+and the history table has no writer. The scraped data also needs a cleanup pass:
+701 rows contain only ~590 distinct chapter/verse pairs, so duplicates are still
+in the bundle.
+
+The data pipeline was the hard part and it's finished — the app around it is what's
+left.

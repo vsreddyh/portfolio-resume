@@ -1,6 +1,6 @@
 ---
 title: "LeetCode Scoreboard"
-description: "Difficulty-weighted rankings with a write/read split and a multi-range cumulative progress chart; cron syncs, dashboard never touches LeetCode."
+description: "Acceptance-rate-weighted rankings with a write/read split and a multi-range cumulative progress chart; cron syncs, dashboard never touches LeetCode."
 stack: ["Next.js", "TypeScript", "MongoDB", "Mongoose", "Web Push", "ECharts"]
 github: "https://github.com/vsreddyh/leetcode-scoreboard"
 featured: false
@@ -12,6 +12,15 @@ diagram: |
     SY --> DB[(MongoDB\none doc per user+question)]
     D["/ dashboard\naggregation only"] --> DB
     AD["/admin\ntracked users"] --> DB
+decisions:
+  - title: "Reads never touch LeetCode"
+    text: "Every write goes through /api/sync on an external 5-minute cron; the dashboard, admin pages and chart only aggregate MongoDB. When LeetCode is slow or rate-limiting, the board still renders."
+  - title: "Score is 100 minus the acceptance rate"
+    text: "Difficulty is already encoded in how many people solve a problem, so the score needs no tier table: a hard question with a low accept rate is worth more automatically, and the number is comparable across years."
+  - title: "One canonical rate per question"
+    text: "Rates drift, so the first sync backfills every question's current acRate for all its solvers and a heal loop rewrites divergences — solving the same problem minutes apart pays the same."
+  - title: "The cron is external on purpose"
+    text: "Vercel has no long-running scheduler here, so cron-job.org hits /api/sync with a seeded CRON_SECRET. The end-of-day refresh folds into the first tick after 23:30 IST instead of a second job."
 ---
 
 ## The problem
@@ -50,3 +59,10 @@ Separate the hot path from the slow source. Polling external APIs on a timer
 into your own store, then serving reads from the store, is a pattern that
 scales from scoreboards to trading infra — and idempotent upserts plus
 canonical scores are what keep concurrent writers honest.
+
+## Where it stops
+
+`recentSubmissionList` only returns the latest 20 submissions per user, so
+history accrues from the day a user is tracked rather than backfilling years of
+solves, and a burst of 20+ acceptances between ticks loses the overflow. The
+chart therefore starts at tracking day, not at account creation.
