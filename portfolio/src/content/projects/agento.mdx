@@ -17,6 +17,13 @@ diagram: |
     HA --> DB
     RT["retention one-shot\ncron 03:00"] -.-> DB
     PI --- MCPs["Go MCPs\nmoney · cookbook · health · tasks · projects · notes · memory · browser\n+ read-only Gmail MCP"]
+decisions:
+  - title: "One URL for the app"
+    text: "The Android app only knows a server URL and a password. An nginx proxy routes /api/* and /health to health-api, so the phone always talks to one host no matter how the services behind it change."
+  - title: "Retention per domain, not per database"
+    text: "Money prunes at 90 days and meal/day logs at 30, while weight, notes and cookbook data are permanent — each collection gets the lifetime its data actually deserves."
+  - title: "One .env, no inherited drift"
+    text: "Every MCP launcher loads the repo-root .env itself and an already-exported value wins, so the agent and the containers read the same secrets from a single place."
 ---
 
 ## The problem

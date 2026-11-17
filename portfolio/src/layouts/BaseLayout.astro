@@ -8,7 +8,11 @@ interface Props {
 }
 
 const base = import.meta.env.BASE_URL;
-const canonical = new URL(Astro.url.pathname, 'https://vsreddyh.github.io');
+// pathname already includes `base` on GitHub Pages project sites, so resolve it
+// against the configured site instead of a hardcoded origin.
+const site = Astro.site ?? new URL('https://vsreddyh.github.io');
+const canonical = new URL(Astro.url.pathname, site);
+const ogImage = new URL(`${base}og.png`, site).toString();
 const {
   title = 'Vishnu Shouryan Reddy — Software Engineer',
   description = 'Full-stack software engineer: React, Node.js, Python, cloud, and AI-powered automation.',
@@ -30,71 +34,25 @@ const nav = [
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="icon" href={`${base}favicon-32.png`} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <meta name="theme-color" content="#09090b" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vishnu Shouryan Reddy — I build AI systems and full-stack products that survive production." />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <ClientRouter />
     <noscript><style>.reveal{opacity:1 !important;transform:none !important}</style></noscript>
-    <script is:inline defer src="https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js" integrity="sha384-N3QqR/7q+xm3BGX+CBbNI8AUmRRqcsDzToy+0z1NLDI0QmTKW8zvwLvqulJgk3dP" crossorigin="anonymous"></script>
-    <script is:inline defer>
-      (function () {
-        var counter = 0;
-        function renderPending() {
-          if (!window.mermaid) {
-            setTimeout(renderPending, 500);
-            return;
-          }
-          window.mermaid.initialize({
-            startOnLoad: false,
-            theme: 'dark',
-            fontFamily: 'system-ui, sans-serif',
-            themeVariables: {
-              primaryColor: '#131a16',
-              primaryBorderColor: '#34d399',
-              primaryTextColor: '#e4e4e7',
-              secondaryColor: '#18181b',
-              tertiaryColor: '#18181b',
-              lineColor: '#34d399',
-              textColor: '#e4e4e7',
-              mainBkg: '#131a16',
-              nodeBorder: '#34d399',
-              clusterBkg: 'transparent',
-              clusterBorder: '#3f3f46',
-              edgeLabelBackground: '#09090b',
-            },
-          });
-          var nodes = document.querySelectorAll('pre.mermaid-diagram:not([data-done])');
-          if (!('IntersectionObserver' in window)) {
-            nodes.forEach(renderOne);
-            return;
-          }
-          var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-              if (entry.isIntersecting) {
-                io.unobserve(entry.target);
-                renderOne(entry.target);
-              }
-            });
-          });
-          nodes.forEach(function (n) { io.observe(n); });
-        }
-        function renderOne(pre) {
-          try {
-            var code = pre.getAttribute('data-chart') || pre.textContent;
-            window.mermaid.render('mmd-' + (counter++), code).then(function (res) {
-              pre.innerHTML = res.svg;
-              pre.setAttribute('data-done', 'true');
-            });
-          } catch (e) { /* leave source text visible */ }
-        }
-        renderPending();
-        document.addEventListener('astro:page-load', renderPending);
-      })();
-    </script>
   </head>
   <body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-emerald-400 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-950">Skip to content</a>
@@ -117,7 +75,7 @@ const nav = [
           >
             Resume
           </a>
-          <details class="relative md:hidden">
+          <details class="relative md:hidden" data-menu>
             <summary class="cursor-pointer rounded-lg border border-white/15 px-3 py-1.5 text-sm list-none">
               Menu
             </summary>
@@ -154,17 +112,30 @@ const nav = [
           .map((a) => document.getElementById(a.getAttribute('data-spy') || ''))
           .filter(Boolean);
 
+        // Mobile <details> menu: close it once a link is picked, and on Escape.
+        document.querySelectorAll('[data-menu]').forEach((menu) => {
+          menu.querySelectorAll('a').forEach((a) =>
+            a.addEventListener('click', () => menu.removeAttribute('open')),
+          );
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Escape') return;
+          document.querySelectorAll('[data-menu][open]').forEach((menu) =>
+            menu.removeAttribute('open'),
+          );
+        });
+
         if ('IntersectionObserver' in window && sections.length > 0) {
           const spy = new IntersectionObserver(
             (entries) => {
               for (const entry of entries) {
                 if (entry.isIntersecting) {
-                  links.forEach((a) =>
-                    a.setAttribute(
-                      'data-active',
-                      a.getAttribute('data-spy') === entry.target.id ? 'true' : 'false',
-                    ),
-                  );
+                  links.forEach((a) => {
+                    const active = a.getAttribute('data-spy') === entry.target.id;
+                    a.setAttribute('data-active', active ? 'true' : 'false');
+                    if (active) a.setAttribute('aria-current', 'true');
+                    else a.removeAttribute('aria-current');
+                  });
                 }
               }
             },
@@ -184,6 +155,13 @@ const nav = [
             { threshold: 0.12 },
           );
           document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => revealer.observe(el));
+
+          // Safety net: never leave content invisible if the observer never fires.
+          setTimeout(() => {
+            document
+              .querySelectorAll('.reveal:not(.is-visible)')
+              .forEach((el) => el.classList.add('is-visible'));
+          }, 4000);
         } else {
           document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
         }
