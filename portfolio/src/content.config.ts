@@ -14,6 +14,14 @@ const projects = defineCollection({
     kicker: z.string().optional(),
     outcome: z.string().optional(),
     diagram: z.string().optional(),
+    decisions: z
+      .array(
+        z.object({
+          title: z.string(),
+          text: z.string(),
+        }),
+      )
+      .default([]),
   }),
 });
 
