@@ -29,7 +29,7 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
     function failOne(pre) {
       pre.setAttribute('data-failed', 'true');
       pre.setAttribute('aria-busy', 'false');
-      setStatus(pre, 'Diagram failed to load — source shown above.');
+      setStatus(pre, 'Diagram failed to load — source shown.');
     }
 
     function ensureLib(done) {
