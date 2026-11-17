@@ -82,6 +82,18 @@ jobs:
           repository: vsreddyh/portfolio-previews
           path: previews
           persist-credentials: false
+      - name: Debug SSH key (temporary)
+        env:
+          PREVIEWS_DEPLOY_KEY: ${{ secrets.PREVIEWS_DEPLOY_KEY }}
+        run: |
+          set -euo pipefail
+          echo "secret bytes: ${#PREVIEWS_DEPLOY_KEY}"
+          keyfile="$(mktemp)"
+          printf '%s' "$PREVIEWS_DEPLOY_KEY" > "$keyfile"
+          chmod 600 "$keyfile"
+          ssh-keygen -lf "$keyfile" || echo "NOT A VALID KEY FILE"
+          ssh -v -o StrictHostKeyChecking=accept-new -o BatchMode=yes -i "$keyfile" -T git@github.com 2>&1 | grep -aE "Offering public key|Server accepts key|Authenticated|Permission denied" | head -n 6 || true
+          rm -f "$keyfile"
       - name: Publish preview
         env:
           PREVIEWS_DEPLOY_KEY: ${{ secrets.PREVIEWS_DEPLOY_KEY }}
