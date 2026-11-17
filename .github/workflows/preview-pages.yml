@@ -96,6 +96,9 @@ jobs:
         with:
           repository: vsreddyh/portfolio-previews
           path: previews
+          # Full history: both jobs `pull --rebase` before pushing, which is
+          # unreliable on the default shallow clone.
+          fetch-depth: 0
           persist-credentials: false
       - name: Publish preview
         env:
@@ -185,6 +188,9 @@ jobs:
         with:
           repository: vsreddyh/portfolio-previews
           path: previews
+          # Full history: both jobs `pull --rebase` before pushing, which is
+          # unreliable on the default shallow clone.
+          fetch-depth: 0
           persist-credentials: false
       - name: Remove preview
         env:
