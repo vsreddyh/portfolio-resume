@@ -66,7 +66,9 @@ when three user types share one API.
 
 It was built for a hackathon and it shows in the edges: search uses Mongo
 `$text` but no text index is created in the repo, so it depends on indexes made
-by hand; the plagiarism threshold compares against state one render behind; and
+by hand; the plagiarism verdict is computed from state one render behind
+(`ProjectUploadForm.jsx:236-251` reads `percent` captured before the request),
+so a clean description can be flagged and a flagged one can slip through; and
 there are no tests. The three-role flows are the part that works.
 
 Try it: **[schedio-coral.vercel.app](https://schedio-coral.vercel.app)**.
