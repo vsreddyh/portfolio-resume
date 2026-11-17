@@ -39,62 +39,6 @@ const nav = [
     <meta name="twitter:description" content={description} />
     <ClientRouter />
     <noscript><style>.reveal{opacity:1 !important;transform:none !important}</style></noscript>
-    <script is:inline defer src="https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js" integrity="sha384-N3QqR/7q+xm3BGX+CBbNI8AUmRRqcsDzToy+0z1NLDI0QmTKW8zvwLvqulJgk3dP" crossorigin="anonymous"></script>
-    <script is:inline defer>
-      (function () {
-        var counter = 0;
-        function renderPending() {
-          if (!window.mermaid) {
-            setTimeout(renderPending, 500);
-            return;
-          }
-          window.mermaid.initialize({
-            startOnLoad: false,
-            theme: 'dark',
-            fontFamily: 'system-ui, sans-serif',
-            themeVariables: {
-              primaryColor: '#131a16',
-              primaryBorderColor: '#34d399',
-              primaryTextColor: '#e4e4e7',
-              secondaryColor: '#18181b',
-              tertiaryColor: '#18181b',
-              lineColor: '#34d399',
-              textColor: '#e4e4e7',
-              mainBkg: '#131a16',
-              nodeBorder: '#34d399',
-              clusterBkg: 'transparent',
-              clusterBorder: '#3f3f46',
-              edgeLabelBackground: '#09090b',
-            },
-          });
-          var nodes = document.querySelectorAll('pre.mermaid-diagram:not([data-done])');
-          if (!('IntersectionObserver' in window)) {
-            nodes.forEach(renderOne);
-            return;
-          }
-          var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-              if (entry.isIntersecting) {
-                io.unobserve(entry.target);
-                renderOne(entry.target);
-              }
-            });
-          });
-          nodes.forEach(function (n) { io.observe(n); });
-        }
-        function renderOne(pre) {
-          try {
-            var code = pre.getAttribute('data-chart') || pre.textContent;
-            window.mermaid.render('mmd-' + (counter++), code).then(function (res) {
-              pre.innerHTML = res.svg;
-              pre.setAttribute('data-done', 'true');
-            });
-          } catch (e) { /* leave source text visible */ }
-        }
-        renderPending();
-        document.addEventListener('astro:page-load', renderPending);
-      })();
-    </script>
   </head>
   <body class="bg-zinc-950 text-zinc-100 font-sans antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-emerald-400 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-zinc-950">Skip to content</a>
