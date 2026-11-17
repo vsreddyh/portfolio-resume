@@ -6,6 +6,135 @@ interface Props {
 
 const { chart, label } = Astro.props;
 ---
-<figure class="overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 p-4 sm:p-6">
-  <pre class="mermaid-diagram text-left text-xs leading-relaxed" data-chart={chart} role="img" aria-label={label}>{chart}</pre>
+<figure class="min-h-[180px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 p-4 sm:p-6">
+  <pre class="mermaid-diagram text-left text-xs leading-relaxed" data-chart={chart} role="img" aria-label={label} aria-busy="true">{chart}</pre>
+  <figcaption data-mermaid-status class="mt-2 text-xs text-zinc-400">Rendering diagram…</figcaption>
+  <noscript><p class="mt-2 text-xs text-zinc-400">Diagram source shown — enable JavaScript to render it.</p></noscript>
 </figure>
+<script is:inline>
+  (function () {
+    var SRC = 'https://cdn.jsdelivr.net/npm/mermaid@10.9.8/dist/mermaid.min.js';
+    var INTEGRITY = 'sha384-N3QqR/7q+xm3BGX+CBbNI8AUmRRqcsDzToy+0z1NLDI0QmTKW8zvwLvqulJgk3dP';
+    var SELECTOR = 'pre.mermaid-diagram:not([data-done])';
+    var counter = 0;
+    var pending = null;
+
+    function setStatus(pre, text) {
+      var fig = pre.closest('figure');
+      var cap = fig && fig.querySelector('[data-mermaid-status]');
+      if (cap) {
+        if (!text) cap.remove();
+        else cap.textContent = text;
+      }
+    }
+
+    function failOne(pre) {
+      pre.setAttribute('data-failed', 'true');
+      pre.setAttribute('aria-busy', 'false');
+      setStatus(pre, 'Diagram failed to load — source shown.');
+    }
+
+    function ensureLib(done) {
+      if (window.mermaid) {
+        done();
+        return;
+      }
+      if (pending) {
+        pending.push(done);
+        return;
+      }
+      pending = [done];
+      var flush = function () {
+        var q = pending;
+        pending = null;
+        q.forEach(function (f) { f(); });
+      };
+      var s = document.createElement('script');
+      s.src = SRC;
+      s.defer = true;
+      s.crossOrigin = 'anonymous';
+      s.setAttribute('integrity', INTEGRITY);
+      s.onload = flush;
+      s.onerror = function () {
+        pending = null;
+        document.querySelectorAll(SELECTOR).forEach(failOne);
+      };
+      document.head.appendChild(s);
+      // CDN blocked or too slow: stop leaving users on "Rendering…".
+      setTimeout(function () {
+        if (!window.mermaid && pending) {
+          pending = null;
+          document.querySelectorAll(SELECTOR).forEach(failOne);
+        }
+      }, 10000);
+    }
+
+    function initMermaid() {
+      window.mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+        fontFamily: 'system-ui, sans-serif',
+        themeVariables: {
+          primaryColor: '#131a16',
+          primaryBorderColor: '#34d399',
+          primaryTextColor: '#e4e4e7',
+          secondaryColor: '#18181b',
+          tertiaryColor: '#18181b',
+          lineColor: '#34d399',
+          textColor: '#e4e4e7',
+          mainBkg: '#131a16',
+          nodeBorder: '#34d399',
+          clusterBkg: 'transparent',
+          clusterBorder: '#3f3f46',
+          edgeLabelBackground: '#09090b',
+        },
+      });
+    }
+
+    function renderOne(pre) {
+      try {
+        var code = pre.getAttribute('data-chart') || pre.textContent;
+        window.mermaid
+          .render('mmd-' + counter++, code)
+          .then(function (res) {
+            pre.innerHTML = res.svg;
+            pre.setAttribute('data-done', 'true');
+            pre.setAttribute('aria-busy', 'false');
+            setStatus(pre, '');
+          })
+          .catch(function () {
+            failOne(pre);
+          });
+      } catch (e) {
+        failOne(pre);
+      }
+    }
+
+    function renderPending() {
+      var nodes = document.querySelectorAll(SELECTOR);
+      if (!nodes.length) return;
+      if (!('IntersectionObserver' in window)) {
+        ensureLib(function () {
+          initMermaid();
+          nodes.forEach(renderOne);
+        });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            io.unobserve(entry.target);
+            ensureLib(function () {
+              initMermaid();
+              renderOne(entry.target);
+            });
+          }
+        });
+      });
+      nodes.forEach(function (n) { io.observe(n); });
+    }
+
+    renderPending();
+    document.addEventListener('astro:page-load', renderPending);
+  })();
+</script>
