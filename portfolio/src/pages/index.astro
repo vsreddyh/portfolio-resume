@@ -25,13 +25,13 @@ const archive = (await getCollection('projects'))
       systems that are cheap to run and easy to reason about.
     </p>
     <div class="reveal mt-8 flex flex-wrap gap-3" style="--reveal-delay:240ms">
-      <a href="#work" class="rounded-full bg-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300">
+      <a href={`${base}#work`} class="rounded-full bg-emerald-400 px-6 py-2.5 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300">
         Selected work
       </a>
       <a href="https://github.com/vsreddyh" class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
         GitHub
       </a>
-      <a href="#contact" class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
+      <a href={`${base}#contact`} class="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold transition hover:border-white/50 hover:bg-white/5">
         Get in touch
       </a>
     </div>
@@ -75,11 +75,11 @@ const archive = (await getCollection('projects'))
           <li>
             <a href={`${base}projects/${p.id}/`} class="flex flex-wrap items-baseline justify-between gap-2 py-2.5 transition hover:text-emerald-300">
               <span class="font-medium">{p.data.title}</span>
-              <span class="text-zinc-500">{p.data.description}</span>
+              <span class="text-zinc-400">{p.data.description}</span>
             </a>
           </li>
         ))}
-        <li class="py-2.5 text-zinc-500">
+        <li class="py-2.5 text-zinc-400">
           Plus CLI games, a bash hardware monitor, placement-data tooling and more —
           <a href="https://github.com/vsreddyh?tab=repositories" class="font-medium text-emerald-400 hover:text-emerald-300">everything lives on GitHub ↗</a>
         </li>
