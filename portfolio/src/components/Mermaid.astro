@@ -161,6 +161,8 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
     // edge labels follow the new palette. Not-yet-rendered diagrams pick it
     // up when they scroll into view.
     document.addEventListener('theme-change', function () {
+      // CDN may have failed (failOne path) — then there is nothing to redraw.
+      if (!window.mermaid) return;
       initMermaid();
       document.querySelectorAll(SELECTOR + ', pre.mermaid-diagram[data-done]').forEach(function (pre) {
         pre.removeAttribute('data-done');
