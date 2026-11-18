@@ -20,6 +20,7 @@
   --color-codeblock: #171512;
   --color-codeblock-fg: #f4f1e8;
   --color-select: #e8d9cd;
+  --color-rowhover: #fffdf8;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
@@ -39,6 +40,7 @@
   --color-codeblock: #0f0d0a;
   --color-codeblock-fg: #e8e2d4;
   --color-select: #4a3a2c;
+  --color-rowhover: #221d16;
 }
 
 html {
@@ -140,7 +142,7 @@ h2,
   }
 }
 .row:hover {
-  background-color: rgba(255, 253, 248, 0.6);
+  background-color: var(--color-rowhover);
 }
 .row .row-title {
   transition: color 0.15s ease;
