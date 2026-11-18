@@ -16,10 +16,29 @@
   --color-muted: #6d6558;
   --color-rule: #d9d2c3;
   --color-rust: #9c3a25;
+  --color-codebg: #efeade;
+  --color-codeblock: #171512;
+  --color-codeblock-fg: #f4f1e8;
+  --color-select: #e8d9cd;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Dim warm dark theme. Same tokens, so every utility flips with one switch. */
+[data-theme="dark"] {
+  --color-paper: #161310;
+  --color-paper-raised: #1e1a15;
+  --color-ink: #e9e2d3;
+  --color-ink-soft: #cfc5b1;
+  --color-muted: #9a8d76;
+  --color-rule: #373126;
+  --color-rust: #cf6b45;
+  --color-codebg: #2a251d;
+  --color-codeblock: #0f0d0a;
+  --color-codeblock-fg: #e8e2d4;
+  --color-select: #4a3a2c;
 }
 
 html {
@@ -46,7 +65,7 @@ body {
 }
 
 ::selection {
-  background: #e8d9cd;
+  background: var(--color-select);
   color: var(--color-ink);
 }
 
@@ -229,14 +248,14 @@ h2,
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.85em;
-  background: #efeade;
+  background: var(--color-codebg);
   padding: 0.1em 0.32em;
   border-radius: 2px;
   color: var(--color-ink);
 }
 .prose pre {
-  background: var(--color-ink);
-  color: #f4f1e8;
+  background: var(--color-codeblock);
+  color: var(--color-codeblock-fg);
   padding: 1rem 1.1rem;
   overflow-x: auto;
   font-size: 0.8125rem;

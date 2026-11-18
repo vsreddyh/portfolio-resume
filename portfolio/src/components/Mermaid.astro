@@ -67,29 +67,50 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
       }, 10000);
     }
 
+    function palette() {
+      if (document.documentElement.dataset.theme === 'dark') {
+        return {
+          background: '#161310',
+          primaryColor: '#1e1a15',
+          primaryTextColor: '#e9e2d3',
+          primaryBorderColor: '#6b6046',
+          secondaryColor: '#241f18',
+          tertiaryColor: '#161310',
+          lineColor: '#9a8d76',
+          textColor: '#e9e2d3',
+          mainBkg: '#1e1a15',
+          nodeBorder: '#6b6046',
+          clusterBkg: '#1e1a15',
+          clusterBorder: '#4a4335',
+          edgeLabelBackground: '#161310',
+          titleColor: '#e9e2d3',
+        };
+      }
+      return {
+        background: '#f7f5f0',
+        primaryColor: '#fffdf8',
+        primaryTextColor: '#171512',
+        primaryBorderColor: '#8a7f6b',
+        secondaryColor: '#efeade',
+        tertiaryColor: '#f7f5f0',
+        lineColor: '#6d6558',
+        textColor: '#171512',
+        mainBkg: '#fffdf8',
+        nodeBorder: '#8a7f6b',
+        clusterBkg: '#fffdf8',
+        clusterBorder: '#c9bfa9',
+        edgeLabelBackground: '#f7f5f0',
+        titleColor: '#171512',
+      };
+    }
+
     function initMermaid() {
       window.mermaid.initialize({
         startOnLoad: false,
         theme: 'base',
         fontFamily: 'ui-sans-serif, system-ui, sans-serif',
         flowchart: { curve: 'basis', htmlLabels: true, padding: 16 },
-        themeVariables: {
-          fontSize: '14px',
-          background: '#f7f5f0',
-          primaryColor: '#fffdf8',
-          primaryTextColor: '#171512',
-          primaryBorderColor: '#8a7f6b',
-          secondaryColor: '#efeade',
-          tertiaryColor: '#f7f5f0',
-          lineColor: '#6d6558',
-          textColor: '#171512',
-          mainBkg: '#fffdf8',
-          nodeBorder: '#8a7f6b',
-          clusterBkg: '#fffdf8',
-          clusterBorder: '#c9bfa9',
-          edgeLabelBackground: '#f7f5f0',
-          titleColor: '#171512',
-        },
+        themeVariables: Object.assign({ fontSize: '14px' }, palette()),
       });
     }
 
@@ -136,5 +157,15 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
     }
 
     renderPending();
+    // Re-render finished diagrams when the theme flips so node fills and
+    // edge labels follow the new palette. Not-yet-rendered diagrams pick it
+    // up when they scroll into view.
+    document.addEventListener('theme-change', function () {
+      initMermaid();
+      document.querySelectorAll(SELECTOR + ', pre.mermaid-diagram[data-done]').forEach(function (pre) {
+        pre.removeAttribute('data-done');
+        renderOne(pre);
+      });
+    });
   })();
 </script>

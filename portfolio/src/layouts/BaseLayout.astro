@@ -36,7 +36,22 @@ const nav = [
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
     <link rel="icon" href={`${base}favicon-32.png`} sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
-    <meta name="theme-color" content="#f7f5f0" />
+    <meta name="theme-color" content="#f7f5f0" id="theme-color" />
+    <script is:inline>
+      // Set the theme before first paint to avoid a flash. Saved choice wins,
+      // then the OS preference, then light.
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          if (theme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+            var meta = document.getElementById('theme-color');
+            if (meta) meta.setAttribute('content', '#161310');
+          }
+        } catch (e) { /* private mode: stay light */ }
+      })();
+    </script>
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -68,6 +83,20 @@ const nav = [
             Résumé
           </a>
         </div>
+        <div class="flex items-center gap-3">
+        <button
+          type="button"
+          data-theme-toggle
+          class="mono-label flex cursor-pointer items-center border border-rule px-2.5 py-1.5 text-ink transition hover:text-rust"
+          aria-label="Toggle dark theme"
+        >
+          <span data-theme-icon-moon>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </span>
+          <span data-theme-icon-sun class="hidden">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </span>
+        </button>
         <details class="relative md:hidden" data-menu>
           <summary class="mono-label cursor-pointer list-none border border-rule px-3 py-1.5 text-ink">
             Menu
@@ -83,6 +112,7 @@ const nav = [
             </a>
           </div>
         </details>
+        </div>
       </nav>
     </header>
 
@@ -102,6 +132,35 @@ const nav = [
     </footer>
 
     <script>
+      // Theme toggle. The head script already set the initial theme; here we
+      // sync the icon and wire the button. Diagrams listen for theme-change.
+      function syncThemeIcon() {
+        var dark = document.documentElement.dataset.theme === 'dark';
+        document.querySelectorAll('[data-theme-icon-moon]').forEach((el) =>
+          el.classList.toggle('hidden', dark),
+        );
+        document.querySelectorAll('[data-theme-icon-sun]').forEach((el) =>
+          el.classList.toggle('hidden', !dark),
+        );
+      }
+      function setTheme(theme) {
+        if (theme === 'dark') document.documentElement.dataset.theme = 'dark';
+        else delete document.documentElement.dataset.theme;
+        try {
+          localStorage.setItem('theme', theme);
+        } catch (e) { /* private mode */ }
+        var meta = document.getElementById('theme-color');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#161310' : '#f7f5f0');
+        syncThemeIcon();
+        document.dispatchEvent(new CustomEvent('theme-change'));
+      }
+      document.querySelectorAll('[data-theme-toggle]').forEach((btn) =>
+        btn.addEventListener('click', () =>
+          setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'),
+        ),
+      );
+      syncThemeIcon();
+
       // Scrollspy for the section nav, plus closing the mobile menu after a pick.
       function init() {
         document.querySelectorAll('[data-menu]').forEach((menu) => {
