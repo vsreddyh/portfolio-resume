@@ -70,9 +70,9 @@ const now = [
 
       <div class="mt-16 grid gap-x-12 sm:grid-cols-2">
         {archive.map((p) => (
-          <a href={`${base}projects/${p.id}/`} class="block border-t border-rule py-4 no-underline">
+          <a href={`${base}projects/${p.id}/`} class="archive-row block border-t border-rule px-1 py-4 no-underline">
             <span class="flex items-baseline justify-between gap-4">
-              <span class="text-[0.9375rem] text-ink">{p.data.title}</span>
+              <span class="archive-title text-[0.9375rem] text-ink">{p.data.title}</span>
               <span class="mono-label whitespace-nowrap">{p.data.stack[0]}</span>
             </span>
             <span class="mt-1 block max-w-md text-sm leading-relaxed text-muted">{p.data.description}</span>

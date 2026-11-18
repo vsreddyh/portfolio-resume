@@ -150,6 +150,20 @@ h2,
 .row:hover .row-title {
   color: var(--color-rust);
 }
+
+/* Archive list: same hover language as the featured rows. */
+.archive-row {
+  transition: background-color 0.15s ease;
+}
+.archive-row:hover {
+  background-color: var(--color-rowhover);
+}
+.archive-row .archive-title {
+  transition: color 0.15s ease;
+}
+.archive-row:hover .archive-title {
+  color: var(--color-rust);
+}
 .row .row-arrow {
   color: var(--color-muted);
   transition: transform 0.15s ease, color 0.15s ease;
