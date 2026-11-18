@@ -1,59 +1,26 @@
 ---
 title: "Anonymous Image Gallery"
-description: "Tiered media pipeline: MinIO for burst, S3 for rest, Redis in front of every read."
+description: "Image uploads through MinIO, a nightly move to S3, and reads cached in Redis."
 stack: ["React", "FastAPI", "Redis", "MongoDB", "MinIO", "Amazon S3"]
 github: "https://github.com/vsreddyh/Minio-S3"
 featured: true
 order: 3
-kicker: "Cost-driven systems"
-outcome: "Fewer S3 requests by design, not by hope"
+problem: "S3 bills by request, not by byte. A gallery that hits S3 on every upload and every re-read pays for noise."
 diagram: |
   flowchart TB
-    subgraph write[Write path]
-      U["Uploads\nuuid names"] --> MI["MinIO\nhot ingest"] --> NM["Midnight mc mirror\ncurated only + purge"] --> S3[(Amazon S3)]
-    end
-    subgraph read[Read path]
-      CL[Client] --> FA["FastAPI\npresigned URLs"] --> RD[(Redis\n55-min TTL)] --> S3
-      MDB[(MongoDB index)] -.-> FA
-    end
-decisions:
-  - title: "Hot write, cold store"
-    text: "Uploads land in self-hosted MinIO; at midnight a cron mirrors curated objects to S3 and purges them from MinIO, so the expensive store only holds what survived review."
-  - title: "Presigned URLs cached in Redis"
-    text: "A read resolves Redis → MinIO (1h URL) → S3 fallback and then caches the signed URL for 55 minutes, so repeat reads never reach S3 at all."
-  - title: "Health covers all four backends"
-    text: "/health pings MinIO, MongoDB, Redis and S3 and reports 503 degraded unless Mongo is healthy, so one endpoint answers whether the pipeline can serve."
+    U["Uploads"] --> MI["MinIO"]
+    MI --> S3[(S3: nightly mirror)]
+    CL["Client"] --> FA["FastAPI"]
+    FA --> RD[(Redis: signed URLs)]
+    RD --> S3
 ---
 
-## The problem
+## How it works
 
-Object storage bills aren't dominated by bytes — they're dominated by requests.
-A naive gallery pays S3 for every bursty upload, every re-read, every piece of
-noise. I wanted an ingestion path that was fast under burst and cheap at rest.
+Uploads land in self-hosted MinIO under uuid names, with metadata in MongoDB. At midnight a cron job mirrors curated files to S3 with `mc mirror`, deletes them from MinIO and invalidates their Redis keys.
 
-## What I built
+Reads never go straight to storage. FastAPI checks Redis first (55-minute TTL on signed URLs), then MinIO, then S3. Noisy traffic stays on the cheap side; only the nightly batch and cache misses reach S3. One Compose file, one `/health` endpoint that pings all four backends.
 
-A tiered pipeline with one Docker Compose file. Uploads land in self-hosted
-MinIO under uuid-hex names, with metadata in MongoDB. Reads resolve through a
-chain: Redis first (55-minute TTL on signed URLs), MinIO presigned URL next,
-S3 fallback last. At midnight a cron job mirrors curated files to S3 with
-`mc mirror`, deletes the mirrored objects from MinIO, and invalidates their
-Redis keys. A `/health` endpoint pings all four backing services and reports
-degraded unless Mongo is healthy.
+## Limits
 
-The result is fewer S3 request charges: noisy traffic never reaches S3, only
-the nightly batch does, and repeat reads never leave Redis.
-
-## What it taught me
-
-Cost is an architecture constraint, not an invoice surprise. Batching the
-expensive operation (S3 writes) into a nightly job and caching the expensive
-read (signed URLs) is the entire design — everything else is plumbing. This is
-the project that most shaped how I think about building cheap-to-run systems.
-
-## Where it stops
-
-It is an ingestion pipeline, not a product: no auth, no delete endpoint, no
-pagination, and the frontend assumes the API is on `localhost:8000`. The
-interesting part — tiering, caching, invalidation — is complete; the gallery
-around it is not.
+Pipeline, not product. No auth, no delete endpoint, no pagination, and the frontend assumes the API is on `localhost:8000`. The tiering and invalidation hold up; everything around them would need building.

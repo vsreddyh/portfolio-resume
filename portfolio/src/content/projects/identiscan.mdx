@@ -1,60 +1,26 @@
 ---
 title: "Identiscan"
-description: "Check-in/out engine on top of dlib face matching, with GridFS photos and cascade-safe admin."
+description: "Roll number plus a face photo, checked against enrolled photos, with per-class records."
 stack: ["React", "TailwindCSS", "Node.js", "Flask", "MongoDB", "ElectronJS"]
 github: "https://github.com/vsreddyh/identiscan"
 featured: false
 order: 4
+problem: "Paper registers don't scale to large batches, and proxy attendance is trivial."
 diagram: |
   flowchart LR
-    A["Attendance app\nroll + live photo"] --> E["Express :5003"]
-    E --> G[(GridFS\n enrolled photos)]
-    E --> F["Flask :5004\ndlib embedding · 0.6"]
+    K["Kiosk app"] --> E["Express :5003"]
+    E --> G[(GridFS: enrolled)]
+    E --> F["Flask :5004: dlib"]
     F --> E
-    E --> M[(MongoDB\nrecords · batches)]
-    AD["Admin app\nbatches · % view"] --> E
-decisions:
-  - title: "Face matching lives in its own service"
-    text: "Flask + dlib sits behind /compare on :5004 while Express keeps the records. The matcher can be redeployed, or swapped for another model, without touching attendance rules or the admin app."
-  - title: "The capture is forwarded, never stored"
-    text: "Only the enrolled photo lives in GridFS; the live photo arrives as an express-fileupload buffer and is appended straight into the compare request (backend/controllers/mark.js:47-53, 73-82) — no write path puts a check-in photo on disk."
-  - title: "Rules live in the API, not the kiosk"
-    text: "Check-in before 12:00, checkout after a 6-hour gap and one in/out pair per day are enforced server-side, so editing the kiosk app cannot talk it into marking someone present."
+    E --> M[(MongoDB: records)]
 ---
 
-## The problem
+## How it works
 
-Paper registers and proxy attendance don't scale for large batches. The goal:
-walk up, enter a roll number, show your face, and get a trustworthy check-in —
-with admins able to see who was actually present, per class, per day.
+The kiosk app takes a roll number and a live photo and POSTs both to Express. Express pulls the enrolled photo from GridFS and forwards the pair to a Flask service, which runs dlib embeddings and returns the match distance at a 0.6 threshold. On a match, Express writes the record.
 
-## What I built
+Check-in before 12:00, checkout after a 6-hour gap, one in/out pair per day — all enforced server-side, so the kiosk can't be edited into marking someone present. The admin app manages batch, class and student with cascade deletes on the records. The kiosk ships as a Linux Electron app for touchscreen hardware.
 
-Three services behind two frontends. The Attendance app takes a roll number
-plus a live photo (with a custom on-screen virtual keyboard for touchscreens)
-and POSTs to Express, which pulls the enrolled photo from a GridFS bucket and
-forwards both images to a Flask microservice. Flask runs the `face_recognition`
-pipeline — dlib 128-d embedding, Euclidean distance, 0.6 threshold, first face
-only — and returns the match distance. On match, Express writes the record.
+## Limits
 
-The rules engine is where the domain lives: check-in before 12:00, checkout
-only after a 6-hour gap, one in/out pair per day, and attendance percentage
-computed against active class dates. The Admin app manages the hierarchy
-(batch → class → student) with cascade deletes wired as Mongoose hooks, so
-removing a batch can't orphan records. Auth is session-cookie + bcrypt, and
-the whole Attendance frontend ships wrapped as a Linux Electron app for kiosk
-hardware.
-
-## On the accuracy number
-
-Matching runs on dlib's ResNet embedding (99.38% on LFW, per the model
-publisher). That's the library's benchmark, not an in-repo evaluation — the
-right way to read it is "proven model, threshold tuned for the deployment,"
-not a claim about our hallways.
-
-## Where it stops
-
-Sessions and bcrypt exist, but no route is guarded yet, so auth is scaffolding
-rather than enforcement. Enrolled photos also outlive a student deletion —
-cascade deletes clean the records, not the GridFS bucket. Both are why this is a
-"worked in the hallway, not deployed" project rather than a shipped system.
+Sessions and bcrypt exist but no route is guarded, so auth is scaffolding. Enrolled photos also outlive a student deletion: the cascade cleans records, not the GridFS bucket. This ran in a hallway, not as a deployment.

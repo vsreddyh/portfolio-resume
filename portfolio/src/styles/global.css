@@ -1,8 +1,46 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("../assets/newsreader-latin.woff2") format("woff2");
+  font-weight: 300 600;
+  font-style: normal;
+  font-display: swap;
+}
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-paper: #f7f5f0;
+  --color-paper-raised: #fffdf8;
+  --color-ink: #171512;
+  --color-ink-soft: #3b352c;
+  --color-muted: #6d6558;
+  --color-rule: #d9d2c3;
+  --color-rust: #9c3a25;
+  --color-codebg: #efeade;
+  --color-codeblock: #171512;
+  --color-codeblock-fg: #f4f1e8;
+  --color-select: #e8d9cd;
+  --color-rowhover: #fffdf8;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Dim warm dark theme. Same tokens, so every utility flips with one switch. */
+[data-theme="dark"] {
+  --color-paper: #161310;
+  --color-paper-raised: #1e1a15;
+  --color-ink: #e9e2d3;
+  --color-ink-soft: #cfc5b1;
+  --color-muted: #9a8d76;
+  --color-rule: #373126;
+  --color-rust: #cf6b45;
+  --color-codebg: #2a251d;
+  --color-codeblock: #0f0d0a;
+  --color-codeblock-fg: #e8e2d4;
+  --color-select: #4a3a2c;
+  --color-rowhover: #221d16;
 }
 
 html {
@@ -14,61 +52,290 @@ html {
   html {
     scroll-behavior: auto;
   }
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
   }
 }
 
-/* Scroll-reveal: JS adds .is-visible via IntersectionObserver.
-   Hidden until revealed; the noscript override in BaseLayout keeps content visible with JS off. */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Visible keyboard focus */
+::selection {
+  background: var(--color-select);
+  color: var(--color-ink);
+}
+
+h1,
+h2,
+.serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+/* Small caps metadata: dates, stacks, labels, counts. */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+/* Inline text link with a hairline that answers on hover. */
+.link {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.link:hover {
+  color: var(--color-rust);
+  text-decoration-color: var(--color-rust);
+}
+
+/* Quiet text action: no pill, no fill. */
+.btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.9375rem;
+  color: var(--color-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-ink);
+  padding-bottom: 0.1rem;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover {
+  color: var(--color-rust);
+  border-color: var(--color-rust);
+}
+
+/* Work index: rule-separated rows, not cards. */
+.row {
+  display: grid;
+  grid-template-columns: 2rem 1fr 1.25rem;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1.6rem 0.25rem;
+  border-top: 1px solid var(--color-rule);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s ease;
+}
+.row:last-of-type {
+  border-bottom: 1px solid var(--color-rule);
+}
+@media (min-width: 640px) {
+  .row {
+    grid-template-columns: 2.5rem 1fr 12rem 1.5rem;
+    gap: 1.75rem;
+    padding: 1.8rem 0.35rem;
+  }
+}
+.row:hover {
+  background-color: var(--color-rowhover);
+}
+.row .row-title {
+  transition: color 0.15s ease;
+}
+.row:hover .row-title {
+  color: var(--color-rust);
+}
+
+/* Archive list: same hover language as the featured rows. */
+.archive-row {
+  transition: background-color 0.15s ease;
+}
+.archive-row:hover {
+  background-color: var(--color-rowhover);
+}
+.archive-row .archive-title {
+  transition: color 0.15s ease;
+}
+.archive-row:hover .archive-title {
+  color: var(--color-rust);
+}
+.row .row-arrow {
+  color: var(--color-muted);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.row:hover .row-arrow {
+  transform: translate(2px, -2px);
+  color: var(--color-rust);
+}
+
 :focus-visible {
-  outline: 2px solid #34d399;
-  outline-offset: 2px;
+  outline: 2px solid var(--color-rust);
+  outline-offset: 3px;
 }
 
-/* Mermaid diagrams: source text until lazy-rendered to SVG */
-.mermaid-diagram svg {
-  max-width: 100%;
-  height: auto;
-  margin: 0 auto;
-  display: block;
-}
-
-/* Active nav link (scrollspy) */
+/* Nav: current section gets a hairline, not a pill. */
 .nav-link {
   position: relative;
-  transition: color 0.2s ease;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.nav-link:hover,
+.nav-link[data-active="true"] {
+  color: var(--color-ink);
 }
 .nav-link::after {
   content: "";
   position: absolute;
   left: 0;
   right: 100%;
-  bottom: -4px;
-  height: 2px;
-  border-radius: 999px;
-  background: currentColor;
-  transition: right 0.25s ease;
+  bottom: -6px;
+  height: 1px;
+  background: var(--color-rust);
+  transition: right 0.2s ease;
 }
 .nav-link:hover::after,
 .nav-link[data-active="true"]::after {
   right: 0;
 }
-.nav-link[data-active="true"] {
+
+/* Long-form body copy for case studies. */
+.prose {
+  max-width: 38rem;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+}
+.prose > * + * {
+  margin-top: 1.05rem;
+}
+.prose h2 {
+  font-family: var(--font-serif);
+  font-size: 1.625rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin-top: 3rem;
+}
+.prose h2 + * {
+  margin-top: 0.9rem;
+}
+.prose h3 {
   font-weight: 600;
+  color: var(--color-ink);
+  margin-top: 2rem;
+}
+.prose strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.prose a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-rust);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  color: var(--color-rust);
+}
+.prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+.prose ul > li {
+  position: relative;
+  padding-left: 1.15rem;
+}
+.prose ul > li + li {
+  margin-top: 0.5rem;
+}
+.prose ul > li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  color: var(--color-rust);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-codebg);
+  padding: 0.1em 0.32em;
+  border-radius: 2px;
+  color: var(--color-ink);
+}
+.prose pre {
+  background: var(--color-codeblock);
+  color: var(--color-codeblock-fg);
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.prose pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+.prose blockquote {
+  border-left: 2px solid var(--color-rule);
+  padding-left: 1rem;
+  color: var(--color-muted);
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-rule);
+  margin: 2.5rem 0;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.prose th,
+.prose td {
+  text-align: left;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+.prose th {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+/* Diagrams sit on the page, not in a card. */
+.diagram {
+  margin: 2.5rem 0 0;
+}
+.diagram pre.mermaid-diagram {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  overflow-x: auto;
+}
+.diagram svg {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+.diagram figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-top: 0.85rem;
 }

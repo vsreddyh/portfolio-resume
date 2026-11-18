@@ -1,34 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <defs>
-    <linearGradient id="glow" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#34d399" stop-opacity="0.16"/>
-      <stop offset="0.55" stop-color="#34d399" stop-opacity="0.03"/>
-      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
-    </linearGradient>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
-    </pattern>
-  </defs>
+  <rect width="1200" height="630" fill="#f7f5f0"/>
+  <rect x="0" y="0" width="1200" height="4" fill="#9c3a25"/>
+  <rect x="0.5" y="4.5" width="1199" height="625" fill="none" stroke="#171512" stroke-opacity="0.2" stroke-width="1"/>
 
-  <rect width="1200" height="630" fill="#09090b"/>
-  <rect width="1200" height="630" fill="url(#grid)"/>
-  <rect width="1200" height="630" fill="url(#glow)"/>
-
-  <rect x="0" y="0" width="1200" height="6" fill="#34d399"/>
-
-  <g transform="translate(96, 84)">
-    <rect width="56" height="56" rx="12" fill="#0f1512" stroke="#34d399" stroke-opacity="0.3" stroke-width="1.5"/>
-    <path transform="translate(10,10) scale(0.5625)" d="M13 13h12.6l6.4 24.2L38.4 13H51L38.2 51H25.8L13 13z" fill="#34d399"/>
-    <text x="76" y="27" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#e4e4e7">vsreddyh<tspan fill="#34d399">.dev</tspan></text>
-    <text x="76" y="49" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#a1a1aa">Vishnu Shouryan Reddy</text>
+  <g transform="translate(96, 96)">
+    <text font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="#6d6558" letter-spacing="3">VSREDDYH.DEV</text>
+    <text y="120" font-family="Georgia, 'Times New Roman', serif" font-size="76" fill="#171512">I write software that</text>
+    <text y="208" font-family="Georgia, 'Times New Roman', serif" font-size="76" fill="#171512">runs unattended.</text>
+    <text y="272" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-style="italic" fill="#6d6558">Go · Node · Android · Postgres — and the cron jobs</text>
+    <text y="376" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="22" fill="#6d6558">VISHNU SHOURYAN REDDY · HYDERABAD</text>
   </g>
-
-  <text x="96" y="290" font-family="Helvetica, Arial, sans-serif" font-size="66" font-weight="800" fill="#f4f4f5" letter-spacing="-1.5">I build AI systems and</text>
-  <text x="96" y="372" font-family="Helvetica, Arial, sans-serif" font-size="66" font-weight="800" fill="#f4f4f5" letter-spacing="-1.5">full-stack products that</text>
-  <text x="96" y="454" font-family="Helvetica, Arial, sans-serif" font-size="66" font-weight="800" fill="#34d399" letter-spacing="-1.5">survive production.</text>
-
-  <line x1="96" y1="512" x2="296" y2="512" stroke="#34d399" stroke-opacity="0.4" stroke-width="2"/>
-
-  <text x="96" y="560" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#d4d4d8">Software Engineer · 5th Bridge Data Technologies</text>
-  <text x="96" y="594" font-family="Helvetica, Arial, sans-serif" font-size="19" fill="#71717a">vsreddyh.github.io/portfolio-resume · Go · Python · React · Postgres · agentic AI</text>
 </svg>

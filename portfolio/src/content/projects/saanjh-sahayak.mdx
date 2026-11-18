@@ -1,51 +1,23 @@
 ---
 title: "Saanjh Sahayak"
-description: "Prototype clinical-decision app: caretakers upload lab PDFs, Gemini extracts params, doctors verify."
-stack: ["React Native", "Expo", "NativeWind", "Node.js", "Express", "Gemini API", "MongoDB"]
+description: "Caretakers upload lab PDFs, Gemini drafts a summary, doctors verify."
+stack: ["React Native", "Expo", "NativeWind", "Node.js", "Express", "Gemini 1.5 Flash", "MongoDB"]
 github: "https://github.com/vsreddyh/mysaanj"
 featured: false
 order: 7
+problem: "Caretakers collect lab reports but doctors review them in batches, so deterioration is spotted late."
 diagram: |
   flowchart LR
-    App["Expo app\npatients · PDF upload"] --> E["Express /en/*\n18 endpoints"]
-    E --> M[(MongoDB\npatients · reports)]
-    E --> G[(GridFS\nreport PDFs)]
-    E <--> GE["Gemini 1.5-flash\nextract + analyze"]
-    D["Doctor review\nunverified → verified"] --> E
-decisions:
-  - title: "Two passes over one PDF"
-    text: "The first Gemini call only extracts parameters with a negative example so non-medical uploads are rejected early; the second turns those parameters into summary, precautions, severity and a specialist. Extraction failing cleanly beats analysis on garbage."
-  - title: "Unverified to verified is the state machine"
-    text: "Every AI report lands in patient.unverifiedreports and only a doctor's note moves it across. The model drafts; it never gets to be the record."
-  - title: "A PDF, a summary, and nothing else in the app"
-    text: "Reports live in GridFS and patients hold references, so the phone never carries lab PDFs on disk and the same report can be reopened by a doctor on another device."
+    App["Expo app"] --> E["Express API"]
+    E --> G[(GridFS: PDFs)]
+    E --> GE["Gemini: extract, then analyze"]
+    D["doctor review"] --> E
 ---
 
-## The problem
+## How it works
 
-In old-age homes, caretakers collect lab reports but doctors review them in
-batches — slow, and easy to miss deterioration. The idea: digitize the handoff
-so an AI first pass (parameters, summary, severity, specialist suggestion)
-reaches the doctor before the visit, not after.
+A 10-screen Expo app over an Express API with 18 endpoints. Uploaded PDFs land in GridFS. A two-stage Gemini 1.5 Flash pipeline first extracts structured health parameters — with a negative example so non-medical uploads are rejected — then writes summary, precautions, severity 0–10 and specialist routing under the patient's unverified reports. A doctor's note moves a report to verified.
 
-## What exists (prototype)
+## Limits
 
-A 10-screen Expo app (caretaker flows, doctor flows, PDF viewing) over an
-Express API with 18 endpoints. Uploaded PDFs land in GridFS; a two-stage
-Gemini 1.5 Flash pipeline first extracts structured health parameters (few-shot,
-with a negative example to reject non-medical uploads) and then generates
-analysis, precautions, severity 0–10, and specialist routing, filed under the
-patient's unverified reports. A doctor's note promotes a report to verified.
-
-## Honest status
-
-Late prototype, stalled since 2024: the pipeline and review loop are real, but
-authentication is stubbed — the login endpoints set a hardcoded session and no
-query is scoped to the caller, so anyone who knows an id can read that patient's
-reports. The repo also still tracks a `backend/.env` from 2024, so its database
-password and provider keys spent two years on a public branch: treat them as
-compromised and untrack the file, whatever their current status.
-
-It needs real auth and per-user scoping before it touches real patients. I'm
-keeping it here because the two-stage extraction design is the interesting part,
-not because it's shippable.
+Prototype, stalled since 2024. Login sets a hardcoded session and no query is scoped to the caller, so anyone with an id can read that patient's reports. The repo also still tracks a 2024 `backend/.env`, so treat those values as compromised and untrack the file. It needs real auth before it touches real patients.

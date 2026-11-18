@@ -1,72 +1,27 @@
 ---
 title: "Rouge Automaton"
-description: "Go Discord RAG bot with a 10-round tool loop, exact-match Mongo intel tools, live war status + Major Orders, catalog + wiki sync, and a roleplayed defector persona."
+description: "Discord bot answering Helldivers 2 questions from a Mongo cache it refreshes itself."
 stack: ["Go", "discordgo", "MongoDB", "Podman Compose"]
 github: "https://github.com/vsreddyh/rouge_automaton"
 featured: false
 order: 6
+problem: "Game wikis are slow to search mid-session and go stale, so answers need a local cache."
 diagram: |
   flowchart LR
-    U["Discord\nallowlist + mentions"] --> B["rouge bot\ndiscordgo gateway"]
-    B --> RL["OpenCode relay\nResponses API + tool loop"]
-    B --> DB[(MongoDB\nwiki intel cache)]
-    W["watcher\nRecentChanges · 5 min"] --> DB
-    C["catalog sync\ndaily ETag"] --> DB
-    CR["crawl\nunits + world"] --> DB
-    B --> TM["Training Manual API\nwar status"]
-    B --> WK["helldivers.wiki.gg\nlookup fallback"]
-decisions:
-  - title: "Tools over a vector store"
-    text: "Retrieval is exact-match Mongo lookups over collated indexes with aliases, not embeddings. Nine tools cover units, gear, places, war status, major orders and wiki search — nothing to re-embed when the wiki edits a page."
-  - title: "One tool definition, two consumers"
-    text: "The same Execute implementation backs the Discord bot's tool loop and the stdio MCP server, so a new capability lands in both places at once and the bot's behaviour can be tested without Discord."
-  - title: "Failure is voiced, never silent"
-    text: "A 429, a dead relay or an exhausted quota each has an in-character reply with an ETA, and replies are capped at 1900 runes so the sign-off always lands inside Discord's 2000-rune ceiling."
+    U["Discord"] --> B["rouge bot"]
+    B --> DB[(MongoDB cache)]
+    W["wiki watcher"] --> DB
+    B --> TM["war status API"]
 ---
 
-## The problem
+## How it works
 
-Game wikis are huge, slow to search mid-session, and go stale. The idea: a
-Discord bot that answers Helldivers 2 intel questions (units, counters,
-loadouts, biomes, live war status) from a local cache that refreshes itself —
-with a personality players actually enjoy talking to.
+Go-only, no Python. Questions go through a think-act loop of up to 10 tool rounds over exact-match Mongo lookups — units, gear, planets, war summary, Major Orders — with the same tool definitions shared between the Discord client and a stdio MCP server. The relay is a single OpenCode Go model, no fallback chain.
 
-## What I built
+Gear syncs daily from a public catalog snapshot, units and world are crawled from the wiki, and a watcher polls RecentChanges every five minutes and re-parses only changed pages. On a local miss the bot falls back to live wiki lookup with source links. Live war status comes from the Training Manual API.
 
-A Go-only bot (no Python runtime) roleplaying a defected informant. Questions
-flow through a think-act loop of up to 10 tool rounds over exact-match Mongo
-intel tools — unit/gear/world lookups, generic war summary, Major Order
-briefing (title, kill/objective progress, expiry, reward, plus companion
-strategic-threat tasks), named-planet
-status, wiki search — defined once and shared between the relay client and an
-MCP stdio server. The relay is OpenCode Go (`muse-spark-1.3-contributor`), one
-provider with no fallback chain. Retrieval is Mongo exact-match with cited
-context (collated
-indexes, alias handling); on a local miss it falls back to live wiki lookup
-with source links. Live war status comes from the Training Manual API with a
-staleness guard, answering generic "how goes the war" questions without
-needing a planet name. Gear shelves sync daily from a public catalog snapshot
-(ETag-conditional, cached in Mongo); units and world are crawled politely
-from the wiki, and a self-feeding watcher polls the wiki RecentChanges feed
-every 5 minutes, routes unseen pages to a shelf, and re-parses only changed
-pages.
+Guardrails: allowlist and mention gating, replies capped at 1900 runes so the sign-off fits Discord's 2000-rune ceiling, in-character failure replies with an ETA instead of silence, and rate limiting client-side. Ships as static binaries in a distroless image under Podman Compose.
 
-The craft is in the guardrails: allowlist + mention gating with auto-threads,
-model replies bounded at 1900 runes with an in-voice "cut short" trailer so the
-sign-off lands inside Discord's 2000-rune ceiling, the persona compiled into the
-binary with serial numbers redacted and every transmission ending in `Over.`,
-and unreleased gear met with a requisition refusal instead of guessed handling.
-Failure is voiced in character — a 429 gets a "busy spreading democracy" reply
-with a liberation ETA, never silence. Client-side token-bucket rate limiting
-backs that up, with `/status` (health + relay probe) and `/cooldown` (quota
-inquiry) ops commands and a typing indicator while the model works. Services
-ship as static binaries in a distroless image under Podman Compose (bot,
-watcher, catalog sync, crawl), alongside Mongo, seeded by a one-shot ingest from
-checked-in intel data covering units, gear, and world shelves.
+## Limits
 
-## What it taught me
-
-Constraints make bots: capped tool rounds, clamped result counts, and canned
-failure modes turn an LLM integration from a demo into something that behaves
-in production. And embedding the persona at compile time means the character
-survives every redeploy bit-for-bit.
+Exact match, not search: misspelled planet names miss the cache and cost a live lookup. One model provider means a dead relay is a dead bot, voiced in character but still dead.
