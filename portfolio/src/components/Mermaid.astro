@@ -19,6 +19,7 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
     var SELECTOR = 'pre.mermaid-diagram:not([data-done])';
     var counter = 0;
     var pending = null;
+    var libInited = false;
 
     function setStatus(pre, text) {
       var fig = pre.closest('figure');
@@ -34,6 +35,10 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
 
     function ensureLib(done) {
       if (window.mermaid) {
+        if (!libInited) {
+          initMermaid();
+          libInited = true;
+        }
         done();
         return;
       }
@@ -45,6 +50,10 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
       var flush = function () {
         var q = pending;
         pending = null;
+        if (!libInited) {
+          initMermaid();
+          libInited = true;
+        }
         q.forEach(function (f) { f(); });
       };
       var s = document.createElement('script');
@@ -137,7 +146,6 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
       if (!nodes.length) return;
       if (!('IntersectionObserver' in window)) {
         ensureLib(function () {
-          initMermaid();
           nodes.forEach(renderOne);
         });
         return;
@@ -147,7 +155,6 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
           if (entry.isIntersecting) {
             io.unobserve(entry.target);
             ensureLib(function () {
-              initMermaid();
               renderOne(entry.target);
             });
           }
