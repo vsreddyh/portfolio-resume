@@ -1,0 +1,24 @@
+{
+  "name": "Vishnu Shouryan Reddy — Software Engineer",
+  "short_name": "vsreddyh.dev",
+  "description": "Software engineer in Hyderabad. Go, Node, Python and Postgres, with the cron jobs and small services that keep them running.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#f7f5f0",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

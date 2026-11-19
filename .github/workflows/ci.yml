@@ -41,6 +41,9 @@ jobs:
       - name: Install
         run: npm ci
         working-directory: portfolio
+      - name: Verify mermaid CDN integrity hash
+        run: npm run check:sri
+        working-directory: portfolio
       - name: Build
         run: npm run build
         working-directory: portfolio
