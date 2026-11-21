@@ -16,15 +16,15 @@ const now = [
   },
   {
     title: 'Daily Gita',
-    status: 'in progress',
+    status: 'daily',
     href: `${base}projects/daily-gita/`,
-    note: 'Corpus is finished and bundled; the reading loop is what is left.',
+    note: 'A scheduled task fetches a verse from the internet every day and opens a thread on it.',
   },
   {
-    title: 'Saanjh Sahayak',
-    status: 'paused',
-    href: `${base}projects/saanjh-sahayak/`,
-    note: 'Two-stage report extraction works; auth and per-user scoping do not exist yet.',
+    title: 'Schedio',
+    status: 'live',
+    href: `${base}projects/schedio/`,
+    note: 'Student–college–recruiter platform, running demo linked on its page.',
   },
 ];
 ---
@@ -37,8 +37,8 @@ const now = [
     <p class="mt-7 max-w-[36rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
       Go and Node services, an Android client, and the cron jobs that keep them
       tidy. I work on event-driven trading infrastructure at 5th Bridge; the
-      projects below are the ones I run myself, and each page ends with what is
-      still missing from it.
+      projects below are the ones I run myself, and each page shows how it is
+      built.
     </p>
     <div class="mt-9 flex flex-wrap items-baseline gap-x-7 gap-y-3">
       <a href="#work" class="btn">Selected work <span aria-hidden="true">↓</span></a>
@@ -51,7 +51,7 @@ const now = [
     <div class="mx-auto max-w-6xl px-6 py-20">
       <div class="flex flex-wrap items-baseline justify-between gap-3">
         <h2 class="text-3xl">Selected work</h2>
-        <p class="mono-label">Three systems · diagrams · known limits</p>
+        <p class="mono-label">Three systems · architecture diagrams</p>
       </div>
 
       <div class="mt-10">
@@ -79,7 +79,7 @@ const now = [
           </a>
         ))}
         <p class="border-t border-rule py-4 text-sm text-muted sm:col-span-2">
-          Also CLI games, a bash hardware monitor and placement-data tooling —
+          More experiments and tooling —
           <a class="link" href="https://github.com/vsreddyh?tab=repositories">everything else is on GitHub ↗</a>
         </p>
       </div>

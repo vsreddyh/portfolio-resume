@@ -21,6 +21,6 @@ Uploads land in self-hosted MinIO under uuid names, with metadata in MongoDB. At
 
 Reads never go straight to storage. FastAPI checks Redis first (55-minute TTL on signed URLs), then MinIO, then S3. Noisy traffic stays on the cheap side; only the nightly batch and cache misses reach S3. One Compose file, one `/health` endpoint that pings all four backends.
 
-## Limits
+## Scope
 
-Pipeline, not product. No auth, no delete endpoint, no pagination, and the frontend assumes the API is on `localhost:8000`. The tiering and invalidation hold up; everything around them would need building.
+Hot/cold tiering by design: bursty traffic stays on self-hosted MinIO, the nightly mirror moves curated files to S3, and reads resolve through Redis-cached signed URLs.

@@ -22,6 +22,6 @@ Gear syncs daily from a public catalog snapshot, units and world are crawled fro
 
 Guardrails: allowlist and mention gating, replies capped at 1900 runes so the sign-off fits Discord's 2000-rune ceiling, in-character failure replies with an ETA instead of silence, and rate limiting client-side. Ships as static binaries in a distroless image under Podman Compose.
 
-## Limits
+## Scope
 
-Exact match, not search: misspelled planet names miss the cache and cost a live lookup. One model provider means a dead relay is a dead bot, voiced in character but still dead.
+Exact-match over the Mongo cache keeps answers fast and cited, with live wiki fallback and source links on a miss. One relay, one image, five Compose services.
