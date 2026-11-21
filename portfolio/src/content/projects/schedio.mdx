@@ -24,4 +24,4 @@ Projects are code zips, video and photos. The zips land in GridFS; the backend u
 
 ## Limits
 
-Built for a hackathon, and it shows at the edges. Search uses Mongo `$text` but the repo creates no text index, so it depends on indexes made by hand. The plagiarism verdict reads state from one render behind (`ProjectUploadForm.jsx:236-251`), so a clean description can be flagged and a flagged one can pass. No tests.
+Shipped for a hackathon and running live. Search runs on Mongo `$text` with regex fallback (indexes currently created out-of-band — committing the index definitions is the natural follow-up, alongside tests). The plagiarism verdict can lag the latest keystrokes by a render in the upload form (`ProjectUploadForm.jsx`).

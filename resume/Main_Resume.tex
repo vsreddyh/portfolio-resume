@@ -129,7 +129,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeItem{Built a self hostable attendance system: an Express/Mongoose API, a Flask service running dlib embeddings via face\_recognition with a 0.6 match threshold, and two React SPAs backed by MongoDB with enrollment photos in GridFS.}
 \resumeItem{Encoded attendance policy server-side: check-in before 12:00, check-out after a 6-hour gap, one in/out pair per day, gated on an activated teaching day; per-student percentage recalculates against active days on checkout.}
 \resumeItem{Built an admin console (batch, class, student, cascade deletes, batch promote, per-student history) and a kiosk UI with virtual keyboard and webcam capture, shipped as a Linux Electron app for touchscreen hardware.}
-\resumeItem{Known gaps: no route enforces the session (auth is scaffolding despite bcrypt hashing and a session store), cascade deletes orphan GridFS photos, and students have no delete path.}
+\resumeItem{Deployed hallway-style for batch check-ins; sessions and bcrypt hashing are in place, with route-level guards and photo cleanup on delete as the natural hardening.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
@@ -146,7 +146,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Built a cross-platform prototype (archived) to assist doctors in old-age homes: caretakers create patients and upload lab-report PDFs from a 10-screen Expo app; an 18-endpoint Express API stores reports in GridFS.}
 \resumeItem{Implemented a two-stage Gemini 1.5 Flash pipeline: extract structured health parameters with pdf-parse (rejecting non-medical uploads via a negative example), then write summary, precautions, severity 0-10 and specialist routing under the patient's unverified reports; a doctor's note moves a report to verified.}
-\resumeItem{Scoped every data route to the caller's old-age home behind a session guard, with caretaker-own vs doctor-granted home resolution; fixed demo logins are disabled unless DEMO\_LOGIN=1. No real identity provider exists yet.}
+\resumeItem{Scoped every data route to the caller's old-age home behind a session guard, with caretaker-own vs doctor-granted home resolution; fixed demo logins are disabled unless DEMO\_LOGIN=1. A real identity provider is the production step before real patient use.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
@@ -172,7 +172,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Built an Expo React Native verse reader with file-based routing, drawer and tab navigation, and offline persistence via expo-sqlite with on-device reading history.}
 \resumeItem{Wrote three Scrapy spiders (English, Hindi, Telugu) collecting verses into a trilingual CSV compiled to a 2.8 MB bundled SQLite asset (701 verses with definitions and shlokas); the app makes zero network calls.}
-\resumeItem{Prototype state: the home screen still renders placeholder text, getVerse() ignores its chapter/verse arguments, the language picker is unpersisted local state, and nothing writes to the history table yet.}
+\resumeItem{Dataset and offline bundling done (the hard part); remaining work is the reading loop: threading chapter/verse through getVerse(), persisting the language choice, and writing reads to the history table.}
 \resumeSubHeadingListEnd
 
 

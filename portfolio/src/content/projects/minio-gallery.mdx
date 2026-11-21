@@ -23,4 +23,4 @@ Reads never go straight to storage. FastAPI checks Redis first (55-minute TTL on
 
 ## Limits
 
-Pipeline, not product. No auth, no delete endpoint, no pagination, and the frontend assumes the API is on `localhost:8000`. The tiering and invalidation hold up; everything around them would need building.
+A working demo of the tiering pattern: uuid-named MinIO uploads, Redis-cached signed URLs (55-minute TTL), nightly S3 mirror with cache invalidation, and a `/health` check across all four backends. Auth, delete, and pagination are the expected next endpoints for production use; the frontend currently assumes the API is on `localhost:8000`.

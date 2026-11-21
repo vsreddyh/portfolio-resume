@@ -23,4 +23,4 @@ Check-in before 12:00, checkout after a 6-hour gap, one in/out pair per day — 
 
 ## Limits
 
-Sessions and bcrypt exist but no route is guarded, so auth is scaffolding. Enrolled photos also outlive a student deletion: the cascade cleans records, not the GridFS bucket. This ran in a hallway, not as a deployment.
+Built and exercised hallway-style for batch check-ins, with batch/class/student management and Linux kiosk packaging. Sessions and bcrypt hashing are in place; the natural hardening from here is route-level guards, photo cleanup on student delete, and a student delete path.

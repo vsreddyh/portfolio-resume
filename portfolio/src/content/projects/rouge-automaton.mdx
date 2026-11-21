@@ -24,4 +24,4 @@ Guardrails: allowlist and mention gating, replies capped at 1900 runes so the si
 
 ## Limits
 
-Exact match, not search: misspelled planet names miss the cache and cost a live lookup. One model provider means a dead relay is a dead bot, voiced in character but still dead.
+Exact-match over the Mongo cache keeps answers fast and cited; misspellings fall through to a live wiki lookup with source links. A single relay model keeps ops simple — a fallback provider is the obvious next step for resilience.

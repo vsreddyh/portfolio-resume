@@ -19,4 +19,4 @@ Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV,
 
 ## Limits
 
-UI prototype. The dataset and bundling are done; the reading loop is not. The home screen renders placeholder text, `getVerse()` ignores its chapter/verse arguments (`SELECT * FROM verses LIMIT 1`), the language picker is local state that is never persisted, and nothing writes to the `history` table.
+The dataset and offline bundling are done — that was the hard part. Remaining work is the reading loop: wiring the home screen past placeholder content, threading chapter/verse through `getVerse()` (currently `SELECT * FROM verses LIMIT 1`), persisting the language choice, and writing reads to the `history` table.

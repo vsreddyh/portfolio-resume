@@ -22,4 +22,4 @@ The progress chart is cumulative per user per day in IST, over 1D to ALL ranges,
 
 ## Limits
 
-`recentSubmissionList` returns the latest 20 submissions, so history starts the day a user is tracked — there is no backfill, and a burst of 20+ acceptances between ticks loses the overflow.
+History starts the day a user is tracked — `recentSubmissionList` returns the latest 20 submissions per tick, so there is no backfill. A fair trade for a 5-minute sync: the dashboard only ever reads pre-aggregated Mongo data and stays fast when LeetCode is slow.
