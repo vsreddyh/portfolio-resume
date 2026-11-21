@@ -15,8 +15,8 @@ diagram: |
 
 ## How it works
 
-Scrapy spiders crawl English, Hindi and Telugu verse pages into a trilingual CSV, compiled into a SQLite database bundled as a 2.8 MB app asset and read through `SQLiteProvider` — zero network calls. Around it: a drawer shell, settings, terms and privacy screens.
+Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV, compiled into a SQLite database bundled as a 2.8 MB app asset and read through `SQLiteProvider` — zero network calls. Around it: an expo-router drawer shell with home, history, settings, terms and privacy screens. The `verses` table holds 701 rows across chapter, verse, English/Hindi/Telugu definitions and shlokas; the `history` table ships empty.
 
 ## Limits
 
-UI prototype. The dataset and bundling are done; the reading loop is not. The home screen renders placeholder text, `getVerse()` ignores its arguments, the language picker is local state that is never persisted, and the history table has no writer. The scrape also needs deduping: 701 rows hold about 590 distinct chapter and verse pairs.
+UI prototype. The dataset and bundling are done; the reading loop is not. The home screen renders placeholder text, `getVerse()` ignores its chapter/verse arguments (`SELECT * FROM verses LIMIT 1`), the language picker is local state that is never persisted, and nothing writes to the `history` table.
