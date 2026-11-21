@@ -1,6 +1,6 @@
 ---
 title: "Daily Gita"
-description: "Trilingual verse corpus with a daily scheduled T3 thread. No server."
+description: "Retired verse app; the verse-a-day habit lives on as a scheduled T3 thread."
 stack: ["React Native", "Expo", "expo-sqlite", "Nativewind", "Scrapy", "T3 Code"]
 github: "https://github.com/vsreddyh/Daily_Gita"
 featured: false
@@ -8,16 +8,16 @@ order: 8
 problem: "A daily verse reader should not need accounts, a backend, or connectivity."
 diagram: |
   flowchart LR
-    W["verse site"] --> SC["Scrapy, 3 languages"]
-    SC --> DB[("gita.db, 701 verses")]
-    DB --> T3["scheduled T3 task, daily"]
-    T3 --> TH["thread on a random verse"]
+    T3["scheduled T3 task, daily"] --> SITE["verse site"]
+    SITE --> TH["thread on today's verse"]
 ---
 
 ## How it works
 
-Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV, compiled into a 701-row SQLite database with definitions and shlokas in all three languages. The Expo app is the offline reference build — the reading loop moved to where I already work: a scheduled T3 task picks a random verse every day at a fixed time and opens a thread on it, with text, translations, and commentary. Same corpus, zero network calls, zero maintenance.
+I abandoned the Expo app. What survived is the habit: a scheduled T3 task fetches a verse from the internet every day at a fixed time and opens a thread on it, with text, translations, and commentary. No accounts, no backend, no app to maintain.
+
+The original build — three Scrapy spiders (English, Hindi, Telugu), a 701-row trilingual SQLite corpus, an expo-router shell — is retired with the repo.
 
 ## Scope
 
-Account-free by design: one corpus, one daily thread, no backend. The Expo client stays as the offline reference build.
+One verse a day, inside my existing workflow. Nothing to install, nothing to maintain.
