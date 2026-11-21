@@ -16,8 +16,8 @@ diagram: |
 
 ## How it works
 
-Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV, compiled into a 701-row SQLite database with definitions and shlokas in all three languages. The Expo app around it is parked — the reading loop moved to where I already work: a scheduled T3 task picks a random verse every day at a fixed time and opens a thread on it, with text, translations, and commentary. Same corpus, zero network calls, zero maintenance.
+Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV, compiled into a 701-row SQLite database with definitions and shlokas in all three languages. The Expo app is the offline reference build — the reading loop moved to where I already work: a scheduled T3 task picks a random verse every day at a fixed time and opens a thread on it, with text, translations, and commentary. Same corpus, zero network calls, zero maintenance.
 
-## Limits
+## Scope
 
 Account-free by design: one corpus, one daily thread, no backend. The Expo client stays as the offline reference build.

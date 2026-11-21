@@ -18,8 +18,8 @@ diagram: |
 
 A 10-screen Expo app over an Express API with 18 endpoints under `/en`. Uploaded PDFs land in GridFS. A two-stage Gemini 1.5 Flash pipeline first extracts structured health parameters — with a negative example so non-medical uploads are rejected — then writes summary, precautions, severity 0–10 and specialist routing under the patient's unverified reports. A doctor's note moves a report to verified.
 
-Every data route sits behind `requireSession` and is scoped to the caller's old-age home (`findAccessiblePatient`, caretaker-own vs doctor-granted homes). The fixed demo logins are disabled unless `DEMO_LOGIN=1` (or non-production). The repo is archived; there is still no real identity provider.
+Every data route sits behind `requireSession` and is scoped to the caller's old-age home (`findAccessiblePatient`, caretaker-own vs doctor-granted homes).
 
-## Limits
+## Scope
 
 End-to-end prototype: caretaker uploads, two-stage Gemini summaries with severity and specialist routing, and doctor sign-off moving reports to verified — over session-scoped routes.
