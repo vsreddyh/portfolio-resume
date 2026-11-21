@@ -1,7 +1,7 @@
 ---
 title: "Daily Gita"
-description: "Verse reader that ships its database with the app. No server."
-stack: ["React Native", "Expo", "expo-sqlite", "Nativewind", "Scrapy"]
+description: "Trilingual verse corpus with a daily scheduled T3 thread. No server."
+stack: ["React Native", "Expo", "expo-sqlite", "Nativewind", "Scrapy", "T3 Code"]
 github: "https://github.com/vsreddyh/Daily_Gita"
 featured: false
 order: 8
@@ -9,14 +9,15 @@ problem: "A daily verse reader should not need accounts, a backend, or connectiv
 diagram: |
   flowchart LR
     W["verse site"] --> SC["Scrapy, 3 languages"]
-    SC --> DB[("gita.db, bundled")]
-    DB --> App["Expo app, offline"]
+    SC --> DB[("gita.db, 701 verses")]
+    DB --> T3["scheduled T3 task, daily"]
+    T3 --> TH["thread on a random verse"]
 ---
 
 ## How it works
 
-Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV, compiled into a SQLite database bundled as a 2.8 MB app asset and read through `SQLiteProvider` — zero network calls. Around it: an expo-router drawer shell with home, history, settings, terms and privacy screens. The `verses` table holds 701 rows across chapter, verse, English/Hindi/Telugu definitions and shlokas; the `history` table ships empty.
+Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV, compiled into a 701-row SQLite database with definitions and shlokas in all three languages. The Expo app around it is parked — the reading loop moved to where I already work: a scheduled T3 task picks a random verse every day at a fixed time and opens a thread on it, with text, translations, and commentary. Same corpus, zero network calls, zero maintenance.
 
 ## Limits
 
-Offline-first and account-free by design: the full 701-verse trilingual corpus ships with the app, so verses load with zero network calls.
+Account-free by design: one corpus, one daily thread, no backend. The Expo client stays as the offline reference build.

@@ -172,7 +172,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListStart
 \resumeItem{Built an Expo React Native verse reader with file-based routing, drawer and tab navigation, and offline persistence via expo-sqlite with on-device reading history.}
 \resumeItem{Wrote three Scrapy spiders (English, Hindi, Telugu) collecting verses into a trilingual CSV compiled to a 2.8 MB bundled SQLite asset (701 verses with definitions and shlokas); the app makes zero network calls.}
-\resumeItem{Dataset and offline bundling done (the hard part); remaining work is the reading loop: threading chapter/verse through getVerse(), persisting the language choice, and writing reads to the history table.}
+\resumeItem{Retired the app's reading loop in favor of a scheduled T3 task: once daily it picks a random verse from the same corpus and opens a thread on it with text, translations, and commentary.}
 \resumeSubHeadingListEnd
 
 
