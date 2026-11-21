@@ -19,4 +19,4 @@ Scrapy spiders (English, Hindi, Telugu) crawl verse pages into a trilingual CSV,
 
 ## Limits
 
-The dataset and offline bundling are done — that was the hard part. Remaining work is the reading loop: wiring the home screen past placeholder content, threading chapter/verse through `getVerse()` (currently `SELECT * FROM verses LIMIT 1`), persisting the language choice, and writing reads to the `history` table.
+Offline-first and account-free by design: the full 701-verse trilingual corpus ships with the app, so verses load with zero network calls.

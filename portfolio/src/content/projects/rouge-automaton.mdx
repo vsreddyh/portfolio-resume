@@ -24,4 +24,4 @@ Guardrails: allowlist and mention gating, replies capped at 1900 runes so the si
 
 ## Limits
 
-Exact-match over the Mongo cache keeps answers fast and cited; misspellings fall through to a live wiki lookup with source links. A single relay model keeps ops simple — a fallback provider is the obvious next step for resilience.
+Exact-match over the Mongo cache keeps answers fast and cited, with live wiki fallback and source links on a miss. One relay, one image, five Compose services.
