@@ -9,8 +9,8 @@
 }
 
 @theme {
-  --color-paper: #f7f5f0;
-  --color-paper-raised: #fffdf8;
+  --color-paper: #f1ece3;
+  --color-paper-raised: #f7f3ea;
   --color-ink: #171512;
   --color-ink-soft: #3b352c;
   --color-muted: #6d6558;
@@ -20,7 +20,7 @@
   --color-codeblock: #171512;
   --color-codeblock-fg: #f4f1e8;
   --color-select: #e8d9cd;
-  --color-rowhover: #fffdf8;
+  --color-rowhover: #faf6ee;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;

@@ -1,22 +1,23 @@
 ---
 title: "Daily Gita"
-description: "Verse reader that ships its database with the app. No server."
-stack: ["React Native", "Expo", "expo-sqlite", "Nativewind", "Scrapy"]
+description: "Retired verse app; the verse-a-day habit lives on as a scheduled T3 thread."
+stack: ["React Native", "Expo", "expo-sqlite", "Nativewind", "Scrapy", "T3 Code"]
 github: "https://github.com/vsreddyh/Daily_Gita"
 featured: false
 order: 8
 problem: "A daily verse reader should not need accounts, a backend, or connectivity."
 diagram: |
   flowchart LR
-    W["verse site"] --> SC["Scrapy, 3 languages"]
-    SC --> DB[("gita.db, bundled")]
-    DB --> App["Expo app, offline"]
+    T3["scheduled T3 task, daily"] --> SITE["verse site"]
+    SITE --> TH["thread on today's verse"]
 ---
 
 ## How it works
 
-Scrapy spiders crawl English, Hindi and Telugu verse pages into a trilingual CSV, compiled into a SQLite database bundled as a 2.8 MB app asset and read through `SQLiteProvider` — zero network calls. Around it: a drawer shell, settings, terms and privacy screens.
+I abandoned the Expo app. What survived is the habit: a scheduled T3 task fetches a verse from the internet every day at a fixed time and opens a thread on it, with text, translations, and commentary. No accounts, no backend, no app to maintain.
 
-## Limits
+The original build — three Scrapy spiders (English, Hindi, Telugu), a 701-row trilingual SQLite corpus, an expo-router shell — is retired with the repo.
 
-UI prototype. The dataset and bundling are done; the reading loop is not. The home screen renders placeholder text, `getVerse()` ignores its arguments, the language picker is local state that is never persisted, and the history table has no writer. The scrape also needs deduping: 701 rows hold about 590 distinct chapter and verse pairs.
+## Scope
+
+One verse a day, inside my existing workflow. Nothing to install, nothing to maintain.

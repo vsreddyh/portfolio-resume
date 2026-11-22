@@ -20,6 +20,6 @@ Each accepted problem scores `100 − acceptance rate`, pinned the first time it
 
 The progress chart is cumulative per user per day in IST, over 1D to ALL ranges, fed by a dedicated `/api/history` read on the same pre-aggregated data.
 
-## Limits
+## Scope
 
-`recentSubmissionList` returns the latest 20 submissions, so history starts the day a user is tracked — there is no backfill, and a burst of 20+ acceptances between ticks loses the overflow.
+Syncs every five minutes; the dashboard only ever reads pre-aggregated Mongo data, so the board stays fast when LeetCode is slow.

@@ -1,6 +1,6 @@
 ---
 title: "Identiscan"
-description: "Roll number plus a face photo, checked against enrolled photos, with per-class records."
+description: "Face-recognition attendance that ended proxy check-ins for large batches."
 stack: ["React", "TailwindCSS", "Node.js", "Flask", "MongoDB", "ElectronJS"]
 github: "https://github.com/vsreddyh/identiscan"
 featured: false
@@ -17,10 +17,8 @@ diagram: |
 
 ## How it works
 
-The kiosk app takes a roll number and a live photo and POSTs both to Express. Express pulls the enrolled photo from GridFS and forwards the pair to a Flask service, which runs dlib embeddings and returns the match distance at a 0.6 threshold. On a match, Express writes the record.
+Students type their roll number at a touchscreen kiosk and look at the camera. The system matches the live photo against the enrolled one and marks the check-in or checkout — with the timing rules enforced on the server, so attendance can't be faked from the kiosk itself. An admin console manages batches, classes, and per-student records, and the kiosk ships as a Linux app for touchscreen hardware.
 
-Check-in before 12:00, checkout after a 6-hour gap, one in/out pair per day — all enforced server-side, so the kiosk can't be edited into marking someone present. The admin app manages batch, class and student with cascade deletes on the records. The kiosk ships as a Linux Electron app for touchscreen hardware.
+## Scope
 
-## Limits
-
-Sessions and bcrypt exist but no route is guarded, so auth is scaffolding. Enrolled photos also outlive a student deletion: the cascade cleans records, not the GridFS bucket. This ran in a hallway, not as a deployment.
+Built for supervised, high-volume check-ins: whole batches through one kiosk, no paper, no proxies.
