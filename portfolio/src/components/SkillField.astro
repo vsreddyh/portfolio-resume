@@ -1,0 +1,664 @@
+---
+// SkillField: skills in two views. Simple: a static grouped chip grid.
+// Visualize: a slow physics drift of skill pills with group bar (By stack /
+// By project), legend solo-filter, grab-and-throw, drag-to-pan, Ctrl+scroll
+// zoom. By project splits shared skills into animated clones; switching back
+// merges them. Zoomed out, pills merge into count bubbles.
+const CATS = [
+  ['Languages', ['C#', 'Java', 'Kotlin', 'Python', 'TypeScript', 'JavaScript', 'Go', 'C++', 'Bash', 'Lua', 'SQL', 'HTML', 'CSS']],
+  ['Backend', ['ASP.NET', 'Node.js', 'Express', 'Django', 'FastAPI', 'Flask', 'Mongoose']],
+  ['Frontend', ['React', 'Next.js', 'React Native', 'Expo', 'ElectronJS', 'TailwindCSS', 'Nativewind', 'shadcn/ui', 'Vite']],
+  ['Databases', ['SQL Server', 'PostgreSQL', 'MongoDB', 'MySQL', 'SQLite', 'Redis', 'Convex', 'ClickHouse']],
+  ['DevOps', ['Docker', 'Docker Compose', 'Podman', 'GitHub Actions', 'AWS', 'S3', 'Vercel', 'MinIO', 'Tailscale', 'Linux']],
+  ['AI / ML', ['PyTorch', 'Transformers', 'Scikit-learn', 'XGBoost', 'LightGBM', 'NumPy', 'Pandas', 'Matplotlib', 'Jupyter', 'Gemini API']],
+  ['APIs', ['REST', 'GraphQL', 'Discord API', 'Calendar API', 'Web Push']],
+  ['Scraping', ['Scrapy', 'lxml', 'requests', 'gspread', 'openpyxl']],
+  ['Testing', ['Go testing', 'Jest', 'React Testing Library']],
+  ['Tools', ['Git', 'GitHub', 'Mercurial', 'Neovim', 'Postman', 'Bun', 'SearXNG']],
+  ['Practices', ['Agile', 'SDLC']],
+];
+const PROJS = [
+  ['Agento', ['Kotlin', 'Go', 'MongoDB', 'Podman', 'Tailscale', 'Linux', 'Git', 'GitHub', 'Bash', 'Calendar API', 'GitHub Actions', 'Go testing']],
+  ['Schedio', ['React', 'JavaScript', 'Node.js', 'Express', 'Docker', 'Vercel', 'Gemini API', 'Postman', 'Mongoose']],
+  ['Anonymous Image Gallery', ['React', 'FastAPI', 'Python', 'Redis', 'MinIO', 'AWS', 'S3', 'Bun', 'Vite', 'Docker Compose']],
+  ['Identiscan', ['React', 'JavaScript', 'TailwindCSS', 'Node.js', 'Express', 'Flask', 'ElectronJS', 'HTML', 'CSS', 'MongoDB', 'Mongoose']],
+  ['Saanjh Sahayak', ['React Native', 'Expo', 'Nativewind', 'Node.js', 'Express', 'Mongoose', 'MongoDB', 'REST']],
+  ['Rouge Automaton', ['Go', 'Discord API', 'MongoDB', 'Podman', 'Linux']],
+  ['LeetCode Scoreboard', ['Next.js', 'TypeScript', 'MongoDB', 'Mongoose', 'GraphQL', 'Web Push', 'shadcn/ui', 'Vercel']],
+  ['Daily Gita', ['Python', 'Scrapy', 'lxml', 'requests', 'gspread', 'openpyxl', 'SQLite', 'React Native', 'Expo', 'Nativewind']],
+];
+const skills = [...new Set(CATS.flatMap(([, members]) => members))];
+---
+<div data-simple-view class="mt-10 grid gap-x-12 gap-y-8 sm:grid-cols-2">
+  {CATS.slice(0, 3).map(([label, members]) => (
+    <div>
+      <h3 class="mono-label mb-3">{label}</h3>
+      <div class="flex flex-wrap gap-1.5">
+        {members.map((m) => (
+          <span class="border border-rule px-2 py-1 text-sm text-ink-soft">{m}</span>
+        ))}
+      </div>
+    </div>
+  ))}
+  <div data-simple-more class="hidden gap-x-12 gap-y-8 sm:col-span-2 sm:grid-cols-2">
+  {CATS.slice(3).map(([label, members]) => (
+    <div>
+      <h3 class="mono-label mb-3">{label}</h3>
+      <div class="flex flex-wrap gap-1.5">
+        {members.map((m) => (
+          <span class="border border-rule px-2 py-1 text-sm text-ink-soft">{m}</span>
+        ))}
+      </div>
+    </div>
+  ))}
+  </div>
+</div>
+<p class="mt-6 text-sm">
+  <button type="button" data-simple-toggle class="link">Show more <span aria-hidden="true">↓</span></button>
+</p>
+<div data-visual-view class="hidden">
+<div class="mb-3 mt-10 flex flex-wrap items-center gap-2" data-group-bar>
+  <button type="button" data-mode="category" class="mono-label border border-rule px-2 py-1">By stack</button>
+  <button type="button" data-mode="project" class="mono-label border border-rule px-2 py-1">By project</button>
+</div>
+<div class="mb-3 hidden flex-wrap gap-2" data-legend></div>
+<div class="relative overflow-hidden border border-rule" data-skill-field>
+  <canvas class="block h-[560px] w-full touch-none" aria-label={`Skills: ${skills.join(', ')}`}></canvas>
+  <div class="absolute right-2 top-2 flex gap-1">
+    <button type="button" data-zoom-in aria-label="Zoom in" class="mono-label border border-rule bg-paper px-2 py-1 text-ink">+</button>
+    <button type="button" data-zoom-out aria-label="Zoom out" class="mono-label border border-rule bg-paper px-2 py-1 text-ink">−</button>
+    <button type="button" data-zoom-reset aria-label="Reset view. Shows current zoom." title="Reset view" class="mono-label border border-rule bg-paper px-2 py-1 text-ink">100%</button>
+  </div>
+  <p class="sr-only">{skills.join(', ')}</p>
+</div>
+</div>
+
+<script define:vars={{ skills, CATS, PROJS }}>
+  const wrap = document.querySelector('[data-skill-field]');
+  const bar = document.querySelector('[data-group-bar]');
+  const legend = document.querySelector('[data-legend]');
+  const canvas = wrap?.querySelector('canvas');
+  const simpleView = document.querySelector('[data-simple-view]');
+  const simpleMore = document.querySelector('[data-simple-more]');
+  const simpleToggle = document.querySelector('[data-simple-toggle]');
+  simpleToggle?.addEventListener('click', () => {
+    const open = simpleMore.classList.toggle('hidden');
+    simpleMore.classList.toggle('grid', open === false);
+    simpleMore.classList.toggle('sm:grid', open === false);
+    simpleToggle.innerHTML = open ? 'Show more <span aria-hidden="true">↓</span>' : 'Show less <span aria-hidden="true">↑</span>';
+  });
+  const visualView = document.querySelector('[data-visual-view]');
+  const modeSwitch = document.querySelector('[data-skill-mode]');
+  const zoomLabel = wrap?.querySelector('[data-zoom-reset]');
+  if (wrap && canvas && bar && legend && simpleView && visualView && modeSwitch) {
+    const ctx = canvas.getContext('2d');
+    const reduced = matchMedia('(prefers-reduced-motion)').matches;
+    const FIELD_H = 560;
+
+    const groupColor = (idx, n) => `hsl(${Math.round((idx * 360) / n + 12) % 360}, 62%, 48%)`;
+
+    const palette = () => {
+      const css = getComputedStyle(document.documentElement);
+      const get = (k, fb) => (css.getPropertyValue(k) || '').trim() || fb;
+      return {
+        ink: get('--color-ink', '#171512'),
+        paper: get('--color-paper', '#f7f5f0'),
+        rust: get('--color-rust', '#9c3a3a'),
+      };
+    };
+    let pal = palette();
+    document.addEventListener('theme-change', () => { pal = palette(); draw(); });
+
+    let WW = 1600, WH = 1000;
+    const cam = { x: 0, y: 0, s: 1 };
+    const home = () => {
+      cam.s = CW > 10 ? Math.min(CW / WW, CH / WH) : 1;
+      cam.x = WW / 2; cam.y = WH / 2;
+    };
+
+    let CW = 0, CH = FIELD_H;
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      CW = wrap.clientWidth; CH = FIELD_H;
+      canvas.width = Math.floor(CW * dpr);
+      canvas.height = Math.floor(CH * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    let mode = 'category';
+    let solo = null;
+    let clustered = false;
+    let groups = [];
+    let nodes = [];
+    let grabbed = null;
+    let grabDX = 0, grabDY = 0;
+    let flingX = 0, flingY = 0, flingT = 0;
+    let followers = null;
+    let view = 'simple';
+
+    ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+    const makePill = (label, gx) => {
+      const w = ctx.measureText(label).width + 28;
+      return {
+        label, w, h: 26, r: w / 2,
+        x: Math.random() * WW, y: Math.random() * WH,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        gx, ax: null, ay: null,
+        scale: 1, tvis: 1, base: null, returning: false, clones: null,
+      };
+    };
+    const primaries = skills.map((label) => makePill(label, -1));
+    nodes = [...primaries];
+    const scatter = (arr) => {
+      for (let k = 0; k < 80; k++) {
+        for (let i = 0; i < arr.length; i++) {
+          for (let j = i + 1; j < arr.length; j++) {
+            const a = arr[i], b = arr[j];
+            let dx = b.x - a.x, dy = b.y - a.y;
+            const d = Math.hypot(dx, dy) || 0.01;
+            const min = a.r + b.r + 10;
+            if (d < min) {
+              dx /= d; dy /= d;
+              const push = (min - d) / 2;
+              a.x -= dx * push; a.y -= dy * push;
+              b.x += dx * push; b.y += dy * push;
+            }
+          }
+        }
+      }
+    };
+
+    const layout = () => {
+      const defs = mode === 'project' ? PROJS : CATS;
+      groups = defs.map(([label], i) => ({ label, i, n: 0 }));
+      for (const n of nodes) {
+        if (n.returning) continue;
+        const g = groups[n.gx];
+        if (g) g.n++;
+      }
+      const cols = Math.ceil(Math.sqrt(groups.length));
+      const rows = Math.ceil(groups.length / cols);
+      groups.forEach((g, i) => {
+        const c = i % cols, r = Math.floor(i / cols);
+        g.x = WW * (0.15 + 0.7 * (cols === 1 ? 0.5 : c / (cols - 1)));
+        g.y = WH * (0.16 + 0.68 * (rows === 1 ? 0.5 : r / (rows - 1)));
+      });
+      for (const n of nodes) {
+        if (n.returning) continue;
+        const g = groups[n.gx];
+        if (!g) { n.ax = null; n.ay = null; continue; }
+        n.ax = g.x + (Math.random() - 0.5) * 110;
+        n.ay = g.y + (Math.random() - 0.5) * 80;
+      }
+    };
+
+    const projGroupsOf = (label) => {
+      const out = [];
+      PROJS.forEach(([, members], i) => { if (members.includes(label)) out.push(i); });
+      return out;
+    };
+    const catIdxOf = (() => {
+      const idx = new Map();
+      CATS.forEach(([, members], i) => members.forEach((m) => idx.set(m, i)));
+      return (label) => idx.get(label) ?? 0;
+    })();
+
+    const setMode = (m) => {
+      if (m === mode) return;
+      mode = m; solo = null;
+      grabbed = null; followers = null;
+      if (m === 'project') {
+        for (const p of primaries) {
+          const gs = projGroupsOf(p.label);
+          if (!gs.length) { p.tvis = 0; p.gx = -1; continue; }
+          p.tvis = 1; p.gx = gs[0]; p.returning = false;
+          p.clones = p.clones || [];
+          while (p.clones.length > gs.length - 1) {
+            const c = p.clones.pop();
+            c.returning = true; c.tvis = 0;
+          }
+          gs.slice(1).forEach((gi) => {
+            let c = p.clones.find((k) => k.gx === gi && !k.returning);
+            if (!c) {
+              c = makePill(p.label, gi);
+              c.scale = 0; c.tvis = 1;
+              c.x = p.x; c.y = p.y;
+              c.vx = p.vx + (Math.random() - 0.5) * 40;
+              c.vy = p.vy + (Math.random() - 0.5) * 40;
+              c.base = p;
+              p.clones.push(c);
+              nodes.push(c);
+            } else {
+              c.returning = false; c.tvis = 1;
+            }
+            c.gx = gi;
+          });
+        }
+      } else {
+        for (const p of primaries) {
+          p.tvis = 1; p.gx = catIdxOf(p.label); p.returning = false;
+          (p.clones || []).forEach((c) => { c.returning = true; c.tvis = 0; });
+          p.clones = [];
+        }
+      }
+      layout(); paintBar(); renderLegend(); draw();
+    };
+
+    const renderLegend = () => {
+      legend.innerHTML = '';
+      legend.classList.remove('hidden'); legend.classList.add('flex');
+      groups.forEach((g) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'mono-label flex items-center gap-1.5 border border-rule px-2 py-1 text-ink';
+        if (solo !== null && solo !== g.i) b.style.opacity = '0.45';
+        const dot = document.createElement('span');
+        dot.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:9999px;background:${groupColor(g.i, groups.length)}`;
+        b.append(dot, document.createTextNode(`${g.label} (${g.n})`));
+        b.addEventListener('click', () => {
+          solo = solo === g.i ? null : g.i;
+          renderLegend(); draw();
+        });
+        legend.append(b);
+      });
+    };
+
+    const paintBar = () => {
+      bar.querySelectorAll('[data-mode]').forEach((b) => {
+        const on = b.dataset.mode === mode;
+        b.style.background = on ? 'var(--color-ink)' : 'transparent';
+        b.style.color = on ? 'var(--color-paper)' : 'var(--color-ink)';
+      });
+    };
+    bar.querySelectorAll('[data-mode]').forEach((b) => {
+      b.addEventListener('click', () => setMode(b.dataset.mode));
+    });
+
+    const paintViewSwitch = () => {
+      modeSwitch.querySelectorAll('[data-skill-view]').forEach((b) => {
+        const on = b.dataset.skillView === view;
+        b.style.background = on ? 'var(--color-ink)' : 'transparent';
+        b.style.color = on ? 'var(--color-paper)' : 'var(--color-ink)';
+      });
+    };
+    const setView = (v) => {
+      if (v === view) return;
+      view = v;
+      const visual = v === 'visual';
+      visualView.classList.toggle('hidden', !visual);
+      simpleView.classList.toggle('hidden', visual);
+      paintViewSwitch();
+      if (visual) { resize(); home(); layout(); draw(); }
+    };
+    modeSwitch.querySelectorAll('[data-skill-view]').forEach((b) => {
+      b.addEventListener('click', () => setView(b.dataset.skillView));
+    });
+
+    const mouse = { x: -9999, y: -9999, down: false, panning: false, sx: 0, sy: 0, cx: 0, cy: 0 };
+    const hitNode = (wx, wy) => {
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        const n = nodes[i];
+        if (n.scale < 0.3) continue;
+        if (Math.abs(wx - n.x) < n.w / 2 + 4 && Math.abs(wy - n.y) < n.h / 2 + 8) return n;
+      }
+      return null;
+    };
+    const toWorld = (px, py) => ({
+      x: cam.x + (px - CW / 2) / cam.s,
+      y: cam.y + (py - CH / 2) / cam.s,
+    });
+    const evtPos = (e) => {
+      const r = canvas.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    };
+    canvas.addEventListener('pointermove', (e) => {
+      const p = evtPos(e);
+      const w = toWorld(p.x, p.y);
+      if (grabbed) {
+        grabbed.x = w.x - grabDX; grabbed.y = w.y - grabDY;
+        const now = performance.now();
+        const dt = Math.max((now - flingT) / 1000, 0.008);
+        flingX = (grabbed.x - (grabbed.px ?? grabbed.x)) / dt;
+        flingY = (grabbed.y - (grabbed.py ?? grabbed.y)) / dt;
+        grabbed.px = grabbed.x; grabbed.py = grabbed.y;
+        flingT = now;
+        mouse.x = -9999; mouse.y = -9999;
+        draw();
+        return;
+      }
+      if (mouse.down) {
+        mouse.panning = true;
+        cam.x = mouse.cx - (p.x - mouse.sx) / cam.s;
+        cam.y = mouse.cy - (p.y - mouse.sy) / cam.s;
+        draw();
+      }
+      mouse.x = w.x; mouse.y = w.y;
+      canvas.style.cursor = hitNode(w.x, w.y) ? 'grab' : 'default';
+    });
+    canvas.addEventListener('pointerdown', (e) => {
+      const p = evtPos(e);
+      const w = toWorld(p.x, p.y);
+      const hit = hitNode(w.x, w.y);
+      mouse.down = true; mouse.panning = false;
+      mouse.sx = p.x; mouse.sy = p.y; mouse.cx = cam.x; mouse.cy = cam.y;
+      if (hit) {
+        grabbed = hit;
+        followers = null;
+        if (hit.gx >= 0) {
+          followers = new Map();
+          for (const n of nodes) {
+            if (n === hit || n.gx !== hit.gx || n.scale < 0.3) continue;
+            if (Math.hypot(n.x - hit.x, n.y - hit.y) > 210) continue;
+            followers.set(n, { dx: n.x - hit.x, dy: n.y - hit.y });
+          }
+          if (followers.size === 0) followers = null;
+        }
+        grabDX = w.x - hit.x; grabDY = w.y - hit.y;
+        hit.px = hit.x; hit.py = hit.y;
+        flingX = 0; flingY = 0; flingT = performance.now();
+        hit.vx = 0; hit.vy = 0;
+        canvas.style.cursor = 'grabbing';
+      }
+      canvas.setPointerCapture(e.pointerId);
+    });
+    const release = () => {
+      if (grabbed) {
+        const sp = Math.hypot(flingX, flingY);
+        if (sp > 4) {
+          const cap = Math.min(sp, 160);
+          grabbed.vx = (flingX / sp) * cap;
+          grabbed.vy = (flingY / sp) * cap;
+        }
+        grabbed.px = undefined; grabbed.py = undefined;
+        grabbed = null; followers = null;
+        canvas.style.cursor = 'default';
+      }
+      mouse.down = false;
+    };
+    canvas.addEventListener('pointerup', release);
+    canvas.addEventListener('pointercancel', release);
+    canvas.addEventListener('pointerleave', () => {
+      mouse.x = -9999; mouse.y = -9999; mouse.down = false;
+    });
+
+    const zoomAt = (px, py, factor) => {
+      const before = toWorld(px, py);
+      cam.s = Math.min(2.5, Math.max(0.35, cam.s * factor));
+      const after = toWorld(px, py);
+      cam.x += before.x - after.x;
+      cam.y += before.y - after.y;
+      draw();
+    };
+    canvas.addEventListener('wheel', (e) => {
+      if (!e.ctrlKey && !e.metaKey) return;
+      e.preventDefault();
+      const p = evtPos(e);
+      zoomAt(p.x, p.y, Math.exp(-e.deltaY * 0.002));
+    }, { passive: false });
+    wrap.querySelector('[data-zoom-in]')?.addEventListener('click', () => zoomAt(CW / 2, CH / 2, 1.25));
+    wrap.querySelector('[data-zoom-out]')?.addEventListener('click', () => zoomAt(CW / 2, CH / 2, 0.8));
+    wrap.querySelector('[data-zoom-reset]')?.addEventListener('click', () => { home(); draw(); });
+
+    const hexA = (hex, a) => {
+      const h = hex.replace('#', '');
+      const v = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+      const n = parseInt(v, 16);
+      return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+    };
+
+    const step = (dt) => {
+      for (const n of nodes) {
+        if (n === grabbed) continue;
+        if (n.returning && n.base) {
+          n.x += (n.base.x - n.x) * Math.min(1, 8 * dt);
+          n.y += (n.base.y - n.y) * Math.min(1, 8 * dt);
+          n.vx = 0; n.vy = 0;
+        } else {
+          const fol = followers ? followers.get(n) : null;
+          if (fol && grabbed) {
+            n.vx += ((grabbed.x + fol.dx) - n.x) * 6 * dt;
+            n.vy += ((grabbed.y + fol.dy) - n.y) * 6 * dt;
+            n.vx *= 0.95; n.vy *= 0.95;
+          } else if (n.ax !== null) {
+            n.vx += (n.ax - n.x) * 2.2 * dt;
+            n.vy += (n.ay - n.y) * 2.2 * dt;
+          }
+          const mdx = n.x - mouse.x, mdy = n.y - mouse.y;
+          const md = Math.hypot(mdx, mdy);
+          if (md < 140 && md > 0.01 && !mouse.panning) {
+            const f = (1 - md / 140) * 12 * dt;
+            n.vx += (mdx / md) * f; n.vy += (mdy / md) * f;
+          }
+          n.x += n.vx * dt; n.y += n.vy * dt;
+        }
+        n.vx *= 0.985; n.vy *= 0.985;
+        let sp = Math.hypot(n.vx, n.vy);
+        if (sp < 0.05) {
+          const a = Math.random() * Math.PI * 2;
+          n.vx = Math.cos(a) * 0.6; n.vy = Math.sin(a) * 0.6;
+          sp = 0.6;
+        }
+        const target = Math.min(Math.max(sp, 0.01), 100 / 3);
+        n.vx = (n.vx / sp) * target; n.vy = (n.vy / sp) * target;
+        if (n.x < n.r) { n.x = n.r; n.vx = Math.abs(n.vx); }
+        if (n.x > WW - n.r) { n.x = WW - n.r; n.vx = -Math.abs(n.vx); }
+        if (n.y < n.h / 2 + 2) { n.y = n.h / 2 + 2; n.vy = Math.abs(n.vy); }
+        if (n.y > WH - n.h / 2 - 2) { n.y = WH - n.h / 2 - 2; n.vy = -Math.abs(n.vy); }
+        n.scale += (n.tvis - n.scale) * Math.min(1, 5 * dt);
+      }
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          if (a.scale < 0.3 || b.scale < 0.3) continue;
+          let dx = b.x - a.x, dy = b.y - a.y;
+          let d = Math.hypot(dx, dy) || 0.01;
+          dx /= d; dy /= d;
+          const min = a.r + b.r + 4;
+          const sameGroup = a.gx >= 0 && a.gx === b.gx;
+          const crossGroup = a.gx >= 0 && b.gx >= 0 && a.gx !== b.gx;
+          if (d < 180 && !crossGroup) {
+            const f = (1 - d / 180) * 2.5 * dt;
+            a.vx -= dx * f; a.vy -= dy * f;
+            b.vx += dx * f; b.vy += dy * f;
+          }
+          if (crossGroup && d < 340) {
+            const f = (1 - d / 340) * 34 * dt;
+            a.vx -= dx * f; a.vy -= dy * f;
+            b.vx += dx * f; b.vy += dy * f;
+          }
+          if (d < min) {
+            const overlap = (min - d) / 2;
+            a.x -= dx * overlap; a.y -= dy * overlap;
+            b.x += dx * overlap; b.y += dy * overlap;
+            const rel = (b.vx - a.vx) * dx + (b.vy - a.vy) * dy;
+            if (rel < 0) {
+              const imp = -rel / 2;
+              a.vx -= dx * imp; a.vy -= dy * imp;
+              b.vx += dx * imp; b.vy += dy * imp;
+            }
+          }
+        }
+      }
+      const before = nodes.length;
+      nodes = nodes.filter((n) => !(n.returning && n.scale < 0.04));
+      if (nodes.length !== before) layout();
+    };
+
+    const draw = () => {
+      ctx.setTransform(
+        Math.min(window.devicePixelRatio || 1, 2), 0, 0,
+        Math.min(window.devicePixelRatio || 1, 2), 0, 0,
+      );
+      ctx.clearRect(0, 0, CW, CH);
+      ctx.translate(CW / 2, CH / 2);
+      ctx.scale(cam.s, cam.s);
+      ctx.translate(-cam.x, -cam.y);
+      ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      if (!clustered && cam.s < 0.45) clustered = true;
+      else if (clustered && cam.s > 0.6) clustered = false;
+      const pendingLabels = [];
+      if (groups.length) {
+        for (const g of groups) {
+          let cx = 0, top = Infinity, c = 0;
+          for (const n of nodes) {
+            if (n.gx !== g.i || n.scale < 0.3) continue;
+            cx += n.x; c++;
+            top = Math.min(top, n.y - n.h / 2);
+          }
+          if (!c) continue;
+          pendingLabels.push({ g, x: cx / c, y: top });
+        }
+      }
+      var singles = [];
+      if (clustered && groups.length) {
+        for (const g of groups) {
+          let cx = 0, cy = 0, c = 0;
+          for (const n of nodes) {
+            if (n.gx !== g.i || n.scale < 0.5) continue;
+            cx += n.x; cy += n.y; c++;
+          }
+          if (c === 0) continue;
+          if (c === 1) {
+            for (const n of nodes) {
+              if (n.gx === g.i && n.scale >= 0.5) singles.push(n);
+            }
+            continue;
+          }
+          cx /= c; cy /= c;
+          const dim = solo !== null && solo !== g.i;
+          const r = 17 + Math.min(c, 24);
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.fillStyle = groupColor(g.i, groups.length);
+          ctx.globalAlpha = dim ? 0.25 : 0.92;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = hexA(pal.paper, dim ? 0.4 : 1);
+          ctx.font = 'bold 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+          ctx.fillText(String(c), cx, cy + 0.5);
+          ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+        }
+      } else if (clustered) {
+        const cell = 150;
+        const cellMap = new Map();
+        for (const n of nodes) {
+          if (n.scale < 0.5) continue;
+          const k = Math.floor(n.x / cell) + ',' + Math.floor(n.y / cell);
+          if (!cellMap.has(k)) cellMap.set(k, { x: 0, y: 0, n: 0 });
+          const g = cellMap.get(k);
+          g.x += n.x; g.y += n.y; g.n++;
+        }
+        for (const g of cellMap.values()) {
+          if (g.n === 1) continue;
+          g.x /= g.n; g.y /= g.n;
+          const r = 15 + Math.min(g.n, 20);
+          ctx.beginPath();
+          ctx.arc(g.x, g.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = hexA(pal.rust, 0.92);
+          ctx.fill();
+          ctx.fillStyle = hexA(pal.paper, 1);
+          ctx.font = 'bold 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+          ctx.fillText(String(g.n), g.x, g.y + 0.5);
+          ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+        }
+        singles = nodes.filter((n) => {
+          if (n.scale < 0.5) return false;
+          const k = Math.floor(n.x / cell) + ',' + Math.floor(n.y / cell);
+          return cellMap.get(k).n === 1;
+        });
+      } else {
+        singles = nodes.filter((n) => n.scale >= 0.02);
+      }
+      ctx.lineWidth = 1 / cam.s;
+      for (let i = 0; i < singles.length; i++) {
+        for (let j = i + 1; j < singles.length; j++) {
+          const a = singles[i], b = singles[j];
+          if (a.gx !== b.gx || a.gx < 0) continue;
+          if (solo !== null && a.gx !== solo) continue;
+          const d = Math.hypot(b.x - a.x, b.y - a.y);
+          if (d < 210) {
+            ctx.strokeStyle = groupColor(a.gx, groups.length);
+            ctx.globalAlpha = (1 - d / 210) * 0.5;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            ctx.globalAlpha = 1;
+          }
+        }
+      }
+      for (const n of singles) {
+        const k = Math.max(n.scale, 0.001);
+        const dim = solo !== null && n.gx !== solo;
+        const col = n.gx >= 0 ? groupColor(n.gx, groups.length) : null;
+        ctx.save();
+        ctx.translate(n.x, n.y);
+        ctx.scale(k, k);
+        ctx.beginPath();
+        ctx.roundRect(-n.w / 2, -n.h / 2, n.w, n.h, n.h / 2);
+        ctx.fillStyle = hexA(pal.paper, dim ? 0.25 : 0.85);
+        ctx.fill();
+        if (col && !dim) ctx.strokeStyle = col;
+        else ctx.strokeStyle = hexA(dim ? '#808080' : pal.ink, dim ? 0.25 : 0.35);
+        ctx.lineWidth = 1 / (cam.s * k);
+        ctx.stroke();
+        if (col && !dim) ctx.fillStyle = col;
+        else ctx.fillStyle = hexA(pal.ink, dim ? 0.15 : 0.92);
+        ctx.fillText(n.label, 0, 0.5);
+        ctx.restore();
+      }
+      if (pendingLabels.length) {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.font = 'bold 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        for (const { g, x, y } of pendingLabels) {
+          const sx = (x - cam.x) * cam.s + CW / 2;
+          const sy = (y - cam.y) * cam.s + CH / 2 - 16;
+          const dim = solo !== null && solo !== g.i;
+          ctx.globalAlpha = dim ? 0.25 : 0.9;
+          ctx.fillStyle = groupColor(g.i, groups.length);
+          ctx.fillText(g.label, sx, sy);
+          ctx.globalAlpha = 1;
+        }
+      }
+      if (zoomLabel) {
+        const pct = Math.round(cam.s * 100) + '%';
+        if (zoomLabel.textContent !== pct) zoomLabel.textContent = pct;
+      }
+    };
+
+    resize();
+    home();
+    for (const n of primaries) n.gx = catIdxOf(n.label);
+    layout();
+    for (const n of nodes) {
+      n.x = n.ax + (Math.random() - 0.5) * 60;
+      n.y = n.ay + (Math.random() - 0.5) * 46;
+      n.vx = (Math.random() - 0.5) * 24;
+      n.vy = (Math.random() - 0.5) * 24;
+    }
+    scatter(nodes);
+    paintBar(); paintViewSwitch(); renderLegend(); draw();
+    window.addEventListener('resize', () => { resize(); layout(); draw(); });
+
+    let last = performance.now();
+    let running = !reduced;
+    draw();
+    if (!reduced) {
+      const frame = (t) => {
+        if (!running) return;
+        const dt = Math.min((t - last) / 1000, 0.05);
+        last = t;
+        step(dt);
+        draw();
+        requestAnimationFrame(frame);
+      };
+      const io = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting && !running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+        else if (!e.isIntersecting) running = false;
+      });
+      io.observe(wrap);
+      requestAnimationFrame(frame);
+    }
+  }
+</script>

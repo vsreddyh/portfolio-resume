@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SkillField from '../components/SkillField.astro';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
 const all = await getCollection('projects');
 const featured = all.filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order);
-const archive = all.filter((p) => !p.data.featured).sort((a, b) => a.data.order - b.data.order);
 
 const now = [
   {
@@ -14,43 +14,27 @@ const now = [
     href: `${base}projects/agento/`,
     note: 'Daily driver: Compose client, Go API on one box, six MCP servers in T3 Code.',
   },
-  {
-    title: 'Daily Gita',
-    status: 'daily',
-    href: `${base}projects/daily-gita/`,
-    note: 'A scheduled task fetches a verse from the internet every day and opens a thread on it.',
-  },
-  {
-    title: 'Schedio',
-    status: 'live',
-    href: `${base}projects/schedio/`,
-    note: 'Student–college–recruiter platform, running demo linked on its page.',
-  },
 ];
 ---
 <BaseLayout>
   <section id="home" class="mx-auto max-w-6xl px-6 pb-24 pt-20 sm:pt-28">
     <p class="mono-label">Vishnu Shouryan Reddy · Software engineer, Hyderabad</p>
-    <h1 class="mt-6 max-w-4xl text-[clamp(2.4rem,6vw,4.25rem)] leading-[1.02] tracking-[-0.02em]">
+    <h1 class="mt-6 max-w-4xl text-[clamp(2.6rem,6.5vw,4.75rem)] leading-[1.02] tracking-[-0.02em]">
       I build products, not projects.
     </h1>
     <p class="mt-7 max-w-[36rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
       I'm a software engineer at 5th Bridge Data Technologies. I design, build,
-      and run complete products end to end — apps, APIs, and the infrastructure
-      behind them. Selected work is below, each with how it is built.
+      and run complete products: apps, APIs, and the orchestration
+      that runs them. Most of my work is backend: Go, Node, and Python services
+      on Postgres, ClickHouse, and MongoDB, plus the frontend to ship the
+      whole thing myself. I take products from idea to production.
     </p>
-    <div class="mt-9 flex flex-wrap items-baseline gap-x-7 gap-y-3">
-      <a href="#work" class="btn">Selected work <span aria-hidden="true">↓</span></a>
-      <a href="https://github.com/vsreddyh" class="btn">GitHub <span aria-hidden="true">↗</span></a>
-      <a href="mailto:shouryanreddyh@gmail.com" class="btn">Email</a>
-    </div>
   </section>
 
   <section id="work" class="border-t border-rule">
     <div class="mx-auto max-w-6xl px-6 py-20">
       <div class="flex flex-wrap items-baseline justify-between gap-3">
-        <h2 class="text-3xl">Selected work</h2>
-        <p class="mono-label">Three systems · architecture diagrams</p>
+        <h2 class="text-3xl">My Top Three Works</h2>
       </div>
 
       <div class="mt-10">
@@ -67,21 +51,9 @@ const now = [
         ))}
       </div>
 
-      <div class="mt-16 grid gap-x-12 sm:grid-cols-2">
-        {archive.map((p) => (
-          <a href={`${base}projects/${p.id}/`} class="archive-row block border-t border-rule px-1 py-4 no-underline">
-            <span class="flex items-baseline justify-between gap-4">
-              <span class="archive-title text-[0.9375rem] text-ink">{p.data.title}</span>
-              <span class="mono-label whitespace-nowrap">{p.data.stack[0]}</span>
-            </span>
-            <span class="mt-1 block max-w-md text-sm leading-relaxed text-muted">{p.data.description}</span>
-          </a>
-        ))}
-        <p class="border-t border-rule py-4 text-sm text-muted sm:col-span-2">
-          More experiments and tooling —
-          <a class="link" href="https://github.com/vsreddyh?tab=repositories">everything else is on GitHub ↗</a>
-        </p>
-      </div>
+      <p class="mt-10 text-sm">
+        <a class="link" href={`${base}projects/`}>All projects <span aria-hidden="true">→</span></a>
+      </p>
     </div>
   </section>
 
@@ -90,20 +62,30 @@ const now = [
       <h2 class="text-2xl">About</h2>
       <div class="max-w-[36rem] space-y-4 text-[1.0625rem] leading-[1.7] text-ink-soft">
         <p>
-          I'm a software engineer in Hyderabad. Most of my work is backend and
-          infrastructure: Go, Node and Python services on Postgres, ClickHouse and
-          Mongo, with enough frontend to ship the thing end to end.
+          I’m a software engineer working in Hyderabad, currently at 5th Bridge Data
+          Technologies. I studied computer science at KMIT (2022–2026).
         </p>
         <p>
-          I default to boring operations. Compose files over bespoke platforms,
-          cron over always-on workers, SQLite before anything exotic. The projects
-          here are mostly experiments in how much can run without me.
-        </p>
-        <p class="text-muted">
-          Software engineer at 5th Bridge Data Technologies. B.Tech in computer
-          science at KMIT, 2022–2026.
+          I like owning the whole thing: the app, the API, and everything it
+          runs on. The projects on this page are ones I use myself - my tasks
+          and health live in Agento, my verse-a-day arrives as a scheduled
+          thread, my game questions go to a bot I wrote. If I’m not running
+          it, I’m not shipping it.
         </p>
       </div>
+  </div>
+</section>
+
+  <section id="skills" class="border-t border-rule">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <div class="flex flex-wrap items-baseline justify-between gap-3">
+        <h2 class="text-3xl">Skills</h2>
+        <div class="flex gap-1" data-skill-mode>
+          <button type="button" data-skill-view="simple" class="mono-label border border-rule px-2 py-1">Simple</button>
+          <button type="button" data-skill-view="visual" class="mono-label border border-rule px-2 py-1">Visual</button>
+        </div>
+      </div>
+      <SkillField />
     </div>
   </section>
 
@@ -118,10 +100,28 @@ const now = [
         <p class="mt-3 max-w-[38rem] text-[0.9375rem] leading-relaxed text-ink-soft">
           I work at 5th Bridge Data Technologies.
         </p>
-        <p class="mt-4 text-sm">
-          <a class="link" href={`${base}resume.pdf`}>Full history and education (PDF)</a>
+      </div>
+      <div class="mt-8 border-t border-rule pt-6">
+        <div class="flex flex-wrap items-baseline justify-between gap-3">
+          <h3 class="text-lg font-semibold text-ink">Software Engineer Intern — 5th Bridge Data Technologies</h3>
+          <span class="mono-label">Jan 2026 – Jun 2026</span>
+        </div>
+        <p class="mt-3 max-w-[38rem] text-[0.9375rem] leading-relaxed text-ink-soft">
+          Machine learning and NLP prototypes: predictive models, text pipelines, and trend detection.
         </p>
       </div>
+    </div>
+  </section>
+
+  <section id="resume" class="border-t border-rule bg-paper-raised/60">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="text-3xl">Résumé</h2>
+      <p class="mt-4 max-w-[34rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
+        Full history and education, as a PDF.
+      </p>
+      <p class="mt-6">
+        <a class="btn" href={`${base}resume.pdf`}>Download résumé <span aria-hidden="true">↓</span></a>
+      </p>
     </div>
   </section>
 
@@ -146,8 +146,7 @@ const now = [
     <div class="mx-auto max-w-6xl px-6 py-20">
       <h2 class="text-3xl">Get in touch</h2>
       <p class="mt-4 max-w-[34rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
-        Open to software engineering roles, especially teams that own their
-        infrastructure and their on-call. Email is fastest.
+        Open to software engineering roles.
       </p>
       <p class="mt-6">
         <a
@@ -156,11 +155,6 @@ const now = [
         >
           shouryanreddyh@gmail.com
         </a>
-      </p>
-      <p class="mono-label mt-6 flex flex-wrap gap-5">
-        <a class="link" href="https://linkedin.com/in/vsreddyh">LinkedIn ↗</a>
-        <a class="link" href={`${base}resume.pdf`}>Résumé (PDF)</a>
-        <a class="link" href="https://github.com/vsreddyh">GitHub ↗</a>
       </p>
     </div>
   </section>
