@@ -7,7 +7,7 @@
     { "repo": "vsreddyh/identiscan", "portfolio": "portfolio/src/content/projects/identiscan.mdx" },
     { "repo": "vsreddyh/Minio-S3", "portfolio": "portfolio/src/content/projects/minio-gallery.mdx" },
     { "repo": "vsreddyh/mysaanj", "portfolio": "portfolio/src/content/projects/saanjh-sahayak.mdx" },
-    { "repo": "vsreddyh/rouge_automaton", "portfolio": "portfolio/src/content/projects/rouge-automaton.mdx" },
+    { "repo": "vsreddyh/rogue_automaton", "portfolio": "portfolio/src/content/projects/rogue-automaton.mdx" },
     { "repo": "vsreddyh/leetcode-scoreboard", "portfolio": "portfolio/src/content/projects/leetcode-scoreboard.mdx" },
     { "repo": "vsreddyh/Daily_Gita", "portfolio": "portfolio/src/content/projects/daily-gita.mdx" },
     { "repo": "vsreddyh/Past-Placements-XLSX-generator", "portfolio": null },

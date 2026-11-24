@@ -1,14 +1,14 @@
 ---
-title: "Rouge Automaton"
+title: "Rogue Automaton"
 description: "Discord bot answering Helldivers 2 questions from a Mongo cache it refreshes itself."
 stack: ["Go", "discordgo", "MongoDB", "Podman Compose"]
-github: "https://github.com/vsreddyh/rouge_automaton"
+github: "https://github.com/vsreddyh/rogue_automaton"
 featured: false
 order: 6
 problem: "Game wikis are slow to search mid-session and go stale, so answers need a local cache."
 diagram: |
   flowchart LR
-    U["Discord"] --> B["rouge bot"]
+    U["Discord"] --> B["rogue bot"]
     B --> DB[(MongoDB cache)]
     W["wiki watcher"] --> DB
     B --> TM["war status API"]

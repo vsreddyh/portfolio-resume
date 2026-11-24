@@ -23,7 +23,7 @@ const PROJS = [
   ['Anonymous Image Gallery', ['React', 'FastAPI', 'Python', 'Redis', 'MinIO', 'AWS', 'S3', 'Bun', 'Vite', 'Docker Compose']],
   ['Identiscan', ['React', 'JavaScript', 'TailwindCSS', 'Node.js', 'Express', 'Flask', 'ElectronJS', 'HTML', 'CSS', 'MongoDB', 'Mongoose']],
   ['Saanjh Sahayak', ['React Native', 'Expo', 'Nativewind', 'Node.js', 'Express', 'Mongoose', 'MongoDB', 'REST']],
-  ['Rouge Automaton', ['Go', 'Discord API', 'MongoDB', 'Podman', 'Linux']],
+  ['Rogue Automaton', ['Go', 'Discord API', 'MongoDB', 'Podman', 'Linux']],
   ['LeetCode Scoreboard', ['Next.js', 'TypeScript', 'MongoDB', 'Mongoose', 'GraphQL', 'Web Push', 'shadcn/ui', 'Vercel']],
   ['Daily Gita', ['Python', 'Scrapy', 'lxml', 'requests', 'gspread', 'openpyxl', 'SQLite', 'React Native', 'Expo', 'Nativewind']],
 ];
@@ -40,7 +40,7 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
       </div>
     </div>
   ))}
-  <div data-simple-more class="hidden gap-x-12 gap-y-8 sm:col-span-2 sm:grid-cols-2">
+  <div data-simple-more id="skill-more" class="hidden gap-x-12 gap-y-8 sm:col-span-2 sm:grid-cols-2">
   {CATS.slice(3).map(([label, members]) => (
     <div>
       <h3 class="mono-label mb-3">{label}</h3>
@@ -54,20 +54,20 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
   </div>
 </div>
 <p class="mt-6 text-sm">
-  <button type="button" data-simple-toggle class="link">Show more <span aria-hidden="true">↓</span></button>
+  <button type="button" data-simple-toggle aria-expanded="false" aria-controls="skill-more" class="link inline-flex min-h-[44px] items-center">Show more <span aria-hidden="true">↓</span></button>
 </p>
 <div data-visual-view class="hidden">
 <div class="mb-3 mt-10 flex flex-wrap items-center gap-2" data-group-bar>
-  <button type="button" data-mode="category" class="mono-label border border-rule px-2 py-1">By stack</button>
-  <button type="button" data-mode="project" class="mono-label border border-rule px-2 py-1">By project</button>
+  <button type="button" data-mode="category" aria-pressed="true" class="mono-label min-h-[44px] border border-rule px-3 py-1">By stack</button>
+  <button type="button" data-mode="project" aria-pressed="false" class="mono-label min-h-[44px] border border-rule px-3 py-1">By project</button>
 </div>
 <div class="mb-3 hidden flex-wrap gap-2" data-legend></div>
 <div class="relative overflow-hidden border border-rule" data-skill-field>
   <canvas class="block h-[560px] w-full touch-none" aria-label={`Skills: ${skills.join(', ')}`}></canvas>
   <div class="absolute right-2 top-2 flex gap-1">
-    <button type="button" data-zoom-in aria-label="Zoom in" class="mono-label border border-rule bg-paper px-2 py-1 text-ink">+</button>
-    <button type="button" data-zoom-out aria-label="Zoom out" class="mono-label border border-rule bg-paper px-2 py-1 text-ink">−</button>
-    <button type="button" data-zoom-reset aria-label="Reset view. Shows current zoom." title="Reset view" class="mono-label border border-rule bg-paper px-2 py-1 text-ink">100%</button>
+    <button type="button" data-zoom-in aria-label="Zoom in" class="mono-label flex min-h-[44px] min-w-[44px] items-center justify-center border border-rule bg-paper px-2 py-1 text-ink">+</button>
+    <button type="button" data-zoom-out aria-label="Zoom out" class="mono-label flex min-h-[44px] min-w-[44px] items-center justify-center border border-rule bg-paper px-2 py-1 text-ink">−</button>
+    <button type="button" data-zoom-reset aria-label="Reset view. Shows current zoom." title="Reset view" class="mono-label flex min-h-[44px] items-center border border-rule bg-paper px-3 py-1 text-ink">100%</button>
   </div>
   <p class="sr-only">{skills.join(', ')}</p>
 </div>
@@ -82,10 +82,11 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
   const simpleMore = document.querySelector('[data-simple-more]');
   const simpleToggle = document.querySelector('[data-simple-toggle]');
   simpleToggle?.addEventListener('click', () => {
-    const open = simpleMore.classList.toggle('hidden');
-    simpleMore.classList.toggle('grid', open === false);
-    simpleMore.classList.toggle('sm:grid', open === false);
-    simpleToggle.innerHTML = open ? 'Show more <span aria-hidden="true">↓</span>' : 'Show less <span aria-hidden="true">↑</span>';
+    const hidden = simpleMore.classList.toggle('hidden');
+    simpleMore.classList.toggle('grid', hidden === false);
+    simpleMore.classList.toggle('sm:grid', hidden === false);
+    simpleToggle.setAttribute('aria-expanded', hidden ? 'false' : 'true');
+    simpleToggle.innerHTML = hidden ? 'Show more <span aria-hidden="true">↓</span>' : 'Show less <span aria-hidden="true">↑</span>';
   });
   const visualView = document.querySelector('[data-visual-view]');
   const modeSwitch = document.querySelector('[data-skill-mode]');
@@ -251,7 +252,8 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
       groups.forEach((g) => {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'mono-label flex items-center gap-1.5 border border-rule px-2 py-1 text-ink';
+        b.className = 'mono-label flex min-h-[44px] items-center gap-1.5 border border-rule px-3 py-1 text-ink';
+        b.setAttribute('aria-pressed', solo === g.i ? 'true' : 'false');
         if (solo !== null && solo !== g.i) b.style.opacity = '0.45';
         const dot = document.createElement('span');
         dot.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:9999px;background:${groupColor(g.i, groups.length)}`;
@@ -269,6 +271,7 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
         const on = b.dataset.mode === mode;
         b.style.background = on ? 'var(--color-ink)' : 'transparent';
         b.style.color = on ? 'var(--color-paper)' : 'var(--color-ink)';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
     };
     bar.querySelectorAll('[data-mode]').forEach((b) => {
@@ -280,6 +283,7 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
         const on = b.dataset.skillView === view;
         b.style.background = on ? 'var(--color-ink)' : 'transparent';
         b.style.color = on ? 'var(--color-paper)' : 'var(--color-ink)';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
     };
     const setView = (v) => {

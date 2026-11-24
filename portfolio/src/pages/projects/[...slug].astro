@@ -15,7 +15,7 @@ const { title, description, stack, github, demo, problem, diagram } = project.da
 ---
 <BaseLayout title={`${title} — Vishnu Shouryan Reddy`} description={description}>
   <article class="mx-auto max-w-3xl px-6 pb-24 pt-14 sm:pt-16">
-    <a href={`${base}#work`} class="mono-label link">← All work</a>
+    <a href={`${base}projects/`} class="mono-label link">← Projects</a>
 
     <header class="mt-8 border-b border-rule pb-8">
       <h1 class="text-[clamp(2.25rem,5vw,3.25rem)] leading-[1.05] tracking-[-0.02em]">{title}</h1>
@@ -43,7 +43,7 @@ const { title, description, stack, github, demo, problem, diagram } = project.da
     </div>
 
     <footer class="mt-16 flex flex-wrap items-baseline justify-between gap-4 border-t border-rule pt-6">
-      <a href={`${base}#work`} class="mono-label link">← All work</a>
+      <a href={`${base}projects/`} class="mono-label link">← Projects</a>
       <p class="mono-label flex gap-5">
         {github && <a class="link" href={github}>Source ↗</a>}
         {demo && <a class="link" href={demo}>Live ↗</a>}

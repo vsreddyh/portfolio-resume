@@ -1,0 +1,50 @@
+name: Sync site resume
+
+# Keeps the served copy tracked: whenever the canonical PDF lands on main,
+# copy it to portfolio/public/resume.pdf and commit the result back to main,
+# so a plain `git pull` refreshes the resume with no local build step.
+#
+# No self-loop: this workflow only triggers on resume/Main_Resume.pdf, but
+# its own commit only touches portfolio/public/resume.pdf. That commit does
+# trigger deploy-portfolio.yml (paths: portfolio/**) — which is intended.
+#
+# Note: this pushes directly to main, which is an exception to the repo's
+# PR-only branch policy, limited to this single generated file.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'resume/Main_Resume.pdf'
+      - '.github/workflows/sync-resume.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-resume
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Copy canonical resume into site public dir
+        run: |
+          set -euo pipefail
+          mkdir -p portfolio/public
+          cp resume/Main_Resume.pdf portfolio/public/resume.pdf
+      - name: Commit back to main if changed
+        run: |
+          set -euo pipefail
+          if git status --porcelain portfolio/public/resume.pdf | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add portfolio/public/resume.pdf
+            git commit -m "chore(portfolio): sync resume.pdf from resume/Main_Resume.pdf"
+            git push
+          else
+            echo "resume.pdf already in sync; nothing to commit."
+          fi
