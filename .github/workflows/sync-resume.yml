@@ -31,6 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # Full history: this workflow pushes back to main, and a shallow
+          # clone risks push rejection when main has moved.
+          fetch-depth: 0
       - name: Copy canonical resume into site public dir
         run: |
           set -euo pipefail
