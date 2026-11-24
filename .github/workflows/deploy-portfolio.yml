@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'portfolio/**'
-      - 'resume/Main_Resume.pdf'
       - '.github/workflows/deploy-portfolio.yml'
   workflow_dispatch:
 
@@ -28,15 +27,13 @@ jobs:
           node-version: 24
           cache: npm
           cache-dependency-path: portfolio/package-lock.json
-      - name: Use Main_Resume as site resume
+      - name: Site resume must be present
         run: |
           set -euo pipefail
-          if [ ! -f resume/Main_Resume.pdf ]; then
-            echo "::error file=resume/Main_Resume.pdf::tracked PDF is missing; it is the file this site serves"
+          if [ ! -f portfolio/public/resume.pdf ]; then
+            echo "::error file=portfolio/public/resume.pdf::missing; it is synced from resume/Main_Resume.pdf by sync-resume.yml"
             exit 1
           fi
-          mkdir -p portfolio/public
-          cp resume/Main_Resume.pdf portfolio/public/resume.pdf
       - name: Install
         run: npm ci
         working-directory: portfolio

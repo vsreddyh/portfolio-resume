@@ -2,10 +2,12 @@
 %----------------------------------------------------------------------------------------
 
 \documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage[left=0.65in, right=0.65in, top=0.31in, bottom=0.45in]{geometry}
 \usepackage{titlesec}
 \usepackage{enumitem}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{parskip}
 \usepackage{xcolor}
 \usepackage{graphicx}
@@ -32,8 +34,8 @@
 %----------------------------------------------------------------------------------------
 \begin{center}
   {\LARGE \textbf{Vishnu Shouryan Reddy}}\\[0.3em]
-  shouryanreddyh@gmail.com \\[0.3em]
-  LinkedIn: linkedin.com/in/vsreddyh \textbar{} GitHub: github.com/vsreddyh
+  \href{mailto:shouryanreddyh@gmail.com}{shouryanreddyh@gmail.com} \\[0.3em]
+  LinkedIn: \href{https://linkedin.com/in/vsreddyh}{linkedin.com/in/vsreddyh} \textbar{} GitHub: \href{https://github.com/vsreddyh}{github.com/vsreddyh}
 \end{center}
 \vspace{-0.8em}
 
@@ -69,7 +71,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeItem{Built a role-based web platform for social media advertising agencies using React, Node.js, and Convex to manage influencer partnerships, from campaign creation to collaboration offer distribution.}
 \resumeItem{Built AI-powered content tools using React, Node.js, and SQLite, including a trending reel-idea generator combining real-time news aggregation with LLM-based content generation, and a cost-optimized text-to-video pipeline with prompt and model-inference optimization.}
 \resumeItem{Worked on application customization and extension development for ProCAD (Revalize), developing User and Domain Extensions to deliver additional functionality based on client requirements.}
-\resumeItem{Led a team of 3 (self + 2 interns) in building an event-driven, low-latency trading infrastructure using Node.js, ClickHouse, and PostgreSQL for real-time market alerts and fast order execution.}
+\resumeItem{Led 2 interns in building an event-driven, low-latency trading infrastructure using Node.js, ClickHouse, and PostgreSQL for real-time market alerts and fast order execution.}
 \resumeSubHeadingListEnd
 
 \textbf{Software Engineer Intern} \hfill {Jan 2026 -- Jun 2026}
@@ -105,7 +107,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \section*{Projects}
 
 \resumeSubheading
-{Agento: Personal Productivity Stack (Android + Go API)}{}{Kotlin, Jetpack Compose, Go, MCP, Podman Compose, MongoDB Atlas}{github.com/vsreddyh/Agento}
+{Agento: Personal Productivity Stack (Android + Go API)}{}{Kotlin, Jetpack Compose, Go, MCP, Podman Compose, MongoDB Atlas}{\href{https://github.com/vsreddyh/Agento}{github.com/vsreddyh/Agento}}
 \resumeSubHeadingListStart
 \resumeItem{Built a personal productivity stack: a Kotlin/Jetpack Compose Android app (tasks, projects, files, mail reports, Health Connect sync, settings) against a Go health-api behind an nginx proxy, persisting to MongoDB Atlas.}
 \resumeItem{Wrote six Go MCP servers (task, project, money, cookbook, health-check, reports) used from T3 Code on the host against the same Atlas database the phone reads; Gmail goes through an extra server limited to read and label changes.}
@@ -115,16 +117,16 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Schedio: Project Sharing Platform}{}{React, Node, Express, Gemini API, MongoDB, Docker, Vercel}{github.com/vsreddyh/schedio}
+{Schedio: Project Sharing Platform}{}{React, Node, Express, Gemini API, MongoDB, Docker, Vercel}{\href{https://github.com/vsreddyh/schedio}{github.com/vsreddyh/schedio}}
 \resumeSubHeadingListStart
 \resumeItem{Built a full-stack collaboration platform connecting students, colleges, and recruiters for project discovery, with email + JWT + session auth and role-based access across three user types.}
 \resumeItem{Implemented tokenized + regex hybrid search with language/domain filters, recruiter bookmarking, likes/comments, and college-side monthly analytics rendered with Chart.js.}
 \resumeItem{Enabled ZIP, video, and image uploads to GridFS with a file-tree code viewer, per-file AI explanations via Gemini, and description plagiarism checks via RapidAPI.}
 \resumeItem{Added password reset via Gmail templates and print-friendly profiles; ships via Docker for dev/production, with live access via Vercel.}
-\resumeItem{\textbf{Demo:} schedio-coral.vercel.app}
+\resumeItem{\textbf{Demo:} \href{https://schedio-coral.vercel.app}{schedio-coral.vercel.app}}
 \resumeSubHeadingListEnd
 
-\resumeSubheading{Identiscan: Scalable Face Recognition Based Attendance System}{}{React, TailwindCSS, Node, Express, Flask, MongoDB, ElectronJS}{github.com/vsreddyh/identiscan}
+\resumeSubheading{Identiscan: Scalable Face Recognition Based Attendance System}{}{React, TailwindCSS, Node, Express, Flask, MongoDB, ElectronJS}{\href{https://github.com/vsreddyh/identiscan}{github.com/vsreddyh/identiscan}}
 \resumeSubHeadingListStart
 \resumeItem{Built a self hostable attendance system: an Express/Mongoose API, a Flask service running dlib embeddings via face\_recognition with a 0.6 match threshold, and two React SPAs backed by MongoDB with enrollment photos in GridFS.}
 \resumeItem{Encoded attendance policy server-side: check-in before 12:00, check-out after a 6-hour gap, one in/out pair per day, gated on an activated teaching day; per-student percentage recalculates against active days on checkout.}
@@ -133,7 +135,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{github.com/vsreddyh/Minio-S3}
+{Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{\href{https://github.com/vsreddyh/Minio-S3}{github.com/vsreddyh/Minio-S3}}
 \resumeSubHeadingListStart
 \resumeItem{Designed an event-driven, cost-optimized media ingestion pipeline: uploads hit MinIO for fast, bursty ingest. A nightly mirror syncs to S3 and purges MinIO. Access is short-lived via signed S3 URLs.}
 \resumeItem{Reduced S3 costs by cutting noisy request overhead and only retaining curated files in S3.}
@@ -142,7 +144,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Saanjh Sahayak: Clinical Decision Support Mobile App}{}{React Native, Expo, Nativewind, Node, Express, Mongoose, Gemini API, MongoDB, Vercel}{github.com/vsreddyh/mysaanj}
+{Saanjh Sahayak: Clinical Decision Support Mobile App}{}{React Native, Expo, Nativewind, Node, Express, Mongoose, Gemini API, MongoDB, Vercel}{\href{https://github.com/vsreddyh/mysaanj}{github.com/vsreddyh/mysaanj}}
 \resumeSubHeadingListStart
 \resumeItem{Built a cross-platform prototype (archived) to assist doctors in old-age homes: caretakers create patients and upload lab-report PDFs from a 10-screen Expo app; an 18-endpoint Express API stores reports in GridFS.}
 \resumeItem{Implemented a two-stage Gemini 1.5 Flash pipeline: extract structured health parameters with pdf-parse (rejecting non-medical uploads via a negative example), then write summary, precautions, severity 0-10 and specialist routing under the patient's unverified reports; a doctor's note moves a report to verified.}
@@ -150,7 +152,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Rouge Automaton: Go Discord RAG Bot}{}{Go, discordgo, MongoDB, Podman Compose}{github.com/vsreddyh/rouge\_automaton}
+{Rogue Automaton: Go Discord RAG Bot}{}{Go, discordgo, MongoDB, Podman Compose}{\href{https://github.com/vsreddyh/rogue_automaton}{github.com/vsreddyh/rogue\_automaton}}
 \resumeSubHeadingListStart
 \resumeItem{Built a Go Discord bot serving game intel via direct gateway plus OpenCode relay client (up to 10 tool rounds), backed by MongoDB exact-match tools with cited context and client-side rate limiting.}
 \resumeItem{Implemented wiki/catalog ingestion: daily ETag-cached gear sync, wiki crawl for units/world, RecentChanges watcher, and Training Manual war status with staleness guard.}
@@ -159,7 +161,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{LeetCode Scoreboard: Competitive Practice Tracker}{}{Next.js, TypeScript, MongoDB, Mongoose, Web Push, ECharts}{github.com/vsreddyh/leetcode-scoreboard}
+{LeetCode Scoreboard: Competitive Practice Tracker}{}{Next.js, TypeScript, MongoDB, Mongoose, Web Push, ECharts}{\href{https://github.com/vsreddyh/leetcode-scoreboard}{github.com/vsreddyh/leetcode-scoreboard}}
 \resumeSubHeadingListStart
 \resumeItem{Built a Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 $-$ acceptance rate) via the LeetCode GraphQL API, so harder problems score more.}
 \resumeItem{Implemented a five-minute external cron sync that upserts submissions into MongoDB while the dashboard reads pre-aggregated daily and total scores without touching LeetCode.}
@@ -168,7 +170,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubHeadingListEnd
 
 \resumeSubheading
-{Daily Gita: Offline Multilingual Verse App}{}{React Native, Expo, expo-sqlite, Nativewind, Scrapy}{github.com/vsreddyh/Daily\_Gita}
+{Daily Gita: Offline Multilingual Verse App}{}{React Native, Expo, expo-sqlite, Nativewind, Scrapy}{\href{https://github.com/vsreddyh/Daily_Gita}{github.com/vsreddyh/Daily\_Gita}}
 \resumeSubHeadingListStart
 \resumeItem{Built an Expo verse reader (file-based routing, drawer/tab navigation, expo-sqlite store) backed by three Scrapy spiders (English, Hindi, Telugu) compiled to a 2.8 MB bundled SQLite asset of 701 verses; retired the app.}
 \resumeItem{Kept the habit without the app: a scheduled T3 task fetches a verse from the internet once daily and opens a thread on it with text, translations, and commentary.}
