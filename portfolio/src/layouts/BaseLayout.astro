@@ -72,16 +72,19 @@ const nav = [
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper">Skip to content</a>
     <header class="sticky top-0 z-50 border-b border-rule bg-paper/95 backdrop-blur-sm">
       <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6" aria-label="Main">
-        <a href={`${base}#home`} class="font-mono text-sm tracking-tight text-ink">
+        <a href={`${base}#home`} class="inline-flex min-h-[44px] items-center font-mono text-sm tracking-tight text-ink">
           vsreddyh
         </a>
-        <div class="hidden items-center gap-7 text-sm md:flex">
+        <div class="hidden items-center gap-6 text-[0.9375rem] md:flex">
           {nav.map((item) => (
             <a class="nav-link" data-spy={item.id} href={item.href}>
               {item.label}
             </a>
           ))}
-          <a href={`${base}resume.pdf`} class="text-ink underline decoration-rule underline-offset-4 transition hover:text-rust hover:decoration-rust">
+          <a
+            href={`${base}resume.pdf`}
+            class="inline-flex min-h-[44px] items-center px-1 text-ink underline decoration-rule underline-offset-4 transition hover:text-rust hover:decoration-rust"
+          >
             Résumé
           </a>
         </div>
@@ -90,13 +93,14 @@ const nav = [
           type="button"
           data-theme-toggle
           class="mono-label flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center border border-rule px-2.5 py-1.5 text-ink transition hover:text-rust"
-          aria-label="Toggle dark theme"
+          aria-label="Dark theme"
+          aria-pressed="false"
         >
           <span data-theme-icon-moon>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
           </span>
           <span data-theme-icon-sun class="hidden">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           </span>
         </button>
         <details class="relative md:hidden" data-menu>
@@ -105,17 +109,18 @@ const nav = [
           </summary>
           <div class="absolute right-0 mt-2 flex w-48 flex-col border border-rule bg-paper-raised p-1 text-sm shadow-sm">
             {nav.map((item) => (
-              <a class="px-3 py-2 text-ink-soft hover:bg-paper hover:text-ink" href={item.href}>
+              <a class="flex min-h-[44px] items-center px-3 text-ink-soft hover:bg-paper hover:text-ink" href={item.href}>
                 {item.label}
               </a>
             ))}
-            <a class="px-3 py-2 text-ink-soft hover:bg-paper hover:text-ink" href={`${base}resume.pdf`}>
+            <a class="flex min-h-[44px] items-center px-3 text-ink-soft hover:bg-paper hover:text-ink" href={`${base}resume.pdf`}>
               Résumé
             </a>
           </div>
         </details>
         </div>
       </nav>
+      <div class="scroll-progress" data-progress aria-hidden="true"></div>
     </header>
 
     <main id="main">
@@ -153,9 +158,9 @@ const nav = [
         document.querySelectorAll('[data-theme-icon-sun]').forEach((el) =>
           el.classList.toggle('hidden', !dark),
         );
-        document.querySelectorAll('[data-theme-toggle]').forEach((btn) =>
-          btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme'),
-        );
+        document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+          btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+        });
       }
       function setTheme(theme) {
         if (theme === 'dark') document.documentElement.dataset.theme = 'dark';
@@ -201,6 +206,49 @@ const nav = [
             menu.removeAttribute('open'),
           );
         });
+
+        // Reading progress: one hairline under the header.
+        const bar = document.querySelector('[data-progress]');
+        let ticking = false;
+        const paintProgress = () => {
+          ticking = false;
+          if (!bar) return;
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+          bar.style.transform = `scaleX(${p})`;
+        };
+        if (bar) {
+          document.addEventListener('scroll', () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(paintProgress);
+          }, { passive: true });
+          window.addEventListener('resize', paintProgress, { passive: true });
+          paintProgress();
+        }
+
+        // Reveal below-the-fold blocks, never the first screen. Off entirely
+        // for readers who ask for reduced motion.
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if ('IntersectionObserver' in window && !reduced) {
+          const items = [...document.querySelectorAll('[data-reveal]')].filter(
+            (el) => el.getBoundingClientRect().top > window.innerHeight,
+          );
+          const ro = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (!entry.isIntersecting) continue;
+                entry.target.classList.add('is-in');
+                ro.unobserve(entry.target);
+              }
+            },
+            { rootMargin: '0px 0px -6% 0px', threshold: 0.05 },
+          );
+          items.forEach((el) => {
+            el.classList.add('will-reveal');
+            ro.observe(el);
+          });
+        }
 
         const links = document.querySelectorAll('[data-spy]');
         const sections = [...links]

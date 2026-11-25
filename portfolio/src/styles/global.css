@@ -11,6 +11,7 @@
 @theme {
   --color-paper: #f1ece3;
   --color-paper-raised: #f7f3ea;
+  --color-paper-sunk: #ece6da;
   --color-ink: #171512;
   --color-ink-soft: #3b352c;
   --color-muted: #6d6558;
@@ -21,6 +22,7 @@
   --color-codeblock-fg: #f4f1e8;
   --color-select: #e8d9cd;
   --color-rowhover: #faf6ee;
+  --color-grid: #d9d2c3;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
@@ -31,6 +33,7 @@
 [data-theme="dark"] {
   --color-paper: #161310;
   --color-paper-raised: #1e1a15;
+  --color-paper-sunk: #120f0d;
   --color-ink: #e9e2d3;
   --color-ink-soft: #cfc5b1;
   --color-muted: #9a8d76;
@@ -41,6 +44,7 @@
   --color-codeblock-fg: #e8e2d4;
   --color-select: #4a3a2c;
   --color-rowhover: #221d16;
+  --color-grid: #2a251d;
 }
 
 html {
@@ -81,8 +85,8 @@ h2,
 /* Small caps metadata: dates, stacks, labels, counts. */
 .mono-label {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.13em;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-muted);
   line-height: 1.5;
@@ -102,47 +106,136 @@ h2,
   text-decoration-color: var(--color-rust);
 }
 
-/* Quiet text action: no pill, no fill. */
+/* Actions: 44px tall, so they are comfortable on touch. */
 .btn {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--color-rule);
   font-size: 0.9375rem;
   color: var(--color-ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-ink);
-  padding-bottom: 0.1rem;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  background: transparent;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 }
 .btn:hover {
   color: var(--color-rust);
   border-color: var(--color-rust);
 }
+.btn-solid {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-paper);
+}
+.btn-solid:hover {
+  background: var(--color-rust);
+  border-color: var(--color-rust);
+  color: var(--color-paper);
+}
+
+/* Section marker: a short rust rule, then a quiet number and name. */
+.section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.section-kicker::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: var(--color-rust);
+  flex: none;
+}
+
+/* Hero blueprint dots: texture without an image. */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(var(--color-grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 72%);
+}
+
+.stat-value {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  line-height: 1;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* One-pixel reading progress under the header. */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--color-rust);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
+}
+
+/* Reveal-on-scroll. Elements below the fold get .will-reveal from script, so
+   a no-JS reader (and the first screen) always sees content. */
+.will-reveal {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.will-reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .will-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* Work index: rule-separated rows, not cards. */
 .row {
   display: grid;
-  grid-template-columns: 2rem 1fr 1.25rem;
+  grid-template-columns: 2rem minmax(0, 1fr) 1.25rem;
   gap: 1rem;
-  align-items: baseline;
+  align-items: start;
   padding: 1.6rem 0.25rem;
   border-top: 1px solid var(--color-rule);
   text-decoration: none;
   color: inherit;
-  transition: background-color 0.15s ease;
+  box-shadow: inset 2px 0 0 transparent;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
 }
 .row:last-of-type {
   border-bottom: 1px solid var(--color-rule);
 }
 @media (min-width: 640px) {
   .row {
-    grid-template-columns: 2.5rem 1fr 12rem 1.5rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr) 1.5rem;
     gap: 1.75rem;
     padding: 1.8rem 0.35rem;
   }
 }
 .row:hover {
   background-color: var(--color-rowhover);
+  box-shadow: inset 2px 0 0 var(--color-rust);
+}
+.row:focus-visible {
+  background-color: var(--color-rowhover);
+  box-shadow: inset 2px 0 0 var(--color-rust);
 }
 .row .row-title {
   transition: color 0.15s ease;
@@ -166,6 +259,7 @@ h2,
 }
 .row .row-arrow {
   color: var(--color-muted);
+  padding-top: 0.45rem;
   transition: transform 0.15s ease, color 0.15s ease;
 }
 .row:hover .row-arrow {
@@ -178,10 +272,15 @@ h2,
   outline-offset: 3px;
 }
 
-/* Nav: current section gets a hairline, not a pill. */
+/* Nav: current section gets a hairline, not a pill. Links are 44px tall so
+   they are comfortable targets on touch screens. */
 .nav-link {
   position: relative;
-  color: var(--color-muted);
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.25rem;
+  color: var(--color-ink-soft);
   text-decoration: none;
   transition: color 0.15s ease;
 }
@@ -194,7 +293,7 @@ h2,
   position: absolute;
   left: 0;
   right: 100%;
-  bottom: -6px;
+  bottom: 0.5rem;
   height: 1px;
   background: var(--color-rust);
   transition: right 0.2s ease;
