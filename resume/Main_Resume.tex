@@ -12,6 +12,8 @@
 \usepackage{xcolor}
 \usepackage{graphicx}
 
+\usepackage[none]{hyphenat}
+\sloppy
 \titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
 \setlist[itemize]{noitemsep, topsep=1pt, left=10pt}
 
@@ -44,7 +46,7 @@
 %----------------------------------------------------------------------------------------
 \section*{Professional Summary}
 
-Software Engineer with experience in full-stack web development, mobile applications, cloud technologies, and AI-powered automation. Passionate about building scalable, cost-efficient systems and developer tools, with a focus on system design: event-driven workflows, distributed storage, caching, and low-latency architectures. Currently focused on automation workflows and the development of Agento, a personal productivity application.
+Software Engineer with experience in full-stack web development, mobile applications, cloud technologies, and AI-powered automation. Passionate about building scalable, cost-efficient systems and developer tools, with a focus on system design: event-driven workflows, distributed storage, and caching. Currently focused on automation workflows and the development of Agento, a personal productivity application.
 
 %----------------------------------------------------------------------------------------
 % EDUCATION
@@ -52,7 +54,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \section*{Education}
 
 \resumeSubheading
-{Keshav Memorial Institute of Technology, Hyderabad}{2022 -- 2026}
+{Keshav Memorial Institute of Technology, Hyderabad}{2022 - 2026}
 {B.Tech in Computer Science and Engineering}{} \\
 \textbf{Relevant Coursework:} Computer Networks, Operating Systems, Database Management, Software Engineering
 
@@ -63,22 +65,22 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \section*{Experience}
 
 \resumeSubheading
-{5th Bridge Data Technologies}{Jan 2026 -- Present}
+{5th Bridge Data Technologies}{Jan 2026 - Present}
 {Hyderabad}{}
 
-\textbf{Software Engineer} \hfill {Jun 2026 -- Present}
+\textbf{Software Engineer} \hfill {Jun 2026 - Present}
 \resumeSubHeadingListStart
-\resumeItem{Built a role-based web platform for social media advertising agencies using React, Node.js, and Convex to manage influencer partnerships, from campaign creation to collaboration offer distribution.}
-\resumeItem{Built AI-powered content tools using React, Node.js, and SQLite, including a trending reel-idea generator combining real-time news aggregation with LLM-based content generation, and a cost-optimized text-to-video pipeline with prompt and model-inference optimization.}
+\resumeItem{Built a role-based web platform for social media advertising agencies to manage influencer partnerships, from campaign creation to collaboration offer distribution.}
+\resumeItem{Built AI-powered content tools, including a trending reel-idea generator combining news aggregation with LLM-based content generation, and a text-to-video pipeline with prompt and model-inference optimization.}
 \resumeItem{Worked on application customization and extension development for ProCAD (Revalize), developing User and Domain Extensions to deliver additional functionality based on client requirements.}
-\resumeItem{Led 2 interns in building an event-driven, low-latency trading infrastructure using Node.js, ClickHouse, and PostgreSQL for real-time market alerts and fast order execution.}
+\resumeItem{Led 2 interns in building an event-driven trading infrastructure for market alerts and fast order execution.}
 \resumeSubHeadingListEnd
 
-\textbf{Software Engineer Intern} \hfill {Jan 2026 -- Jun 2026}
+\textbf{Software Engineer Intern} \hfill {Jan 2026 - Jun 2026}
 \resumeSubHeadingListStart
-\resumeItem{Designed and evaluated predictive models using Python, scikit-learn, and Pandas, combining machine learning and rule-based approaches with simulation and backtesting techniques.}
-\resumeItem{Built an NLP pipeline using Python, PyTorch, and Transformers to extract insights from unstructured text data.}
-\resumeItem{Implemented systems using Python, an LLM, and a search layer to verify signals for real-time identification of emerging trends from continuous data streams.}
+\resumeItem{Designed and evaluated predictive models, combining machine learning and rule-based approaches with simulation and backtesting techniques.}
+\resumeItem{Built an NLP pipeline to extract insights from unstructured text data.}
+\resumeItem{Implemented systems using an LLM and a search layer to verify signals for identification of emerging trends from continuous reddit data streams.}
 \resumeSubHeadingListEnd
 
 
@@ -137,7 +139,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeSubheading
 {Anonymous Image Gallery: Cost Optimized Image Ingestion Pipeline}{}{React, FastAPI, Redis, MongoDB, MinIO, Docker Compose, Amazon S3}{\href{https://github.com/vsreddyh/Minio-S3}{github.com/vsreddyh/Minio-S3}}
 \resumeSubHeadingListStart
-\resumeItem{Designed an event-driven, cost-optimized media ingestion pipeline: uploads hit MinIO for fast, bursty ingest. A nightly mirror syncs to S3 and purges MinIO. Access is short-lived via signed S3 URLs.}
+\resumeItem{Designed an event-driven, tiered media ingestion pipeline: uploads hit MinIO for fast, bursty ingest. A nightly mirror syncs to S3 and purges MinIO. Access is short-lived via signed S3 URLs.}
 \resumeItem{Reduced S3 costs by cutting noisy request overhead and only retaining curated files in S3.}
 \resumeItem{Developed a FastAPI backend that issues presigned URLs. Stores a list of images in MongoDB. Used Redis for caching signed URLs, cutting latency on repeat access.}
 \resumeItem{Containerized the stack with Docker Compose. Bun/Vite frontend, FastAPI backend, MongoDB, Redis, and MinIO for reproducible local and cloud deployment.}
@@ -166,7 +168,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeItem{Built a Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 $-$ acceptance rate) via the LeetCode GraphQL API, so harder problems score more.}
 \resumeItem{Implemented a five-minute external cron sync that upserts submissions into MongoDB while the dashboard reads pre-aggregated daily and total scores without touching LeetCode.}
 \resumeItem{Scores aggregate per user per day (IST), keeping daily and all-time totals consistent across syncs.}
-\resumeItem{Added a password-protected admin panel for tracked-user management and manual sync, plus Web Push notifications, PWA install support, dark/light theming, and a cumulative ECharts progress chart with 1D--ALL ranges and per-range growth badges.}
+\resumeItem{Added a password-protected admin panel for tracked-user management and manual sync, plus Web Push notifications, PWA install support, dark/light theming, and a cumulative ECharts progress chart with 1D-ALL ranges and per-range growth badges.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading

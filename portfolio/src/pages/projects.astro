@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { projectContext } from '../lib/project-meta';
 
 const base = import.meta.env.BASE_URL;
 const all = await getCollection('projects');
@@ -11,7 +12,7 @@ const sorted = all.sort((a, b) => a.data.order - b.data.order);
   description="Every project: featured systems and the rest of the archive."
 >
   <article class="mx-auto max-w-6xl px-6 pb-24 pt-14 sm:pt-16">
-    <a href={base} class="mono-label link">← Home</a>
+    <a href={base} class="mono-label link inline-flex min-h-[44px] items-center">← Home</a>
 
     <header class="mt-8 pb-8">
       <h1 class="text-[clamp(2.25rem,5vw,3.25rem)] leading-[1.05] tracking-[-0.02em]">All projects</h1>
@@ -22,14 +23,13 @@ const sorted = all.sort((a, b) => a.data.order - b.data.order);
 
     <div class="mt-10">
       {sorted.map((p, i) => (
-        <a href={`${base}projects/${p.id}/`} class="row" aria-label={p.data.title}>
+        <a href={`${base}projects/${p.id}/`} class="row">
           <span class="mono-label">0{i + 1}</span>
           <span>
             <span class="row-title block text-2xl leading-snug">{p.data.title}</span>
             <span class="mt-1 block max-w-xl text-sm leading-relaxed text-muted">{p.data.description}</span>
-            <span class="mono-label mt-2 block sm:hidden">{p.data.stack.slice(0, 3).join(' · ')}</span>
+            <span class="mono-label mt-2 block">{projectContext(p.data)} · {p.data.stack.slice(0, 3).join(' · ')}</span>
           </span>
-          <span class="mono-label hidden text-right sm:block">{p.data.stack.slice(0, 3).join(' · ')}</span>
           <span class="row-arrow text-right" aria-hidden="true">↗</span>
         </a>
       ))}
