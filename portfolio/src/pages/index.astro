@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SkillField from '../components/SkillField.astro';
+import { projectContext } from '../lib/project-meta';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
@@ -164,7 +165,7 @@ const now = [
             <span>
               <span class="row-title block text-2xl leading-snug">{p.data.title}</span>
               <span class="mt-1 block max-w-xl text-sm leading-relaxed text-muted">{p.data.description}</span>
-              <span class="mono-label mt-2 block">{p.data.stack.slice(0, 3).join(' · ')}</span>
+              <span class="mono-label mt-2 block">{projectContext(p.data)} · {p.data.stack.slice(0, 3).join(' · ')}</span>
             </span>
             <span class="row-arrow text-right" aria-hidden="true">↗</span>
           </a>

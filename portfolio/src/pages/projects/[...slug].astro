@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Mermaid from '../../components/Mermaid.astro';
 import { getCollection, render } from 'astro:content';
+import { projectContext } from '../../lib/project-meta';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -13,14 +14,15 @@ const { Content } = await render(project);
 const base = import.meta.env.BASE_URL;
 const { title, description, stack, github, demo, problem, diagram } = project.data;
 ---
-<BaseLayout title={`${title} — Vishnu Shouryan Reddy`} description={description}>
+<BaseLayout title={`${title} — Vishnu Shouryan Reddy`} description={description} ogType="article">
   <article class="mx-auto max-w-3xl px-6 pb-24 pt-14 sm:pt-16">
     <a href={`${base}projects/`} class="mono-label link inline-flex min-h-[44px] items-center">← Projects</a>
 
     <header class="mt-8 border-b border-rule pb-8">
       <h1 class="text-[clamp(2.25rem,5vw,3.25rem)] leading-[1.05] tracking-[-0.02em]">{title}</h1>
       <p class="mt-4 max-w-[40rem] text-lg leading-[1.65] text-ink-soft">{description}</p>
-      <p class="mono-label mt-6">{stack.join(' · ')}</p>
+      <p class="mono-label mt-5">{projectContext(project.data)}</p>
+      <p class="mono-label mt-2">{stack.join(' · ')}</p>
       <p class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
         {github && <a class="btn" href={github}>Source <span aria-hidden="true">↗</span></a>}
         {demo && <a class="btn" href={demo}>Live <span aria-hidden="true">↗</span></a>}
