@@ -95,7 +95,7 @@ const nav = [
           type="button"
           data-theme-toggle
           class="mono-label flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center border border-rule px-2.5 py-1.5 text-ink transition hover:text-rust"
-          aria-label="Dark theme"
+          aria-label="Toggle dark theme"
           aria-pressed="false"
         >
           <span data-theme-icon-moon>
@@ -194,7 +194,7 @@ const nav = [
         };
         if (toTop) {
           toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-          document.addEventListener('scroll', toggleToTop, { passive: true });
+          window.addEventListener('scroll', toggleToTop, { passive: true });
           toggleToTop();
         }
         document.querySelectorAll('[data-menu]').forEach((menu) => {
@@ -220,7 +220,7 @@ const nav = [
           bar.style.transform = `scaleX(${p})`;
         };
         if (bar) {
-          document.addEventListener('scroll', () => {
+          window.addEventListener('scroll', () => {
             if (ticking) return;
             ticking = true;
             requestAnimationFrame(paintProgress);
