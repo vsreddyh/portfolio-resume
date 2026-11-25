@@ -8,10 +8,12 @@ const base = import.meta.env.BASE_URL;
 const all = await getCollection('projects');
 const featured = all.filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order);
 
+// Live-proof strip. Static fallbacks render first; a tiny client script below
+// refreshes them from the GitHub API and the LeetCode scoreboard proxy.
 const stats = [
-  { value: String(all.length).padStart(2, '0'), label: 'projects in the index' },
-  { value: '06', label: 'MCP servers I run' },
-  { value: '02', label: 'engineers led' },
+  { key: 'repos', value: '20', label: 'public repos on GitHub' },
+  { key: 'solved', value: '503', label: 'LeetCode solved' },
+  { key: 'rating', value: '1627', label: 'LeetCode contest rating' },
 ];
 
 const now = [
@@ -27,14 +29,19 @@ const now = [
   <section id="home" class="relative overflow-hidden">
     <div class="hero-grid" aria-hidden="true"></div>
     <div class="relative mx-auto max-w-6xl px-6 pb-20 pt-20 sm:pt-28">
-      <p class="section-kicker">Software engineer · Hyderabad</p>
+      <p class="section-kicker section-kicker--accent">Software engineer · Hyderabad</p>
       <h1 class="mt-5 max-w-4xl text-[clamp(2.6rem,6.5vw,4.75rem)] leading-[1.02] tracking-[-0.02em]">
         Vishnu Shouryan Reddy
       </h1>
-      <p class="mt-6 max-w-[34rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
-        I build the services, clients and cron jobs that keep a product running
-        without me — and I write down what each system still gets wrong.
-      </p>
+      <div class="mt-6 max-w-[34rem] leading-[1.7]">
+        <p class="text-[0.95rem] text-muted">
+          I used to design and build projects.
+        </p>
+        <p class="mt-2 text-balance text-[1.25rem] font-medium leading-[1.6] text-ink">
+          <strong class="font-bold text-rust">Now</strong>{' '}
+          I design, build, and orchestrate <span class="text-rust">products</span>.
+        </p>
+      </div>
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a href="#work" class="btn btn-solid">
           See the work <span aria-hidden="true">↓</span>
@@ -47,11 +54,34 @@ const now = [
       <ul class="mt-14 grid max-w-2xl grid-cols-3 gap-x-6 gap-y-4 border-t border-rule pt-6">
         {stats.map((s) => (
           <li>
-            <span class="stat-value block">{s.value}</span>
+            <span class="stat-value block" data-stat={s.key}>{s.value}</span>
             <span class="mono-label mt-2 block">{s.label}</span>
           </li>
         ))}
       </ul>
+      <script>
+        (async () => {
+          try {
+            const [gh, lc] = await Promise.all([
+              fetch('https://api.github.com/users/vsreddyh').then((r) => (r.ok ? r.json() : null)),
+              fetch('https://leetcode-scoreboard.vercel.app/api/public/stats?username=vsreddyh').then((r) =>
+                r.ok ? r.json() : null,
+              ),
+            ]);
+            const set = (key, text) => {
+              const el = document.querySelector(`[data-stat="${key}"]`);
+              if (el) el.textContent = text;
+            };
+            if (gh && typeof gh.public_repos === 'number') set('repos', String(gh.public_repos));
+            if (lc) {
+              if (typeof lc.solved === 'number') set('solved', String(lc.solved));
+              if (typeof lc.rating === 'number') set('rating', String(Math.round(lc.rating)));
+            }
+          } catch {
+            /* static fallbacks stay */
+          }
+        })();
+      </script>
     </div>
   </section>
 
@@ -69,8 +99,7 @@ const now = [
         <p>
           I’m a software engineer at 5th Bridge Data Technologies. I design and
           build apps, APIs, and the orchestration that runs them. Most of my
-          work is backend: Go, Node, and Python services on Postgres,
-          ClickHouse, and MongoDB, plus the frontend to ship the whole thing
+          work is backend systems, plus the frontend to ship the whole thing
           myself. I take products from idea to production.
         </p>
         <p>
@@ -90,10 +119,10 @@ const now = [
           <span class="mono-label">Jun 2026 – present</span>
         </div>
         <ul class="mt-3 max-w-[38rem] list-disc space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed text-ink-soft">
-          <li>Built <a class="link" href="https://ohfluence.com">Ohfluence</a>, a role-based platform for social media advertising agencies (React, Node.js, Convex), from campaign creation to influencer offer distribution.</li>
-          <li>Built AI content tools (React, Node.js, SQLite) as internal products: a trending reel-idea generator over live news plus an LLM, and a cost-optimized text-to-video pipeline.</li>
+          <li>Built <a class="link" href="https://ohfluence.com">Ohfluence</a>, a role-based platform for social media advertising agencies, from campaign creation to influencer offer distribution.</li>
+          <li>Built AI content tools as internal products: a trending reel-idea generator over live news plus an LLM, and a cost-optimized text-to-video pipeline.</li>
           <li>Extended ProCAD (Revalize) with User and Domain Extensions shipped to enterprise customers.</li>
-          <li>Led 2 interns on event-driven trading infrastructure (Node.js, ClickHouse, Postgres) for real-time market alerts and order execution.</li>
+          <li>Led 2 interns on event-driven trading infrastructure for real-time market alerts and order execution.</li>
         </ul>
       </div>
       <div class="mt-8 border-t border-rule pt-6">
@@ -102,9 +131,9 @@ const now = [
           <span class="mono-label">Jan 2026 – Jun 2026</span>
         </div>
         <ul class="mt-3 max-w-[38rem] list-disc space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed text-ink-soft">
-          <li>Predictive models in Python (scikit-learn, Pandas) with simulation and backtesting, paired with rule-based approaches.</li>
-          <li>An NLP pipeline in PyTorch and Transformers that pulls insights out of unstructured text.</li>
-          <li>An LLM-plus-search layer that verifies signals for spotting emerging trends in live data streams.</li>
+          <li>Predictive models with simulation and backtesting, paired with rule-based approaches.</li>
+          <li>An NLP pipeline that pulls insights out of unstructured text.</li>
+          <li>An LLM-plus-search layer that verifies signals for spotting emerging trends in live reddit data streams.</li>
         </ul>
       </div>
     </div>

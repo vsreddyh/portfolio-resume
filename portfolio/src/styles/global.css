@@ -138,21 +138,17 @@ h2,
 
 /* Section marker: a short rust rule, then a quiet number and name. */
 .section-kicker {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-muted);
 }
-.section-kicker::before {
-  content: "";
-  width: 1.75rem;
-  height: 1px;
-  background: var(--color-rust);
-  flex: none;
+
+/* Hero-only: kicker takes the accent so it doesn't merge with the receded
+   past line below the name, which also uses the muted tone. */
+.section-kicker--accent {
+  color: var(--color-rust);
 }
 
 /* Hero blueprint dots: texture without an image. */
