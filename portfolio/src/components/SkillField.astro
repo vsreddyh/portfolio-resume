@@ -52,7 +52,7 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
   <div class="absolute right-2 top-2 flex gap-1">
     <button type="button" data-zoom-in aria-label="Zoom in" class="mono-label flex min-h-[44px] min-w-[44px] items-center justify-center border border-rule bg-paper px-2 py-1 text-ink">+</button>
     <button type="button" data-zoom-out aria-label="Zoom out" class="mono-label flex min-h-[44px] min-w-[44px] items-center justify-center border border-rule bg-paper px-2 py-1 text-ink">−</button>
-    <button type="button" data-zoom-reset aria-label="Reset view. Shows current zoom." title="Reset view" class="mono-label flex min-h-[44px] items-center border border-rule bg-paper px-3 py-1 text-ink">100%</button>
+    <button type="button" data-zoom-reset aria-label="Reset zoom, currently 100%" title="Reset view" class="mono-label flex min-h-[44px] items-center border border-rule bg-paper px-3 py-1 text-ink">100%</button>
   </div>
   <p class="sr-only">{skills.join(', ')}</p>
 </div>
@@ -603,7 +603,10 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
       }
       if (zoomLabel) {
         const pct = Math.round(cam.s * 100) + '%';
-        if (zoomLabel.textContent !== pct) zoomLabel.textContent = pct;
+        if (zoomLabel.textContent !== pct) {
+          zoomLabel.textContent = pct;
+          zoomLabel.setAttribute('aria-label', `Reset zoom, currently ${pct}`);
+        }
       }
     };
 

@@ -23,7 +23,7 @@ const sorted = all.sort((a, b) => a.data.order - b.data.order);
 
     <div class="mt-10">
       {sorted.map((p, i) => (
-        <a href={`${base}projects/${p.id}/`} class="row" aria-label={p.data.title}>
+        <a href={`${base}projects/${p.id}/`} class="row">
           <span class="mono-label">0{i + 1}</span>
           <span>
             <span class="row-title block text-2xl leading-snug">{p.data.title}</span>
