@@ -6,9 +6,9 @@
 // merges them. Zoomed out, pills merge into count bubbles.
 const CATS = [
   ['Languages', ['C#', 'Java', 'Kotlin', 'Python', 'TypeScript', 'JavaScript', 'Go', 'C++', 'Bash', 'Lua', 'SQL', 'HTML', 'CSS']],
-  ['Backend', ['ASP.NET', 'Node.js', 'Express', 'Django', 'FastAPI', 'Flask']],
+  ['Backend', ['ASP.NET', 'Node.js', 'Express', 'Django', 'FastAPI', 'Flask', 'Mongoose']],
   ['Frontend', ['React', 'Next.js', 'React Native', 'Expo', 'ElectronJS', 'TailwindCSS', 'Nativewind', 'shadcn/ui', 'Vite']],
-  ['Databases', ['SQL Server', 'PostgreSQL', 'MongoDB', 'MongoDB (Mongoose)', 'MySQL', 'SQLite', 'Redis', 'Convex', 'ClickHouse']],
+  ['Databases', ['SQL Server', 'PostgreSQL', 'MongoDB', 'MySQL', 'SQLite', 'Redis', 'Convex', 'ClickHouse']],
   ['DevOps', ['Docker', 'Docker Compose', 'Podman', 'GitHub Actions', 'AWS', 'S3', 'Vercel', 'MinIO', 'Tailscale', 'Linux']],
   ['AI / ML', ['PyTorch', 'Transformers', 'Scikit-learn', 'XGBoost', 'LightGBM', 'NumPy', 'Pandas', 'Matplotlib', 'Jupyter Notebook', 'Gemini API']],
   ['APIs', ['REST', 'GraphQL', 'Discord API', 'Calendar API', 'Web Push']],
@@ -19,12 +19,12 @@ const CATS = [
 ];
 const PROJS = [
   ['Agento', ['Kotlin', 'Go', 'MongoDB', 'Podman', 'Tailscale', 'Linux', 'Git', 'GitHub', 'Bash', 'Calendar API', 'GitHub Actions', 'Go testing']],
-  ['Schedio', ['React', 'JavaScript', 'Node.js', 'Express', 'Docker', 'Vercel', 'Gemini API', 'Postman', 'MongoDB (Mongoose)']],
+  ['Schedio', ['React', 'JavaScript', 'Node.js', 'Express', 'Docker', 'Vercel', 'Gemini API', 'Postman', 'Mongoose']],
   ['Anonymous Image Gallery', ['React', 'FastAPI', 'Python', 'Redis', 'MinIO', 'AWS', 'S3', 'Bun', 'Vite', 'Docker Compose']],
-  ['Identiscan', ['React', 'JavaScript', 'TailwindCSS', 'Node.js', 'Express', 'Flask', 'ElectronJS', 'HTML', 'CSS', 'MongoDB', 'MongoDB (Mongoose)']],
-  ['Saanjh Sahayak', ['React Native', 'Expo', 'Nativewind', 'Node.js', 'Express', 'MongoDB (Mongoose)', 'MongoDB', 'REST']],
+  ['Identiscan', ['React', 'JavaScript', 'TailwindCSS', 'Node.js', 'Express', 'Flask', 'ElectronJS', 'HTML', 'CSS', 'MongoDB', 'Mongoose']],
+  ['Saanjh Sahayak', ['React Native', 'Expo', 'Nativewind', 'Node.js', 'Express', 'Mongoose', 'MongoDB', 'REST']],
   ['Rogue Automaton', ['Go', 'Discord API', 'MongoDB', 'Podman', 'Linux']],
-  ['LeetCode Scoreboard', ['Next.js', 'TypeScript', 'MongoDB', 'MongoDB (Mongoose)', 'GraphQL', 'Web Push', 'shadcn/ui', 'Vercel']],
+  ['LeetCode Scoreboard', ['Next.js', 'TypeScript', 'MongoDB', 'Mongoose', 'GraphQL', 'Web Push', 'shadcn/ui', 'Vercel']],
   ['Daily Gita', ['Python', 'Scrapy', 'lxml', 'requests', 'gspread', 'openpyxl', 'SQLite', 'React Native', 'Expo', 'Nativewind']],
 ];
 const skills = [...new Set(CATS.flatMap(([, members]) => members))];
