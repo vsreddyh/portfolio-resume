@@ -21,7 +21,9 @@ diagram: |
 
 Each accepted problem scores `100 − acceptance rate`, pinned the first time it is accepted. An external cron hits `/api/sync` every five minutes, walks tracked users through `recentSubmissionList`, and upserts one document per user and question. The dashboard only ever reads Mongo aggregations — it never calls LeetCode — so the board renders when LeetCode is slow. New solves trigger a Web Push summary.
 
-The progress chart is cumulative per user per day in IST, over 1D to ALL ranges, fed by a dedicated `/api/history` read on the same pre-aggregated data.
+The progress chart is cumulative per user per day in IST, over 1D to ALL ranges including 3M, fed by a dedicated `/api/history` read on the same pre-aggregated data.
+
+A CORS-enabled `GET /api/public/stats?username=<handle>` endpoint proxies live solved counts plus contest rating/ranking for external sites, with 1h in-memory/CDN caching, per-IP rate limiting, and an optional username allowlist.
 
 ## Scope
 
