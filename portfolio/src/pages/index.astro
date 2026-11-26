@@ -196,9 +196,6 @@ const now = [
               <span class="mt-1 block max-w-xl text-sm leading-relaxed text-muted">{p.data.description}</span>
               <span class="mono-label mt-2 block">{projectContext(p.data)} · {p.data.stack.slice(0, 3).join(' · ')}</span>
               <span class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-                <a class="link" href={`${base}projects/${p.id}/`} aria-label={`${p.data.title}: case study`}>
-                  Case study <span aria-hidden="true">→</span>
-                </a>
                 {p.data.github && (
                   <a class="link" href={p.data.github} aria-label={`${p.data.title}: source code on GitHub`}>
                     Code <span aria-hidden="true">↗</span>
