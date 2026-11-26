@@ -6,11 +6,11 @@
 // merges them. Zoomed out, pills merge into count bubbles.
 const CATS = [
   ['Languages', ['C#', 'Java', 'Kotlin', 'Python', 'TypeScript', 'JavaScript', 'Go', 'C++', 'Bash', 'Lua', 'SQL', 'HTML', 'CSS']],
-  ['Backend', ['ASP.NET', 'Node.js', 'Express', 'Django', 'FastAPI', 'Flask', 'Mongoose']],
+  ['Backend', ['ASP.NET', 'Node.js', 'Express', 'Django', 'FastAPI', 'Flask']],
   ['Frontend', ['React', 'Next.js', 'React Native', 'Expo', 'ElectronJS', 'TailwindCSS', 'Nativewind', 'shadcn/ui', 'Vite']],
-  ['Databases', ['SQL Server', 'PostgreSQL', 'MongoDB', 'MySQL', 'SQLite', 'Redis', 'Convex', 'ClickHouse']],
+  ['Databases', ['SQL Server', 'PostgreSQL', 'MongoDB', 'Mongoose', 'MySQL', 'SQLite', 'Redis', 'Convex', 'ClickHouse']],
   ['DevOps', ['Docker', 'Docker Compose', 'Podman', 'GitHub Actions', 'AWS', 'S3', 'Vercel', 'MinIO', 'Tailscale', 'Linux']],
-  ['AI / ML', ['PyTorch', 'Transformers', 'Scikit-learn', 'XGBoost', 'LightGBM', 'NumPy', 'Pandas', 'Matplotlib', 'Jupyter', 'Gemini API']],
+  ['AI / ML', ['PyTorch', 'Transformers', 'Scikit-learn', 'XGBoost', 'LightGBM', 'NumPy', 'Pandas', 'Matplotlib', 'Jupyter Notebook', 'Gemini API']],
   ['APIs', ['REST', 'GraphQL', 'Discord API', 'Calendar API', 'Web Push']],
   ['Scraping', ['Scrapy', 'lxml', 'requests', 'gspread', 'openpyxl']],
   ['Testing', ['Go testing', 'Jest', 'React Testing Library']],
@@ -386,6 +386,10 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
       const n = parseInt(v, 16);
       return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
     };
+    // Contrast: group hues vary wildly in luminance (yellow ~1.9:1 on light
+    // paper), so all canvas text is ink on paper chips — pills, group titles
+    // and count bubbles alike. Group identity comes from the colored ring,
+    // dot, link lines and legend swatch instead of colored text.
 
     const step = (dt) => {
       for (const n of nodes) {
@@ -511,11 +515,17 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
           const r = 17 + Math.min(c, 24);
           ctx.beginPath();
           ctx.arc(cx, cy, r, 0, Math.PI * 2);
-          ctx.fillStyle = groupColor(g.i, groups.length);
-          ctx.globalAlpha = dim ? 0.25 : 0.92;
+          // Count bubble: paper chip + colored ring + ink number, the same
+          // language as pills — solid mid-luminance fills can't hit 4.5:1
+          // with either ink or paper text.
+          ctx.fillStyle = hexA(pal.paper, dim ? 0.25 : 0.95);
           ctx.fill();
+          ctx.lineWidth = 2 / cam.s;
+          ctx.strokeStyle = groupColor(g.i, groups.length);
+          ctx.globalAlpha = dim ? 0.25 : 1;
+          ctx.stroke();
           ctx.globalAlpha = 1;
-          ctx.fillStyle = hexA(pal.paper, dim ? 0.4 : 1);
+          ctx.fillStyle = hexA(pal.ink, dim ? 0.4 : 1);
           ctx.font = 'bold 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
           ctx.fillText(String(c), cx, cy + 0.5);
           ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
@@ -536,9 +546,12 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
           const r = 15 + Math.min(g.n, 20);
           ctx.beginPath();
           ctx.arc(g.x, g.y, r, 0, Math.PI * 2);
-          ctx.fillStyle = hexA(pal.rust, 0.92);
+          ctx.fillStyle = hexA(pal.paper, 0.95);
           ctx.fill();
-          ctx.fillStyle = hexA(pal.paper, 1);
+          ctx.lineWidth = 2 / cam.s;
+          ctx.strokeStyle = hexA(pal.rust, 1);
+          ctx.stroke();
+          ctx.fillStyle = hexA(pal.ink, 1);
           ctx.font = 'bold 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
           ctx.fillText(String(g.n), g.x, g.y + 0.5);
           ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
@@ -581,8 +594,9 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
         else ctx.strokeStyle = hexA(dim ? '#808080' : pal.ink, dim ? 0.25 : 0.35);
         ctx.lineWidth = 1 / (cam.s * k);
         ctx.stroke();
-        if (col && !dim) ctx.fillStyle = col;
-        else ctx.fillStyle = hexA(pal.ink, dim ? 0.15 : 0.92);
+        // Label text is always ink on the paper chip (group hues like yellow
+        // fail at ~1.9:1); the colored ring keeps the group identity.
+        ctx.fillStyle = hexA(pal.ink, dim ? 0.15 : 0.92);
         ctx.fillText(n.label, 0, 0.5);
         ctx.restore();
       }
@@ -595,8 +609,15 @@ const skills = [...new Set(CATS.flatMap(([, members]) => members))];
           const sx = (x - cam.x) * cam.s + CW / 2;
           const sy = (y - cam.y) * cam.s + CH / 2 - 16;
           const dim = solo !== null && solo !== g.i;
+          // Group titles: ink text (group hues fail as text) with a color
+          // dot for identity, matching the legend.
+          const w = ctx.measureText(g.label).width;
           ctx.globalAlpha = dim ? 0.25 : 0.9;
           ctx.fillStyle = groupColor(g.i, groups.length);
+          ctx.beginPath();
+          ctx.arc(sx - w / 2 - 12, sy, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = hexA(pal.ink, 1);
           ctx.fillText(g.label, sx, sy);
           ctx.globalAlpha = 1;
         }

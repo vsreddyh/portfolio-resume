@@ -23,15 +23,29 @@ const sorted = all.sort((a, b) => a.data.order - b.data.order);
 
     <div class="mt-10">
       {sorted.map((p, i) => (
-        <a href={`${base}projects/${p.id}/`} class="row">
+        <div class="row">
           <span class="mono-label">0{i + 1}</span>
           <span>
-            <span class="row-title block text-2xl leading-snug">{p.data.title}</span>
+            <a href={`${base}projects/${p.id}/`} class="row-title block text-2xl leading-snug">{p.data.title}</a>
             <span class="mt-1 block max-w-xl text-sm leading-relaxed text-muted">{p.data.description}</span>
             <span class="mono-label mt-2 block">{projectContext(p.data)} · {p.data.stack.slice(0, 3).join(' · ')}</span>
+            <span class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              <a class="link" href={`${base}projects/${p.id}/`} aria-label={`${p.data.title}: case study`}>
+                Case study <span aria-hidden="true">→</span>
+              </a>
+              {p.data.github && (
+                <a class="link" href={p.data.github} aria-label={`${p.data.title}: source code on GitHub`}>
+                  Code <span aria-hidden="true">↗</span>
+                </a>
+              )}
+              {p.data.demo && (
+                <a class="link" href={p.data.demo} aria-label={`${p.data.title}: live demo`}>
+                  Live demo <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </span>
           </span>
-          <span class="row-arrow text-right" aria-hidden="true">↗</span>
-        </a>
+        </div>
       ))}
     </div>
 
