@@ -108,7 +108,6 @@ const nav = [
         <details class="relative md:hidden" data-menu>
           <summary
             class="mono-label inline-flex min-h-[44px] cursor-pointer list-none items-center border border-rule px-3 py-1.5 text-ink"
-            aria-haspopup="true"
             aria-expanded="false"
             aria-controls="mobile-menu"
           >
@@ -208,25 +207,33 @@ const nav = [
         }
         // Mobile nav: a non-modal disclosure, so no focus trap — Esc closes
         // and returns focus to the summary, and outside taps close it.
+        // aria-expanded is synced both on `toggle` (user interaction) and
+        // explicitly on programmatic closes, so it never goes stale.
+        const closeMenu = (menu) => {
+          if (!menu.hasAttribute('open')) return;
+          menu.removeAttribute('open');
+          const summary = menu.querySelector('summary');
+          if (summary) summary.setAttribute('aria-expanded', 'false');
+        };
         document.querySelectorAll('[data-menu]').forEach((menu) => {
           const summary = menu.querySelector('summary');
           const sync = () => summary && summary.setAttribute('aria-expanded', menu.hasAttribute('open') ? 'true' : 'false');
           menu.addEventListener('toggle', sync);
           sync();
           menu.querySelectorAll('a').forEach((a) =>
-            a.addEventListener('click', () => menu.removeAttribute('open')),
+            a.addEventListener('click', () => closeMenu(menu)),
           );
         });
         document.addEventListener('pointerdown', (e) => {
           document.querySelectorAll('[data-menu][open]').forEach((menu) => {
             if (menu.contains(e.target)) return;
-            menu.removeAttribute('open');
+            closeMenu(menu);
           });
         });
         document.addEventListener('keydown', (e) => {
           if (e.key !== 'Escape') return;
           document.querySelectorAll('[data-menu][open]').forEach((menu) => {
-            menu.removeAttribute('open');
+            closeMenu(menu);
             const summary = menu.querySelector('summary');
             if (summary) summary.focus();
           });
@@ -275,7 +282,8 @@ const nav = [
           });
           // Full-page captures, print, and slow observers must never leave
           // sections hidden: reveal everything before printing, and force any
-          // stragglers visible shortly after load.
+          // stragglers visible shortly after load. The script can execute
+          // after `load` already fired, so check readyState first.
           const revealAll = () => {
             document.querySelectorAll('.will-reveal:not(.is-in)').forEach((el) => {
               el.classList.add('is-in');
@@ -283,7 +291,8 @@ const nav = [
             });
           };
           window.addEventListener('beforeprint', revealAll);
-          window.addEventListener('load', () => setTimeout(revealAll, 2500), { once: true });
+          if (document.readyState === 'complete') setTimeout(revealAll, 2500);
+          else window.addEventListener('load', () => setTimeout(revealAll, 2500), { once: true });
         }
 
         const links = document.querySelectorAll('[data-spy]');
