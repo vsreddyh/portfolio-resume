@@ -47,7 +47,7 @@ const now = [
           See the work <span aria-hidden="true">↓</span>
         </a>
         <a href={`${base}resume.pdf`} class="btn" download="Vishnu-Shouryan-Reddy-Resume.pdf">
-          Résumé (PDF)
+          Resume (PDF)
         </a>
         <a href="mailto:shouryanreddyh@gmail.com" class="btn">Email</a>
       </div>
@@ -103,7 +103,7 @@ const now = [
           myself. I take products from idea to production.
         </p>
         <p>
-          Have a look at my <a class="link" href={`${base}resume.pdf`} download="Vishnu-Shouryan-Reddy-Resume.pdf">Resume</a> <span aria-hidden="true">↓</span>
+          Download my <a class="link" href={`${base}resume.pdf`} download="Vishnu-Shouryan-Reddy-Resume.pdf">resume (PDF)</a> <span aria-hidden="true">↓</span>
         </p>
       </div>
     </div>
@@ -189,15 +189,26 @@ const now = [
 
       <div class="mt-10">
         {featured.map((p, i) => (
-          <a href={`${base}projects/${p.id}/`} class="row">
+          <div class="row">
             <span class="mono-label">0{i + 1}</span>
             <span>
-              <span class="row-title block text-2xl leading-snug">{p.data.title}</span>
+              <a href={`${base}projects/${p.id}/`} class="row-title block text-2xl leading-snug">{p.data.title}</a>
               <span class="mt-1 block max-w-xl text-sm leading-relaxed text-muted">{p.data.description}</span>
               <span class="mono-label mt-2 block">{projectContext(p.data)} · {p.data.stack.slice(0, 3).join(' · ')}</span>
+              <span class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                {p.data.github && (
+                  <a class="link" href={p.data.github} aria-label={`${p.data.title}: source code on GitHub`}>
+                    Code <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+                {p.data.demo && (
+                  <a class="link" href={p.data.demo} aria-label={`${p.data.title}: live demo`}>
+                    Live demo <span aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </span>
             </span>
-            <span class="row-arrow text-right" aria-hidden="true">↗</span>
-          </a>
+          </div>
         ))}
       </div>
 
@@ -226,7 +237,7 @@ const now = [
         <p class="mono-label mt-8 flex flex-wrap gap-x-6 gap-y-2">
           <a class="link" href="https://github.com/vsreddyh">GitHub ↗</a>
           <a class="link" href="https://linkedin.com/in/vsreddyh">LinkedIn ↗</a>
-          <a class="link" href={`${base}resume.pdf`}>Résumé (PDF)</a>
+          <a class="link" href={`${base}resume.pdf`}>Resume (PDF)</a>
         </p>
       </div>
     </div>
