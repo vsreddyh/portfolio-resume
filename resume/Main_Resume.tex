@@ -133,7 +133,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 \resumeItem{Built a self hostable attendance system: an Express/Mongoose API, a Flask service running dlib embeddings via face\_recognition with a 0.6 match threshold, and two React SPAs backed by MongoDB with enrollment photos in GridFS.}
 \resumeItem{Encoded attendance policy server-side: check-in before 12:00, check-out after a 6-hour gap, one in/out pair per day, gated on an activated teaching day; per-student percentage recalculates against active days on checkout.}
 \resumeItem{Built an admin console (batch, class, student, cascade deletes, batch promote, per-student history) and a kiosk UI with virtual keyboard and webcam capture, shipped as a Linux Electron app for touchscreen hardware.}
-\resumeItem{Deployed hallway-style for batch check-ins; sessions and bcrypt hashing are in place, with route-level guards and photo cleanup on delete as the natural hardening.}
+\resumeItem{Deployed hallway-style for batch check-ins; bcrypt hashing and session scaffolding are in place, while admin/compare routes remain public pending route-level guards. Cascade deletes now clean up GridFS enrollment photos.}
 \resumeSubHeadingListEnd
 
 \resumeSubheading
