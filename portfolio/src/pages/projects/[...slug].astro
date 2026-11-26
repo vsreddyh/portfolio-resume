@@ -12,7 +12,8 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 const base = import.meta.env.BASE_URL;
-const { title, description, stack, github, demo, problem, diagram } = project.data;
+const { title, description, stack, github, demo, problem, diagram, image, imageAlt, imageWidth, imageHeight } = project.data;
+const imageSrc = image ? `${base}${image.replace(/^\//, '')}` : null;
 ---
 <BaseLayout title={`${title} — Vishnu Shouryan Reddy`} description={description} ogType="article">
   <article class="mx-auto max-w-3xl px-6 pb-24 pt-14 sm:pt-16">
@@ -28,6 +29,20 @@ const { title, description, stack, github, demo, problem, diagram } = project.da
         {demo && <a class="btn" href={demo}>Live <span aria-hidden="true">↗</span></a>}
       </p>
     </header>
+
+    {imageSrc && (
+      <figure class="mt-10">
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          width={imageWidth}
+          height={imageHeight}
+          loading="lazy"
+          decoding="async"
+          class="w-full rounded-lg border border-rule"
+        />
+      </figure>
+    )}
 
     {problem && (
       <section class="mt-10">

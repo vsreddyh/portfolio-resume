@@ -20,6 +20,13 @@ const projects = defineCollection({
     // One or two sentences: what was annoying enough to build this.
     problem: z.string(),
     diagram: z.string().optional(),
+    // Optional product visual (screenshot, photo, or architecture render).
+    // Stored under `public/projects/<slug>/`; rendered as a plain <img>
+    // so it counts for document.images and works with no-JS.
+    image: z.string().optional(),
+    imageAlt: z.string().default(''),
+    imageWidth: z.number().int().positive().optional(),
+    imageHeight: z.number().int().positive().optional(),
   }),
 });
 
