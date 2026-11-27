@@ -23,7 +23,7 @@ diagram: |
 
 Three roles, one codebase. Students upload projects, colleges see their own students' work with monthly charts, recruiters search everything with institute and domain filters.
 
-Projects are code zips, video and photos. The zips land in GridFS; the backend unzips them server-side and shows a file tree where each file gets a `gemini-2.5-flash` explanation. Descriptions go through a plagiarism service before submission. Likes, comments and recruiter bookmarks are in the same API. Auth is email plus bcrypt with Mongo-backed sessions — JWT is only used for the 10-minute password-reset link. Password reset goes out through Gmail templates. It ships with Docker files and runs on Vercel.
+Projects are code zips, video and photos. The zips land in GridFS; the backend unzips them server-side and shows a file tree where each file gets a `gemini-2.5-flash` explanation. Descriptions go through a plagiarism service before submission. Likes, comments and recruiter bookmarks are in the same API. Auth is email plus bcrypt with Mongo-backed sessions — JWT is only used for the email-verification link. Password reset goes out through Gmail templates. It ships with Docker files and runs on Vercel.
 
 ## Scope
 

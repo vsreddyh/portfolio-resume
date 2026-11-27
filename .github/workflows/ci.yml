@@ -29,15 +29,15 @@ jobs:
           node-version: 24
           cache: npm
           cache-dependency-path: portfolio/package-lock.json
-      - name: Use Main_Resume as site resume
+      - name: Use shipped one-page resume as site resume
         run: |
           set -euo pipefail
-          if [ ! -f resume/Main_Resume.pdf ]; then
-            echo "::error file=resume/Main_Resume.pdf::tracked PDF is missing; deploy-portfolio.yml ships this exact file"
+          if [ ! -f resume/exports/Software_Engineer_General.pdf ]; then
+            echo "::error file=resume/exports/Software_Engineer_General.pdf::tracked PDF is missing; deploy-portfolio.yml ships this exact file"
             exit 1
           fi
           mkdir -p portfolio/public
-          cp resume/Main_Resume.pdf portfolio/public/resume.pdf
+          cp resume/exports/Software_Engineer_General.pdf portfolio/public/resume.pdf
       - name: Install
         run: npm ci
         working-directory: portfolio
@@ -79,7 +79,7 @@ jobs:
             sudo apt-get install -y -qq poppler-utils
           fi
 
-      - name: Check shipped resume PDF matches the master source
+      - name: Check shipped resume PDFs match their sources
         run: |
           set -euo pipefail
           if [ ! -f resume/Main_Resume.pdf ]; then
@@ -107,6 +107,29 @@ jobs:
             # incomparable; flag it for the reviewer instead of guessing.
             if ! git merge-base --is-ancestor "$tex_commit" "$pdf_commit"; then
               echo "::warning file=resume/Main_Resume.tex::cannot order the master source and PDF commits; confirm the PDF was rebuilt"
+            fi
+          fi
+
+          # Same stale-PDF guard for the shipped one-page site resume.
+          if [ ! -f resume/exports/Software_Engineer_General.pdf ]; then
+            echo "::error file=resume/exports/Software_Engineer_General.pdf::tracked PDF is missing; it is the file sync-resume.yml ships"
+            exit 1
+          fi
+          site_tex_commit="$(git log -1 --format=%H -- resume/Custom_Resumes/Software_Engineer_General.tex)"
+          site_pdf_commit="$(git log -1 --format=%H -- resume/exports/Software_Engineer_General.pdf)"
+          if [ -z "$site_tex_commit" ] || [ -z "$site_pdf_commit" ]; then
+            echo "::error file=resume/Custom_Resumes/Software_Engineer_General.tex::no git history for the site resume source or PDF; cannot verify freshness"
+            exit 1
+          fi
+          echo "site source last changed in $site_tex_commit"
+          echo "site PDF last rebuilt in    $site_pdf_commit"
+          if [ "$site_tex_commit" != "$site_pdf_commit" ]; then
+            if git merge-base --is-ancestor "$site_pdf_commit" "$site_tex_commit"; then
+              echo "::error file=resume/Custom_Resumes/Software_Engineer_General.tex::resume/exports/Software_Engineer_General.pdf was not rebuilt after the last source change"
+              exit 1
+            fi
+            if ! git merge-base --is-ancestor "$site_tex_commit" "$site_pdf_commit"; then
+              echo "::warning file=resume/Custom_Resumes/Software_Engineer_General.tex::cannot order the site resume source and PDF commits; confirm the PDF was rebuilt"
             fi
           fi
 

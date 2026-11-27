@@ -2,5 +2,5 @@ node_modules/
 dist/
 .astro/
 # Exception: the synced site copy is tracked so `git pull` refreshes it
-# (synced from resume/Main_Resume.pdf by sync-resume.yml).
+# (synced from resume/exports/Software_Engineer_General.pdf by sync-resume.yml).
 !/public/resume.pdf

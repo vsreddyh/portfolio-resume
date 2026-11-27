@@ -2,6 +2,9 @@
 *.pdf
 # Exception: the shipped master resume is force-tracked so deploy-portfolio.yml can serve it.
 !Main_Resume.pdf
+# Exception: the shipped one-page site resume, copied to
+# portfolio/public/resume.pdf by sync-resume.yml.
+!exports/Software_Engineer_General.pdf
 *.aux
 *.log
 *.out

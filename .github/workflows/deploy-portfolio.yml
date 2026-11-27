@@ -31,7 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ ! -f portfolio/public/resume.pdf ]; then
-            echo "::error file=portfolio/public/resume.pdf::missing; it is synced from resume/Main_Resume.pdf by sync-resume.yml"
+            echo "::error file=portfolio/public/resume.pdf::missing; it is synced from resume/exports/Software_Engineer_General.pdf by sync-resume.yml"
             exit 1
           fi
       - name: Install
