@@ -201,7 +201,13 @@ const nav = [
           if (header) document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
         };
         window.addEventListener('scroll', syncHeader, { passive: true });
-        window.addEventListener('resize', syncHeaderH);
+        // ResizeObserver catches everything that changes bar height: menu
+        // toggle, font load, zoom, viewport resize.
+        if ('ResizeObserver' in window && header) {
+          new ResizeObserver(syncHeaderH).observe(header);
+        } else {
+          window.addEventListener('resize', syncHeaderH);
+        }
         syncHeader(); syncHeaderH();
         // Back-to-top button: hidden until the user scrolls down.
         const toTop = document.querySelector('[data-to-top]');

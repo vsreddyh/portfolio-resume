@@ -194,6 +194,9 @@ h2,
 }
 #home .btn {
   background: transparent;
+  /* Halo matching the page behind the copy: keeps ink text legible over
+     the loaded photo without a visible fill. */
+  text-shadow: 0 0 18px var(--color-paper);
 }
 #home .btn-solid {
   color: var(--color-ink);
