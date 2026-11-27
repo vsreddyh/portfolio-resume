@@ -6,7 +6,7 @@
 - `JD's/` holds job descriptions, one markdown file per JD (e.g. `Application_Engineer_Salesforce.md`).
 - `Custom_Resumes/` holds tailored resumes. Never write a custom resume into the project root or over `Main_Resume.tex`.
 - `CV/` holds cover-letter CVs: a letter explaining why the user is suitable for the role, 50–100 words only. Always write CVs as `.tex` files (never `.txt`-only), plus a matching `.txt` rendition. Never use the tailored resume generator for CVs. A cover letter is a proper business letter, not a resume: no centered resume-style header — sender block is name + email only, then date, recipient, `Re:` line, salutation, body, sign-off with name. `.txt` and `.tex` must carry identical wording and dates: change both in the same edit, then verify with `wc -w` (50–100 words each) and matching `pdftotext` word counts before finishing. Every CV `.tex` must be compiled to `exports/CV_<name>.pdf` whenever it is created or edited — a CV is not done until its PDF is rebuilt (see Compile for the `-jobname` rule).
-- `exports/` holds all compiled PDFs. Compile every `.tex` file into `exports/`; never leave PDFs in project root, `Custom_Resumes/`, or `CV/`.
+- `exports/` holds all compiled PDFs. Compile every `.tex` file into `exports/`; never leave PDFs in project root, `Custom_Resumes/`, or `CV/`. Exception: `exports/Software_Engineer_General.pdf` is the shipped one-page site resume (force-tracked via `.gitignore`) — `sync-resume.yml` copies it to `portfolio/public/resume.pdf`. Rebuild it whenever its `.tex` changes.
 
 ## Creating a custom resume for a JD
 
