@@ -151,6 +151,57 @@ h2,
   color: var(--color-rust);
 }
 
+/* Sticky header: transparent over the hero photo, solid once scrolled. */
+.site-header {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.site-header.is-top {
+  background: transparent;
+  border-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Hero photographic backdrop: stamp-removed beach photo, washed toward the
+   paper tones so text contrast is untouched. Static image: nothing to pause
+   for reduced-motion readers. Paper fallback shows if the image 404s. */
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  /* Bleed under the sticky header so the photo runs edge to edge, without
+     shifting section content. Height comes from JS; 4rem fallback. */
+  top: calc(-1 * var(--header-h, 4rem));
+  pointer-events: none;
+  background-color: var(--color-paper);
+  background-image: var(--hero-light);
+  background-size: cover;
+  background-position: center 40%;
+}
+[data-theme="dark"] .hero-photo {
+  background-image: var(--hero-dark);
+}
+.hero-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-paper) 30%, transparent) 0%,
+    transparent 22%,
+    transparent 78%,
+    var(--color-paper) 100%
+  );
+}
+#home .btn {
+  background: transparent;
+  /* Halo matching the page behind the copy: keeps ink text legible over
+     the loaded photo without a visible fill. */
+  text-shadow: 0 0 18px var(--color-paper);
+}
+#home .btn-solid {
+  color: var(--color-ink);
+}
+
 /* Hero blueprint dots: texture without an image. */
 .hero-grid {
   position: absolute;

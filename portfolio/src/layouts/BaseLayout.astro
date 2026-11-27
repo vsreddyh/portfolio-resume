@@ -72,7 +72,7 @@ const nav = [
   </head>
   <body class="font-sans">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper">Skip to content</a>
-    <header class="sticky top-0 z-50 border-b border-rule bg-paper/95 backdrop-blur-sm">
+    <header class="site-header sticky top-0 z-50 border-b border-rule bg-paper/95 backdrop-blur-sm">
       <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6" aria-label="Main">
         <a href={`${base}#home`} class="inline-flex min-h-[44px] items-center font-mono text-sm tracking-tight text-ink">
           vsreddyh
@@ -188,6 +188,27 @@ const nav = [
 
       // Scrollspy for the section nav, plus closing the mobile menu after a pick.
       function init() {
+        // Header: transparent only over the hero photo (home page top).
+        // Other pages have no photo behind the bar, so they keep it solid.
+        const header = document.querySelector('.site-header');
+        const heroPhoto = document.querySelector('#home .hero-photo');
+        const syncHeader = () => {
+          if (header) header.classList.toggle('is-top', !!heroPhoto && window.scrollY < 24);
+        };
+        // Real header height into a CSS var so the photo overlay never
+        // assumes h-16 (wrap/zoom safe), with a 4rem fallback.
+        const syncHeaderH = () => {
+          if (header) document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
+        };
+        window.addEventListener('scroll', syncHeader, { passive: true });
+        // ResizeObserver catches everything that changes bar height: menu
+        // toggle, font load, zoom, viewport resize.
+        if ('ResizeObserver' in window && header) {
+          new ResizeObserver(syncHeaderH).observe(header);
+        } else {
+          window.addEventListener('resize', syncHeaderH);
+        }
+        syncHeader(); syncHeaderH();
         // Back-to-top button: hidden until the user scrolls down.
         const toTop = document.querySelector('[data-to-top]');
         const toggleToTop = () => {
