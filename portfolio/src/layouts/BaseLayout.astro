@@ -188,13 +188,21 @@ const nav = [
 
       // Scrollspy for the section nav, plus closing the mobile menu after a pick.
       function init() {
-        // Header: transparent while the hero photo is behind it, solid after.
+        // Header: transparent only over the hero photo (home page top).
+        // Other pages have no photo behind the bar, so they keep it solid.
         const header = document.querySelector('.site-header');
+        const heroPhoto = document.querySelector('#home .hero-photo');
         const syncHeader = () => {
-          if (header) header.classList.toggle('is-top', window.scrollY < 24);
+          if (header) header.classList.toggle('is-top', !!heroPhoto && window.scrollY < 24);
+        };
+        // Real header height into a CSS var so the photo overlay never
+        // assumes h-16 (wrap/zoom safe), with a 4rem fallback.
+        const syncHeaderH = () => {
+          if (header) document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
         };
         window.addEventListener('scroll', syncHeader, { passive: true });
-        syncHeader();
+        window.addEventListener('resize', syncHeaderH);
+        syncHeader(); syncHeaderH();
         // Back-to-top button: hidden until the user scrolls down.
         const toTop = document.querySelector('[data-to-top]');
         const toggleToTop = () => {

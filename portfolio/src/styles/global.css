@@ -162,19 +162,17 @@ h2,
   -webkit-backdrop-filter: none;
 }
 
-/* Pull the hero under the transparent header so the photo runs edge to
-   edge. The 4rem pad-back keeps content exactly where it was (h-16 bar). */
-#home {
-  margin-top: -4rem;
-  padding-top: 4rem;
-}
 /* Hero photographic backdrop: stamp-removed beach photo, washed toward the
    paper tones so text contrast is untouched. Static image: nothing to pause
-   for reduced-motion readers. */
+   for reduced-motion readers. Paper fallback shows if the image 404s. */
 .hero-photo {
   position: absolute;
   inset: 0;
+  /* Bleed under the sticky header so the photo runs edge to edge, without
+     shifting section content. Height comes from JS; 4rem fallback. */
+  top: calc(-1 * var(--header-h, 4rem));
   pointer-events: none;
+  background-color: var(--color-paper);
   background-image: var(--hero-light);
   background-size: cover;
   background-position: center 40%;
