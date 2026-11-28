@@ -243,28 +243,39 @@ const now = [
             Copy email
           </button>
         </p>
-        <script>
-          document.querySelectorAll('[data-copy-email]').forEach((btn) => {
-            btn.addEventListener('click', async () => {
-              const address = btn.getAttribute('data-copy-email') || '';
-              const done = () => {
-                const original = 'Copy email';
-                btn.textContent = 'Copied ✓';
-                setTimeout(() => { btn.textContent = original; }, 2000);
-              };
-              try {
-                await navigator.clipboard.writeText(address);
-                done();
-              } catch {
-                const ta = document.createElement('textarea');
-                ta.value = address;
-                document.body.appendChild(ta);
-                ta.select();
-                try { document.execCommand('copy'); done(); } catch { /* clipboard unavailable */ }
-                ta.remove();
-              }
-            });
-          });
+        <script is:inline>
+          (function () {
+            function wireCopyEmail() {
+              document.querySelectorAll('[data-copy-email]').forEach((btn) => {
+                if (btn.hasAttribute('data-copy-wired')) return;
+                btn.setAttribute('data-copy-wired', 'true');
+                btn.addEventListener('click', async () => {
+                  const address = btn.getAttribute('data-copy-email') || '';
+                  const done = () => {
+                    const original = 'Copy email';
+                    btn.textContent = 'Copied ✓';
+                    setTimeout(() => { btn.textContent = original; }, 2000);
+                  };
+                  try {
+                    await navigator.clipboard.writeText(address);
+                    done();
+                  } catch {
+                    const ta = document.createElement('textarea');
+                    ta.value = address;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try { document.execCommand('copy'); done(); } catch { /* clipboard unavailable */ }
+                    ta.remove();
+                  }
+                });
+              });
+            }
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', wireCopyEmail, { once: true });
+            } else {
+              wireCopyEmail();
+            }
+          })();
         </script>
         <p class="mono-label mt-8 flex flex-wrap gap-x-6 gap-y-2">
           <a class="link" href="https://github.com/vsreddyh" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
