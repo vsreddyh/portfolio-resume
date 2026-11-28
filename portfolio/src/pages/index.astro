@@ -21,17 +21,18 @@ const now = [
     title: 'Agento',
     status: 'running',
     href: `${base}projects/agento/`,
-    note: 'Daily driver: Compose client, Go API on one box, six MCP servers in T3 Code.',
+    note: 'Daily driver: Android app for tasks, money and health, backed by a self-hosted Go API I run on one machine.',
   },
 ];
 ---
 <BaseLayout>
   <section id="home" class="relative overflow-hidden">
     <div class="hero-photo" aria-hidden="true" style={`--hero-light: url('${base}hero-beach-light.jpg'); --hero-dark: url('${base}hero-beach-dark.jpg');`}></div>
+    <p class="sr-only">Wide photograph of a beach at soft daylight used as a decorative page backdrop.</p>
     <div class="hero-grid" aria-hidden="true"></div>
     <div class="hero-fade" aria-hidden="true"></div>
     <div class="relative mx-auto max-w-6xl px-6 pb-20 pt-20 sm:pt-28">
-      <p class="section-kicker section-kicker--accent">Software engineer · Hyderabad</p>
+      <p class="section-kicker section-kicker--accent">Software engineer · Hyderabad, India · IST (UTC+5:30)</p>
       <h1 class="mt-5 max-w-4xl text-[clamp(2.6rem,6.5vw,4.75rem)] leading-[1.02] tracking-[-0.02em]">
         Vishnu Shouryan Reddy
       </h1>
@@ -44,14 +45,14 @@ const now = [
           I design, build, and orchestrate <span class="text-rust">products</span>.
         </p>
       </div>
-      <div class="mt-8 flex flex-wrap items-center gap-3">
+      <div class="hero-ctas mt-8 gap-3 sm:items-center">
         <a href="#work" class="btn btn-solid">
           See the work <span aria-hidden="true">↓</span>
         </a>
-        <a href={`${base}resume.pdf`} class="btn" download="Vishnu-Shouryan-Reddy-Resume.pdf">
-          Resume (PDF)
+        <a href={`${base}resume.pdf`} class="btn">
+          Resume
         </a>
-        <a href="mailto:shouryanreddyh@gmail.com" class="btn">Email</a>
+        <a href="mailto:shouryanreddyh@gmail.com?subject=Hello%20from%20your%20portfolio" class="btn">Email</a>
       </div>
       <ul class="mt-14 grid max-w-2xl grid-cols-3 gap-x-6 gap-y-4 border-t border-rule pt-6">
         {stats.map((s) => (
@@ -95,7 +96,8 @@ const now = [
       </div>
       <div class="max-w-[36rem] space-y-4 text-[1.0625rem] leading-[1.7] text-ink-soft">
         <p>
-          I studied computer science at KMIT (2022–2026). I'm a software
+          B.Tech in Computer Science and Engineering — Keshav Memorial
+          Institute of Technology (KMIT), Hyderabad, 2022–2026. I'm a software
           engineer at 5th Bridge Data Technologies.
         </p>
         <p>
@@ -118,7 +120,7 @@ const now = [
           <span class="mono-label">Jun 2026 – present</span>
         </div>
         <ul class="mt-3 max-w-[38rem] list-disc space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed text-ink-soft">
-          <li>Built <a class="link" href="https://ohfluence.com">Ohfluence</a>, a role-based platform for social media advertising agencies, from campaign creation to influencer offer distribution.</li>
+          <li>Built <a class="link" href="https://ohfluence.com" target="_blank" rel="noopener noreferrer">Ohfluence</a>, a role-based platform for social media advertising agencies, from campaign creation to influencer offer distribution.</li>
           <li>Built AI content tools as internal products: a trending reel-idea generator over live news plus an LLM, and a text-to-video pipeline.</li>
           <li>Extended ProCAD (Revalize) with User and Domain Extensions shipped to enterprise customers.</li>
           <li>Led 2 interns on event-driven trading infrastructure for market alerts and order execution.</li>
@@ -132,7 +134,7 @@ const now = [
         <ul class="mt-3 max-w-[38rem] list-disc space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed text-ink-soft">
           <li>Predictive models with simulation and backtesting, paired with rule-based approaches.</li>
           <li>An NLP pipeline that pulls insights out of unstructured text.</li>
-          <li>An LLM-plus-search layer that verifies signals for spotting emerging trends in live reddit data streams.</li>
+          <li>An LLM-plus-search layer that verifies signals for spotting emerging trends in live Reddit data streams.</li>
         </ul>
       </div>
     </div>
@@ -196,12 +198,12 @@ const now = [
               <span class="mono-label mt-2 block">{projectContext(p.data)} · {p.data.stack.slice(0, 3).join(' · ')}</span>
               <span class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
                 {p.data.github && (
-                  <a class="link" href={p.data.github} aria-label={`${p.data.title}: source code on GitHub`}>
+                  <a class="link" href={p.data.github} target="_blank" rel="noopener noreferrer" aria-label={`${p.data.title}: source code on GitHub (opens in a new tab)`}>
                     Code <span aria-hidden="true">↗</span>
                   </a>
                 )}
                 {p.data.demo && (
-                  <a class="link" href={p.data.demo} aria-label={`${p.data.title}: live demo`}>
+                  <a class="link" href={p.data.demo} target="_blank" rel="noopener noreferrer" aria-label={`${p.data.title}: live demo (opens in a new tab)`}>
                     Live demo <span aria-hidden="true">↗</span>
                   </a>
                 )}
@@ -223,20 +225,51 @@ const now = [
         <p class="section-kicker">06</p>
         <h2 class="mt-3 text-3xl">Get in touch</h2>
         <p class="mt-4 max-w-[34rem] text-[1.0625rem] leading-[1.7] text-ink-soft">
-          Open to software engineering roles. Email is fastest.
+          Open to software engineering roles. Email is fastest — I reply
+          within a day from Hyderabad, India (IST, UTC+5:30).
         </p>
-        <p class="mt-6">
+        <p class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3">
           <a
             class="text-[clamp(1.35rem,3vw,2rem)] leading-tight text-ink underline decoration-rule decoration-1 underline-offset-4 transition hover:text-rust hover:decoration-rust"
-            href="mailto:shouryanreddyh@gmail.com"
+            href="mailto:shouryanreddyh@gmail.com?subject=Hello%20from%20your%20portfolio"
           >
             shouryanreddyh@gmail.com
           </a>
+          <button
+            type="button"
+            data-copy-email="shouryanreddyh@gmail.com"
+            class="mono-label min-h-[44px] border border-rule px-3 py-1.5 text-ink transition hover:text-rust"
+          >
+            Copy email
+          </button>
         </p>
+        <script>
+          document.querySelectorAll('[data-copy-email]').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+              const address = btn.getAttribute('data-copy-email') || '';
+              const done = () => {
+                const original = 'Copy email';
+                btn.textContent = 'Copied ✓';
+                setTimeout(() => { btn.textContent = original; }, 2000);
+              };
+              try {
+                await navigator.clipboard.writeText(address);
+                done();
+              } catch {
+                const ta = document.createElement('textarea');
+                ta.value = address;
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); done(); } catch { /* clipboard unavailable */ }
+                ta.remove();
+              }
+            });
+          });
+        </script>
         <p class="mono-label mt-8 flex flex-wrap gap-x-6 gap-y-2">
-          <a class="link" href="https://github.com/vsreddyh">GitHub ↗</a>
-          <a class="link" href="https://linkedin.com/in/vsreddyh">LinkedIn ↗</a>
-          <a class="link" href={`${base}resume.pdf`}>Resume (PDF)</a>
+          <a class="link" href="https://github.com/vsreddyh" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a class="link" href="https://linkedin.com/in/vsreddyh" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+          <a class="link" href={`${base}resume.pdf`}>Resume</a>
         </p>
       </div>
     </div>

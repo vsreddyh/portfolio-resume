@@ -61,6 +61,12 @@ html {
   *::after {
     transition-duration: 0.01ms !important;
   }
+  .diagram-spinner {
+    animation: none;
+  }
+  .hero-grid {
+    display: none;
+  }
 }
 
 body {
@@ -197,6 +203,41 @@ h2,
   /* Halo matching the page behind the copy: keeps ink text legible over
      the loaded photo without a visible fill. */
   text-shadow: 0 0 18px var(--color-paper);
+}
+/* Kicker + headline + lede sit over the photo: ink-soft (not muted) plus
+   a paper halo keeps them above 4.5:1 on both beach variants. */
+#home .section-kicker {
+  color: var(--color-ink-soft);
+  text-shadow: 0 0 14px var(--color-paper), 0 0 4px var(--color-paper);
+}
+#home h1,
+#home .text-muted {
+  text-shadow: 0 0 18px var(--color-paper), 0 0 6px var(--color-paper);
+}
+/* Hero CTAs: two-across grid on narrow phones so Email spans full width
+   instead of orphaning as a 2+1 wrap. */
+#home .hero-ctas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+#home .hero-ctas .btn {
+  width: 100%;
+}
+#home .hero-ctas .btn:last-child {
+  grid-column: 1 / -1;
+}
+@media (min-width: 640px) {
+  #home .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #home .hero-ctas .btn {
+    width: auto;
+  }
+  #home .hero-ctas .btn:last-child {
+    grid-column: auto;
+  }
 }
 #home .btn-solid {
   color: var(--color-ink);
@@ -491,6 +532,40 @@ a.row-title:hover {
   font-size: 0.75rem;
   color: var(--color-muted);
   overflow-x: auto;
+}
+/* Loading state: a labelled skeleton instead of raw `flowchart …` text,
+   so there is no FOUC of diagram source while mermaid.js downloads. */
+.diagram pre.mermaid-diagram.is-loading {
+  border: 1px dashed var(--color-rule);
+  border-radius: 4px;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  overflow: hidden;
+}
+.diagram-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.diagram-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--color-rule);
+  border-top-color: var(--color-rust);
+  border-radius: 9999px;
+  animation: diagram-spin 0.9s linear infinite;
+}
+@keyframes diagram-spin {
+  to { transform: rotate(360deg); }
+}
+/* Static source fallback for no-JS / failed-CDN readers. */
+.diagram pre.mermaid-source {
+  background: var(--color-codeblock);
+  color: var(--color-codeblock-fg);
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.6;
 }
 .diagram svg {
   max-width: 100%;

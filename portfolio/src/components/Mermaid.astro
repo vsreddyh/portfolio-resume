@@ -8,9 +8,9 @@ interface Props {
 const { chart, label, caption = 'Diagram' } = Astro.props;
 ---
 <figure class="diagram">
-  <pre class="mermaid-diagram" data-chart={chart} role="img" aria-label={label} aria-busy="true">{chart}</pre>
-  <figcaption data-mermaid-status>{caption}</figcaption>
-  <noscript><p class="mono-label">Diagram source shown — enable JavaScript to render it.</p></noscript>
+  <pre class="mermaid-diagram is-loading" data-chart={chart} role="img" aria-label={label} aria-busy="true"><span class="diagram-loader" aria-hidden="true"><span class="diagram-spinner"></span>Loading diagram…</span></pre>
+  <figcaption data-mermaid-status data-caption={caption}>Rendering diagram…</figcaption>
+  <noscript><style>.mermaid-diagram{display:none}</style><pre class="mermaid-source">{chart}</pre><p class="mono-label">Diagram source shown — enable JavaScript to render it.</p></noscript>
 </figure>
 <script is:inline>
   (function () {
@@ -28,8 +28,12 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
     }
 
     function failOne(pre) {
+      pre.classList.remove('is-loading');
       pre.setAttribute('data-failed', 'true');
       pre.setAttribute('aria-busy', 'false');
+      // No-JS / failed-JS readers still get the source instead of nothing.
+      var src = pre.getAttribute('data-chart') || '';
+      pre.textContent = src;
       setStatus(pre, 'Diagram failed to load — source shown.');
     }
 
@@ -130,8 +134,12 @@ const { chart, label, caption = 'Diagram' } = Astro.props;
           .render('mmd-' + counter++, code)
           .then(function (res) {
             pre.innerHTML = res.svg;
+            pre.classList.remove('is-loading');
             pre.setAttribute('data-done', 'true');
             pre.setAttribute('aria-busy', 'false');
+            var fig = pre.closest('figure');
+            var cap = fig && fig.querySelector('[data-mermaid-status]');
+            if (cap) cap.textContent = cap.getAttribute('data-caption') || 'Diagram';
           })
           .catch(function () {
             failOne(pre);
