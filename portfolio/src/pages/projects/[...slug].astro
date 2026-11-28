@@ -25,8 +25,8 @@ const { title, description, stack, github, demo, problem, diagram, gallery } = p
       <p class="mono-label mt-5">{projectContext(project.data)}</p>
       <p class="mono-label mt-2">{stack.join(' · ')}</p>
       <p class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-        {github && <a class="btn" href={github}>Source <span aria-hidden="true">↗</span></a>}
-        {demo && <a class="btn" href={demo}>Live <span aria-hidden="true">↗</span></a>}
+        {github && <a class="btn" href={github} target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a>}
+        {demo && <a class="btn" href={demo} target="_blank" rel="noopener noreferrer">Live <span aria-hidden="true">↗</span></a>}
       </p>
     </header>
 
@@ -50,8 +50,8 @@ const { title, description, stack, github, demo, problem, diagram, gallery } = p
     <footer class="mt-16 flex flex-wrap items-baseline justify-between gap-4 border-t border-rule pt-6">
       <a href={`${base}projects/`} class="mono-label link inline-flex min-h-[44px] items-center">← Projects</a>
       <p class="mono-label flex gap-5">
-        {github && <a class="link" href={github}>Source ↗</a>}
-        {demo && <a class="link" href={demo}>Live ↗</a>}
+        {github && <a class="link" href={github} target="_blank" rel="noopener noreferrer">Source ↗</a>}
+        {demo && <a class="link" href={demo} target="_blank" rel="noopener noreferrer">Live ↗</a>}
       </p>
     </footer>
   </article>
