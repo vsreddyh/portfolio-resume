@@ -166,7 +166,7 @@ Software Engineer with experience in full-stack web development, mobile applicat
 {LeetCode Scoreboard: Competitive Practice Tracker}{}{Next.js, TypeScript, MongoDB, Mongoose, Web Push, ECharts}{\href{https://github.com/vsreddyh/leetcode-scoreboard}{github.com/vsreddyh/leetcode-scoreboard}}
 \resumeSubHeadingListStart
 \resumeItem{Built a Next.js + MongoDB scoreboard ranking accepted LeetCode problems by (100 $-$ acceptance rate) via the LeetCode GraphQL API, so harder problems score more.}
-\resumeItem{Implemented a five-minute cron sync that upserts submissions into MongoDB while the dashboard reads pre-aggregated scores without touching LeetCode; tracks 4 users with 100\% clean sync runs.}
+\resumeItem{Implemented a cron sync upserting submissions into MongoDB for pre-aggregated reads, never touching LeetCode; tracks 4 users with 100\% clean sync runs on the five-minute cron (per Vercel logs to date).}
 \resumeItem{Scores aggregate per user per day (IST), keeping daily and all-time totals consistent across syncs.}
 \resumeItem{Added a password-protected admin panel for tracked-user management and manual sync, plus Web Push notifications, PWA install support, dark/light theming, a cumulative ECharts progress chart with 1D-ALL ranges and per-range growth badges, and a CORS-enabled public stats endpoint with caching and per-IP rate limiting.}
 \resumeSubHeadingListEnd
