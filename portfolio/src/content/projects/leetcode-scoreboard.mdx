@@ -9,6 +9,63 @@ started: 2026
 ended: 2026
 team: 1
 problem: "Counting solved problems rewards grinding easies, and hitting LeetCode on every page view is slow."
+gallery:
+  - src: "projects/leetcode-scoreboard/01-desktop-light-chart-all.png"
+    alt: "Score progress chart over the all-time range, light theme"
+    width: 1600
+    height: 1010
+  - src: "projects/leetcode-scoreboard/02-desktop-dark-chart-all.png"
+    alt: "Score progress chart over the all-time range, dark theme"
+    width: 1600
+    height: 1010
+  - src: "projects/leetcode-scoreboard/03-desktop-light-board.png"
+    alt: "Board view with activity calendar, scored question cards, and leaderboard, light theme"
+    width: 1600
+    height: 1000
+  - src: "projects/leetcode-scoreboard/04-desktop-dark-board.png"
+    alt: "Board view with activity calendar, scored question cards, and leaderboard, dark theme"
+    width: 1600
+    height: 1000
+  - src: "projects/leetcode-scoreboard/05-mobile-light-top.png"
+    alt: "Mobile top view with header and chart, light theme"
+    width: 780
+    height: 1688
+  - src: "projects/leetcode-scoreboard/06-mobile-dark-top.png"
+    alt: "Mobile top view with header and chart, dark theme"
+    width: 780
+    height: 1688
+  - src: "projects/leetcode-scoreboard/07-mobile-light-day.png"
+    alt: "Mobile day section with calendar and day cards, light theme"
+    width: 780
+    height: 1688
+  - src: "projects/leetcode-scoreboard/08-mobile-light-bottom.png"
+    alt: "Mobile bottom view with question cards and leaderboard, light theme"
+    width: 780
+    height: 1688
+  - src: "projects/leetcode-scoreboard/09-mobile-dark-bottom.png"
+    alt: "Mobile bottom view with question cards and leaderboard, dark theme"
+    width: 780
+    height: 1688
+  - src: "projects/leetcode-scoreboard/10-desktop-light-admin.png"
+    alt: "Admin panel for tracked-user management and manual sync, light theme"
+    width: 1600
+    height: 1000
+  - src: "projects/leetcode-scoreboard/11-desktop-dark-admin.png"
+    alt: "Admin panel for tracked-user management and manual sync, dark theme"
+    width: 1600
+    height: 1010
+  - src: "projects/leetcode-scoreboard/12-mobile-dark-admin.png"
+    alt: "Mobile admin panel, dark theme"
+    width: 780
+    height: 1688
+  - src: "projects/leetcode-scoreboard/13-mobile-dark-day.png"
+    alt: "Mobile day section with calendar and day cards, dark theme"
+    width: 780
+    height: 1688
+  - src: "projects/leetcode-scoreboard/14-mobile-light-admin.png"
+    alt: "Mobile admin panel, light theme"
+    width: 780
+    height: 1688
 diagram: |
   flowchart LR
     CR["cron, 5 min"] --> SY["/api/sync"]
@@ -21,9 +78,13 @@ diagram: |
 
 Each accepted problem scores `100 − acceptance rate`, pinned the first time it is accepted. An external cron hits `/api/sync` every five minutes, walks tracked users through `recentSubmissionList`, and upserts one document per user and question. The dashboard only ever reads Mongo aggregations — it never calls LeetCode — so the board renders when LeetCode is slow. New solves trigger a Web Push summary.
 
-The progress chart is cumulative per user per day in IST, over 1D to ALL ranges including 3M, fed by a dedicated `/api/history` read on the same pre-aggregated data.
+The progress chart is cumulative per user per day in IST, over 1D to ALL ranges, fed by a dedicated `/api/history` read on the same pre-aggregated data.
 
-A CORS-enabled `GET /api/public/stats?username=<handle>` endpoint proxies live solved counts plus contest rating/ranking for external sites, with 1h in-memory/CDN caching, per-IP rate limiting, and an optional username allowlist.
+A CORS-enabled `GET /api/public/stats?username=<handle>` endpoint proxies live solved counts plus contest rating/ranking for this portfolio site, with 1h in-memory/CDN caching, per-IP rate limiting, and an optional username allowlist.
+
+## Impact
+
+Four tracked users, 373 problems scored for 11,529.58 points across 66 active days in the 81-day season (2026-09-08 to 2026-11-27), measured from `GET /api/overall` on 2026-11-28. 100% clean sync runs on the five-minute cron to date, per Vercel function logs and owner monitoring; the app keeps no per-run log. Push delivery works end to end but is unmeasured.
 
 ## Scope
 

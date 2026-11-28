@@ -17,6 +17,19 @@ const projects = defineCollection({
     ended: z.number().int().min(2000).optional(),
     // People who committed to the repo; 1 means a solo build.
     team: z.number().int().min(1).default(1),
+    // Optional product gallery, stored under portfolio/public/ (path relative
+    // to it). Rendered collapsed behind a toggle as a lazy-loaded masonry
+    // grid; renders nothing when the list is empty.
+    gallery: z
+      .array(
+        z.object({
+          src: z.string(),
+          alt: z.string(),
+          width: z.number().int().optional(),
+          height: z.number().int().optional(),
+        }),
+      )
+      .optional(),
     // One or two sentences: what was annoying enough to build this.
     problem: z.string(),
     diagram: z.string().optional(),

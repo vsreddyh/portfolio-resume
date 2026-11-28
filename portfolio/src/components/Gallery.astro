@@ -1,0 +1,36 @@
+---
+interface Shot {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+}
+
+const { images = [], label = 'Show gallery' } = Astro.props as {
+  images?: Shot[];
+  label?: string;
+};
+
+const base = import.meta.env.BASE_URL;
+---
+{(images?.length ?? 0) > 0 && (
+  <details class="mt-16 border-t border-rule pt-6">
+    <summary class="btn cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+      {label} <span aria-hidden="true">({images.length})</span>
+    </summary>
+    <div class="mt-6 columns-1 gap-4 sm:columns-2">
+      {images.map((img) => (
+        <figure class="mb-4 break-inside-avoid border border-rule">
+          <img
+            src={`${base}${img.src}`}
+            alt={img.alt}
+            width={img.width}
+            height={img.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      ))}
+    </div>
+  </details>
+)}
